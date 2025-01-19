@@ -29,6 +29,7 @@ import {
 import { AutoTableDeleteDialog } from "~/components/auto-table/auto-table-delete-dialog";
 import { AutoTableSheetForms } from "~/components/auto-table/auto-table-form";
 import { DetailsList, DetailsListItem } from "~/components/ui/details-list";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 export const UsersTable = () => {
   const [rowsPerPage] = useRowsPerPage();
@@ -52,8 +53,8 @@ export const UsersTable = () => {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4">
-      <div className="flex-1 space-y-4">
+    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+      <div className="flex flex-1 flex-col gap-4 overflow-hidden">
         <AutoTableProvider
           schema={userSchema}
           rowIdentifierKey="id"
@@ -97,14 +98,16 @@ export const UsersTable = () => {
               </div>
             </AutoTableHeader>
 
-            <DataTable>
-              <DataTableHeader />
-              <AutoTableBody
-                extraRow={(row) => (
-                  <AutoTableDetailsRow rowId={row.original.id} />
-                )}
-              />
-            </DataTable>
+            <ScrollArea className="flex-1">
+              <DataTable>
+                <DataTableHeader />
+                <AutoTableBody
+                  extraRow={(row) => (
+                    <AutoTableDetailsRow rowId={row.original.id} />
+                  )}
+                />
+              </DataTable>
+            </ScrollArea>
           </AutoTableSortDataProvider>
 
           <AutoTableSheetForms<typeof userSchema>

@@ -145,9 +145,10 @@ export const AutoTableDetailsRow = ({ rowId }: { rowId: string | number }) => {
   const { table } = useDataTable();
   const columnsLength = useMemo(() => table.getAllColumns().length, [table]);
 
-  const { selectedRow, detailsData, detailsContent } = useAutoTable();
+  const { selectedRow, detailsData, detailsContent, currentAction } =
+    useAutoTable();
 
-  if (!selectedRow) {
+  if (!selectedRow || currentAction !== "DETAILS") {
     return null;
   }
 
