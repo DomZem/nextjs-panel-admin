@@ -1,6 +1,7 @@
 import "~/styles/globals.css";
 
 import { ThemeProvider } from "~/providers/theme-provider";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "~/components/ui/toaster";
 import { TRPCReactProvider } from "~/trpc/react";
 import { GeistSans } from "geist/font/sans";
@@ -22,17 +23,19 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <TRPCReactProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </TRPCReactProvider>
+        <NuqsAdapter>
+          <TRPCReactProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </TRPCReactProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
