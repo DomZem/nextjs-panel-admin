@@ -10,6 +10,7 @@
 
 # database
 /prisma/db.sqlite
+/prisma/schema.prisma
 /prisma/db.sqlite-journal
 db.sqlite
 
