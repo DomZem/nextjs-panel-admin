@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import { hash } from "@node-rs/argon2";
 
 const db = new PrismaClient();
 
@@ -8,8 +9,11 @@ async function main() {
   await db.user.deleteMany();
 
   // create users
+
+  const hashedUserPassowrd = await hash("Test1234!");
+
   await Promise.all(
-    Array.from({ length: 2 }).map(async () => {
+    Array.from({ length: 55 }).map(async () => {
       const firstName = faker.person.firstName();
       const lastName = faker.person.lastName();
 
@@ -21,10 +25,22 @@ async function main() {
             from: "2000-01-01",
             to: Date.now(),
           }),
+          password: hashedUserPassowrd,
         },
       });
     }),
   );
+
+  // create admin user
+  await db.user.create({
+    data: {
+      name: "admin",
+      email: "admin@gmail.com",
+      emailVerified: new Date(),
+      role: "ADMIN",
+      password: hashedUserPassowrd,
+    },
+  });
 }
 
 main()
