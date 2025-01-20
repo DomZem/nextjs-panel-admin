@@ -133,17 +133,17 @@ export const protectedProcedure = t.procedure
   });
 
 export const adminProcedure = t.procedure.use(({ ctx, next }) => {
-  // if (!ctx.session || !ctx.session.user) {
-  //   throw new TRPCError({ code: "UNAUTHORIZED" });
-  // }
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
 
-  // if (ctx.session.user.role !== "ADMIN") {
-  //   throw new TRPCError({ code: "FORBIDDEN" });
-  // }
+  if (ctx.session.user.role !== "ADMIN") {
+    throw new TRPCError({ code: "FORBIDDEN" });
+  }
 
   return next({
     ctx: {
-      session: { ...ctx.session },
+      session: { ...ctx.session, user: ctx.session.user },
     },
   });
 });
