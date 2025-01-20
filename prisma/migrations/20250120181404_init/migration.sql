@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
+
+-- CreateEnum
 CREATE TYPE "ProductCategory" AS ENUM ('EARPHONES', 'HEADPHONES', 'SPEAKERS');
 
 -- CreateEnum
@@ -40,6 +43,8 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
+    "password" TEXT NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
