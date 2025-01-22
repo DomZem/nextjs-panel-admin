@@ -44,9 +44,11 @@ import {
 
 export const AutoTableSheet = <
   TSchema extends ZodObjectSchema,
-  TFormSchma extends ZodObjectSchema,
+  TCreateFormSchema extends ZodObjectSchema,
+  TUpdateFormSchema extends ZodObjectSchema,
   TDetailsData extends Record<string, unknown>,
 >({
+  title,
   schema,
   rowIdentifierKey,
   onRefetchData,
@@ -66,11 +68,13 @@ export const AutoTableSheet = <
     }>;
     extraColumns?: ColumnDef<ZodObjectInfer<TSchema>>[];
   } & {
-    create: ComponentProps<typeof AutoTableCreateFormSheet<TFormSchma>>;
+    create: ComponentProps<typeof AutoTableCreateFormSheet<TCreateFormSchema>>;
   } & {
     update: ComponentProps<
-      typeof AutoTableUpdateFormSheet<TFormSchma, TSchema, TDetailsData>
+      typeof AutoTableUpdateFormSheet<TUpdateFormSchema, TSchema, TDetailsData>
     >;
+  } & {
+    title: string;
   }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -136,11 +140,12 @@ export const AutoTableSheet = <
             state: {
               sorting,
             },
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             getRowId: (row) => row[rowIdentifierKey],
           }}
         >
           <AutoTableHeader>
-            <AutoTableHeaderTitle>Users</AutoTableHeaderTitle>
+            <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
             <div className="inline-flex items-center gap-3">
               <AutoTableRefreshButton />
               <DataTableSelectColumns mapColumnName={mapDashedFieldName} />

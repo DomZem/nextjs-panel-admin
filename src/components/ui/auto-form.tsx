@@ -53,6 +53,7 @@ type BaseFieldConfig = {
   label?: string;
   description?: string;
   placeholder?: string;
+  hidden?: true;
 };
 
 type SelectFieldConfig = {
@@ -60,12 +61,14 @@ type SelectFieldConfig = {
   label?: string;
   description?: string;
   placeholder?: string;
+  hidden?: true;
   options: SelectOption[];
 };
 
 interface CustomFieldConfig {
   type: "custom";
   render: ComponentPropsWithoutRef<typeof FormField>["render"];
+  hidden?: true;
 }
 
 type FieldConfig = BaseFieldConfig | SelectFieldConfig | CustomFieldConfig;
@@ -128,7 +131,7 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                   config?.label ?? mapLabel?.(fieldName) ?? fieldName;
 
                 return (
-                  <FormItem>
+                  <FormItem className={cn("", config?.hidden && "hidden")}>
                     {config?.type === "checkbox" ||
                     formField.type === "boolean" ? (
                       <div className="flex items-center space-x-2">
