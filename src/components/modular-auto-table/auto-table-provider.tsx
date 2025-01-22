@@ -6,7 +6,7 @@ import {
   type ZodObjectSchema,
 } from "~/utils/zod";
 
-type ActionType = "CREATE" | "UPDATE" | "DELETE" | "DETAILS" | null;
+export type ActionType = "CREATE" | "UPDATE" | "DELETE" | "DETAILS" | null;
 
 interface IAutoTableContext<
   TSchema extends ZodObjectSchema,

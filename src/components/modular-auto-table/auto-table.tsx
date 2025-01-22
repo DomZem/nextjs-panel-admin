@@ -1,5 +1,4 @@
 import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
-import { type ActionType } from "../auto-table/auto-table-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +13,11 @@ import {
   type IUseGetAutoTableDetailsData,
   useGetAutoTableDetailsData,
 } from "~/hooks/auto-table/use-get-auto-table-details-data";
-import { useAutoTable } from "./auto-table-provider";
+import { type ActionType, useAutoTable } from "./auto-table-provider";
+import { useDataTable } from "../ui/data-table";
+import { flexRender, type Row } from "@tanstack/react-table";
+import { TableBody, TableCell, TableRow } from "../ui/table";
+import React from "react";
 
 export const AutoTableActionsColumn = <
   TSchema extends ZodObjectSchema,
@@ -72,3 +75,67 @@ export const AutoTableActionsColumn = <
     </DropdownMenu>
   );
 };
+
+export const AutoTableBody = ({
+  extraRow,
+}: {
+  extraRow?: (row: Row<unknown>) => React.ReactNode;
+}) => {
+  const { table } = useDataTable();
+  const columnsLength = table.getAllColumns().length;
+
+  return (
+    <TableBody>
+      {table.getRowModel().rows?.length ? (
+        table.getRowModel().rows.map((row) => (
+          <React.Fragment key={row.id}>
+            <TableRow data-state={row.getIsSelected() && "selected"}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+            {extraRow?.(row)}
+          </React.Fragment>
+        ))
+      ) : (
+        <TableRow>
+          <TableCell colSpan={columnsLength} className="h-24 text-center">
+            No results.
+          </TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  );
+};
+
+// export const AutoTableDetailsRow = ({ rowId }: { rowId: string | number }) => {
+//   const { table } = useDataTable();
+//   const columnsLength = useMemo(() => table.getAllColumns().length, [table]);
+
+//   const { selectedRow, detailsData, detailsContent, currentAction } =
+//     useAutoTable();
+
+//   if (!selectedRow || currentAction !== "DETAILS") {
+//     return null;
+//   }
+
+//   if (selectedRow.id !== rowId) {
+//     return null;
+//   }
+
+//   return (
+//     <TableRow className="relative w-screen" data-state="selected">
+//       <TableCell colSpan={columnsLength}>
+//         {!detailsData ? (
+//           <div className="flex h-96 items-center justify-center">
+//             <LoaderCircle className="animate-spin" />
+//           </div>
+//         ) : (
+//           detailsContent(detailsData)
+//         )}
+//       </TableCell>
+//     </TableRow>
+//   );
+// };

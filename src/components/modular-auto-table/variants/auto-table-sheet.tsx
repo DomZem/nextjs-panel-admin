@@ -6,8 +6,7 @@ import {
 } from "../auto-table-provider";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { AutoTableDeleteDialog } from "../auto-table-delete-dialog";
-import { AutoTableBody } from "~/components/auto-table/auto-table";
-import { AutoTableActionsColumn } from "../auto-table";
+import { AutoTableActionsColumn, AutoTableBody } from "../auto-table";
 import { mapDashedFieldName } from "~/utils/mappers";
 import React, { type ComponentProps } from "react";
 import { Button } from "~/components/ui/button";
