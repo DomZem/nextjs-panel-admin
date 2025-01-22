@@ -1,4 +1,4 @@
-import { ZodEffects, ZodObject, type z, type ZodRawShape } from "zod";
+import { z, ZodEffects, ZodObject, type ZodRawShape } from "zod";
 
 export type ZodObjectSchema =
   | ZodObject<ZodRawShape>
@@ -6,13 +6,16 @@ export type ZodObjectSchema =
 
 export type ZodObjectInfer<TSchema extends ZodObjectSchema> = z.infer<TSchema>;
 
-export type StringOrNumberKeyOnly<T> = {
+type StringOrNumberKeyOnly<T> = {
   [K in keyof T]: T[K] extends string | number
-    ? T[K] extends boolean | Date
+    ? T[K] extends boolean | Date | undefined
       ? never
       : K
     : never;
 }[keyof T];
+
+export type ZodObjectSchemaIdentifierKey<TSchema extends ZodObjectSchema> =
+  Extract<StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>, string>;
 
 export const extractFieldNamesFromSchema = <TSchema extends ZodObjectSchema>(
   schema: TSchema,
@@ -28,3 +31,19 @@ export const extractFieldNamesFromSchema = <TSchema extends ZodObjectSchema>(
 
   return fieldNames;
 };
+
+const foo = <TSchema extends ZodObjectSchema>(
+  schema: TSchema,
+  rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>,
+) => {
+  console.log("hello world");
+};
+
+const dummySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  create_at: z.date(),
+  opt: z.string().optional(),
+});
+
+foo(dummySchema, "id");

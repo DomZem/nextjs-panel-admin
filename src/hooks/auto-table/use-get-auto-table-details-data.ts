@@ -1,7 +1,6 @@
 import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
 import {
-  type StringOrNumberKeyOnly,
-  type ZodObjectInfer,
+  type ZodObjectSchemaIdentifierKey,
   type ZodObjectSchema,
 } from "~/utils/zod";
 
@@ -10,7 +9,7 @@ export interface IUseGetAutoTableDetailsData<
   TDetailsData extends Record<string, unknown>,
 > {
   onDetails: (args: {
-    id: Extract<StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>, string>;
+    id: ZodObjectSchemaIdentifierKey<TSchema>;
   }) => Promise<TDetailsData>;
 }
 
@@ -23,7 +22,7 @@ export const useGetAutoTableDetailsData = <
   const { setDetailsData } = useAutoTable<TSchema, TDetailsData>();
 
   const handleGetDetailsData = async (
-    rowId: Extract<StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>, string>,
+    rowId: ZodObjectSchemaIdentifierKey<TSchema>,
   ) => {
     setDetailsData(null);
     const data = await onDetails({ id: rowId });

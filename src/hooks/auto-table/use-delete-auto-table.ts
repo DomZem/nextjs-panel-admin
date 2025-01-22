@@ -1,16 +1,15 @@
 import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
+import { toast } from "../use-toast";
 import {
-  type StringOrNumberKeyOnly,
-  type ZodObjectInfer,
+  type ZodObjectSchemaIdentifierKey,
   type ZodObjectSchema,
 } from "~/utils/zod";
-import { toast } from "../use-toast";
 
 export interface IUseDeleteAutoTableData<TSchema extends ZodObjectSchema> {
   onDelete: ({
     id,
   }: {
-    id: StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>;
+    id: ZodObjectSchemaIdentifierKey<TSchema>;
   }) => Promise<unknown>;
 }
 

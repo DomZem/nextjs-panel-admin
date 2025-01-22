@@ -1,7 +1,7 @@
 import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
 import {
-  type StringOrNumberKeyOnly,
+  type ZodObjectSchemaIdentifierKey,
   type ZodObjectInfer,
   type ZodObjectSchema,
 } from "~/utils/zod";
@@ -12,7 +12,7 @@ export interface IUseUpdateAutoTableData<
 > {
   onUpdate: (
     data: {
-      id: Extract<StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>, string>;
+      id: ZodObjectSchemaIdentifierKey<TSchema>;
     } & ZodObjectInfer<TFormSchema>,
   ) => Promise<unknown>;
 }
@@ -35,7 +35,7 @@ export const useUpdateAutoTableData = <
 
   const handleUpdate = async (
     data: {
-      id: Extract<StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>, string>;
+      id: ZodObjectSchemaIdentifierKey<TSchema>;
     } & ZodObjectInfer<TFormSchema>,
   ) => {
     if (!selectedRow) {

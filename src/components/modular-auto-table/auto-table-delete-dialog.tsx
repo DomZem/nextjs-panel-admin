@@ -2,6 +2,10 @@
 
 import { type ZodObjectSchema } from "~/utils/zod";
 import {
+  type IUseDeleteAutoTableData,
+  useDeleteAutoTableData,
+} from "~/hooks/auto-table/use-delete-auto-table";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -11,10 +15,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import {
-  type IUseDeleteAutoTableData,
-  useDeleteAutoTableData,
-} from "~/hooks/auto-table/use-delete-auto-table";
 
 export const AutoTableDeleteDialog = <TSchema extends ZodObjectSchema>({
   title,

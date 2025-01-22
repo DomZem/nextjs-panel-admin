@@ -1,6 +1,7 @@
+import { userSchema } from "~/common/validations/user";
 import React, { useState } from "react";
 import {
-  type StringOrNumberKeyOnly,
+  type ZodObjectSchemaIdentifierKey,
   type ZodObjectInfer,
   type ZodObjectSchema,
 } from "~/utils/zod";
@@ -12,10 +13,7 @@ interface IAutoTableContext<
   TDetailsData extends Record<string, unknown>,
 > {
   schema: TSchema;
-  rowIdentifierKey: Extract<
-    StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>,
-    string
-  >;
+  rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   selectedRow: ZodObjectInfer<TSchema> | null;
   setSelectedRow: (row: ZodObjectInfer<TSchema> | null) => void;
   currentAction: ActionType;
@@ -25,7 +23,6 @@ interface IAutoTableContext<
   refetchData: () => Promise<unknown>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const AutoTableContext = React.createContext<IAutoTableContext<
   ZodObjectSchema,
   Record<string, unknown>
@@ -33,10 +30,7 @@ const AutoTableContext = React.createContext<IAutoTableContext<
 
 export interface AutoTableImplementationProps<TSchema extends ZodObjectSchema> {
   schema: TSchema;
-  rowIdentifierKey: Extract<
-    StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>,
-    string
-  >;
+  rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   onRefetchData: () => Promise<unknown>;
 }
 
@@ -50,10 +44,7 @@ export const AutoTableProvider = <
   children,
 }: {
   schema: TSchema;
-  rowIdentifierKey: Extract<
-    StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>,
-    string
-  >;
+  rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   onRefetchData: () => Promise<unknown>;
   children: React.ReactNode;
 }) => {
@@ -71,7 +62,7 @@ export const AutoTableProvider = <
         currentAction,
         setCurrentAction: (action) => setCurrentAction(action),
         rowIdentifierKey,
-        setSelectedRow: (row: ZodObjectInfer<typeof schema> | null) =>
+        setSelectedRow: (row: ZodObjectInfer<TSchema> | null) =>
           setSelectedRow(row),
         detailsData,
         setDetailsData: (data) => setDetailsData(data as TDetailsData),
@@ -98,4 +89,16 @@ export const useAutoTable = <
   }
 
   return context;
+};
+
+const B = () => {
+  return (
+    <AutoTableProvider
+      schema={userSchema}
+      rowIdentifierKey="id"
+      onRefetchData={() => Promise.resolve()}
+    >
+      asda
+    </AutoTableProvider>
+  );
 };
