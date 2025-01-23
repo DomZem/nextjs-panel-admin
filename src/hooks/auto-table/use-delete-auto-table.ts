@@ -13,10 +13,7 @@ export interface IUseDeleteAutoTableData<TSchema extends ZodObjectSchema> {
   }) => Promise<unknown>;
 }
 
-export const useDeleteAutoTableData = <
-  TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
->({
+export const useDeleteAutoTableData = <TSchema extends ZodObjectSchema>({
   onDelete,
 }: IUseDeleteAutoTableData<TSchema>) => {
   const {
@@ -25,18 +22,18 @@ export const useDeleteAutoTableData = <
     setCurrentAction,
     rowIdentifierKey,
     currentAction,
-  } = useAutoTable<TSchema, TDetailsData>();
+  } = useAutoTable<TSchema>();
 
   const handleClose = () => {
     setCurrentAction(null);
   };
 
   const handleDelete = async () => {
-    if (!selectedRow) {
-      throw new Error("No selected row to delete");
-    }
-
     try {
+      if (!selectedRow) {
+        throw new Error("No selected row to delete");
+      }
+
       const id = selectedRow[rowIdentifierKey];
       await onDelete({ id });
       await refetchData();
@@ -47,10 +44,16 @@ export const useDeleteAutoTableData = <
       });
     } catch (e) {
       console.error(e);
+
+      const description =
+        e instanceof Error
+          ? e.message
+          : "There was a problem with your request.";
+
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
+        description,
       });
     } finally {
       setCurrentAction(null);

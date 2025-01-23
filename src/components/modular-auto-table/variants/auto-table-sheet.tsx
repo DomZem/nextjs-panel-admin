@@ -6,7 +6,11 @@ import {
 } from "../auto-table-provider";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { AutoTableDeleteDialog } from "../auto-table-delete-dialog";
-import { AutoTableActionsColumn, AutoTableBody } from "../auto-table";
+import {
+  AutoTableActionsColumn,
+  AutoTableBody,
+  AutoTableDetailsRow,
+} from "../auto-table";
 import { mapDashedFieldName } from "~/utils/mappers";
 import React, { type ComponentProps } from "react";
 import { Button } from "~/components/ui/button";
@@ -40,6 +44,7 @@ import {
   AutoTableCreateFormSheet,
   AutoTableUpdateFormSheet,
 } from "../auto-table-form";
+import { AutoTableDetailsDataProvider } from "../auto-table-details-data-provider";
 
 export const AutoTableSheet = <
   TSchema extends ZodObjectSchema,
@@ -58,22 +63,21 @@ export const AutoTableSheet = <
   create,
   update,
   omitColumns,
+  renderDetails,
 }: AutoTableImplementationProps<TSchema> &
   IUseDeleteAutoTableData<TSchema> &
   IUseGetAutoTableDetailsData<TSchema, TDetailsData> & {
+    title: string;
     data: ZodObjectInfer<TSchema>[];
     omitColumns?: Partial<{
       [K in keyof ZodObjectInfer<TSchema>]: true;
     }>;
     extraColumns?: ColumnDef<ZodObjectInfer<TSchema>>[];
-  } & {
     create: ComponentProps<typeof AutoTableCreateFormSheet<TCreateFormSchema>>;
-  } & {
     update: ComponentProps<
-      typeof AutoTableUpdateFormSheet<TUpdateFormSchema, TSchema, TDetailsData>
+      typeof AutoTableUpdateFormSheet<TUpdateFormSchema, TSchema>
     >;
-  } & {
-    title: string;
+    renderDetails: (data: TDetailsData) => React.ReactNode;
   }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -126,48 +130,54 @@ export const AutoTableSheet = <
         rowIdentifierKey={rowIdentifierKey}
         onRefetchData={onRefetchData}
       >
-        <DataTableProvider
-          tableOptions={{
-            data,
-            columns,
-            getCoreRowModel: getCoreRowModel(),
-            initialState: {
-              columnOrder: ["id"],
-            },
-            onSortingChange: setSorting,
-            getSortedRowModel: getSortedRowModel(),
-            state: {
-              sorting,
-            },
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            getRowId: (row) => row[rowIdentifierKey],
-          }}
-        >
-          <AutoTableHeader>
-            <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
-            <div className="inline-flex items-center gap-3">
-              <AutoTableRefreshButton />
-              <DataTableSelectColumns mapColumnName={mapDashedFieldName} />
-              <AutoTableCloseDetailsButton />
-              <AutoTableCreateButton />
-            </div>
-          </AutoTableHeader>
+        <AutoTableDetailsDataProvider renderDetails={renderDetails}>
+          <DataTableProvider
+            tableOptions={{
+              data,
+              columns,
+              getCoreRowModel: getCoreRowModel(),
+              initialState: {
+                columnOrder: ["id"],
+              },
+              onSortingChange: setSorting,
+              getSortedRowModel: getSortedRowModel(),
+              state: {
+                sorting,
+              },
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+              getRowId: (row) => row[rowIdentifierKey],
+            }}
+          >
+            <AutoTableHeader>
+              <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
+              <div className="inline-flex items-center gap-3">
+                <AutoTableRefreshButton />
+                <DataTableSelectColumns mapColumnName={mapDashedFieldName} />
+                <AutoTableCloseDetailsButton />
+                <AutoTableCreateButton />
+              </div>
+            </AutoTableHeader>
 
-          <ScrollArea className="flex-1">
-            <DataTable>
-              <DataTableHeader />
-              <AutoTableBody />
-            </DataTable>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        </DataTableProvider>
+            <ScrollArea className="flex-1">
+              <DataTable>
+                <DataTableHeader />
+                <AutoTableBody
+                  extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+                />
+              </DataTable>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </DataTableProvider>
+        </AutoTableDetailsDataProvider>
 
         <AutoTableDeleteDialog onDelete={onDelete} />
+
         <AutoTableCreateFormSheet
           formSchema={create.formSchema}
           onCreate={create.onCreate}
           fieldsConfig={create.fieldsConfig}
         />
+
         <AutoTableUpdateFormSheet
           formSchema={update.formSchema}
           onUpdate={update.onUpdate}

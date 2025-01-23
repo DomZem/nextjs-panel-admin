@@ -1,6 +1,7 @@
 "use client";
 
 import { CirclePlus, CopyX, RotateCw } from "lucide-react";
+import { useAutoTable } from "./auto-table-provider";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
 import { useState } from "react";
@@ -10,7 +11,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { useAutoTable } from "./auto-table-provider";
 
 export const AutoTableHeader = ({
   className,

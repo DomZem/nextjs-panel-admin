@@ -8,25 +8,18 @@ import {
 
 export type ActionType = "CREATE" | "UPDATE" | "DELETE" | "DETAILS" | null;
 
-interface IAutoTableContext<
-  TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
-> {
+interface IAutoTableContext<TSchema extends ZodObjectSchema> {
   schema: TSchema;
   rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   selectedRow: ZodObjectInfer<TSchema> | null;
   setSelectedRow: (row: ZodObjectInfer<TSchema> | null) => void;
   currentAction: ActionType;
   setCurrentAction: (action: ActionType) => void;
-  detailsData: TDetailsData | null;
-  setDetailsData: (data: TDetailsData | null) => void;
   refetchData: () => Promise<unknown>;
 }
 
-const AutoTableContext = React.createContext<IAutoTableContext<
-  ZodObjectSchema,
-  Record<string, unknown>
-> | null>(null);
+const AutoTableContext =
+  React.createContext<IAutoTableContext<ZodObjectSchema> | null>(null);
 
 export interface AutoTableImplementationProps<TSchema extends ZodObjectSchema> {
   schema: TSchema;
@@ -34,10 +27,7 @@ export interface AutoTableImplementationProps<TSchema extends ZodObjectSchema> {
   onRefetchData: () => Promise<unknown>;
 }
 
-export const AutoTableProvider = <
-  TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
->({
+export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
   schema,
   rowIdentifierKey,
   onRefetchData,
@@ -51,7 +41,6 @@ export const AutoTableProvider = <
   const [selectedRow, setSelectedRow] =
     useState<ZodObjectInfer<TSchema> | null>(null);
   const [currentAction, setCurrentAction] = useState<ActionType>(null);
-  const [detailsData, setDetailsData] = useState<TDetailsData | null>(null);
 
   return (
     <AutoTableContext.Provider
@@ -64,8 +53,6 @@ export const AutoTableProvider = <
         rowIdentifierKey,
         setSelectedRow: (row: ZodObjectInfer<TSchema> | null) =>
           setSelectedRow(row),
-        detailsData,
-        setDetailsData: (data) => setDetailsData(data as TDetailsData),
       }}
     >
       {children}
@@ -73,15 +60,9 @@ export const AutoTableProvider = <
   );
 };
 
-export const useAutoTable = <
-  TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
->() => {
+export const useAutoTable = <TSchema extends ZodObjectSchema>() => {
   const context = React.useContext(
-    AutoTableContext as React.Context<IAutoTableContext<
-      TSchema,
-      TDetailsData
-    > | null>,
+    AutoTableContext as React.Context<IAutoTableContext<TSchema> | null>,
   );
 
   if (!context) {

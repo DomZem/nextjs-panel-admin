@@ -20,14 +20,13 @@ export interface IUseUpdateAutoTableData<
 export const useUpdateAutoTableData = <
   TFormSchema extends ZodObjectSchema,
   TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
 >({
   onUpdate,
 }: IUseUpdateAutoTableData<TFormSchema, TSchema>) => {
   const { selectedRow, rowIdentifierKey, currentAction, setCurrentAction } =
-    useAutoTable<TSchema, TDetailsData>();
+    useAutoTable<TSchema>();
 
-  const { handleSubmitData } = useSubmitAutoTableData<TSchema, TDetailsData>();
+  const { handleSubmitData } = useSubmitAutoTableData<TSchema>();
 
   const handleClose = () => {
     setCurrentAction(null);

@@ -1,4 +1,16 @@
+import { useAutoTableDetailsData } from "./auto-table-details-data-provider";
 import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
+import { type ActionType, useAutoTable } from "./auto-table-provider";
+import { flexRender, type Row } from "@tanstack/react-table";
+import { TableBody, TableCell, TableRow } from "../ui/table";
+import { LoaderCircle, MoreHorizontal } from "lucide-react";
+import {
+  type IUseGetAutoTableDetailsData,
+  useGetAutoTableDetailsData,
+} from "~/hooks/auto-table/use-get-auto-table-details-data";
+import { useDataTable } from "../ui/data-table";
+import React, { useMemo } from "react";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,17 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import {
-  type IUseGetAutoTableDetailsData,
-  useGetAutoTableDetailsData,
-} from "~/hooks/auto-table/use-get-auto-table-details-data";
-import { type ActionType, useAutoTable } from "./auto-table-provider";
-import { useDataTable } from "../ui/data-table";
-import { flexRender, type Row } from "@tanstack/react-table";
-import { TableBody, TableCell, TableRow } from "../ui/table";
-import React from "react";
 
 export const AutoTableActionsColumn = <
   TSchema extends ZodObjectSchema,
@@ -35,10 +36,7 @@ export const AutoTableActionsColumn = <
     onDetails,
   });
 
-  const { setCurrentAction, setSelectedRow } = useAutoTable<
-    TSchema,
-    TDetailsData
-  >();
+  const { setCurrentAction, setSelectedRow } = useAutoTable<TSchema>();
 
   const setAction = (action: ActionType) => {
     setSelectedRow(row);
@@ -110,32 +108,32 @@ export const AutoTableBody = ({
   );
 };
 
-// export const AutoTableDetailsRow = ({ rowId }: { rowId: string | number }) => {
-//   const { table } = useDataTable();
-//   const columnsLength = useMemo(() => table.getAllColumns().length, [table]);
+export const AutoTableDetailsRow = ({ rowId }: { rowId: string | number }) => {
+  const { detailsData, renderDetails } = useAutoTableDetailsData();
+  const { selectedRow, currentAction } = useAutoTable();
+  const { table } = useDataTable();
 
-//   const { selectedRow, detailsData, detailsContent, currentAction } =
-//     useAutoTable();
+  const columnsLength = useMemo(() => table.getAllColumns().length, [table]);
 
-//   if (!selectedRow || currentAction !== "DETAILS") {
-//     return null;
-//   }
+  if (!selectedRow || currentAction !== "DETAILS") {
+    return null;
+  }
 
-//   if (selectedRow.id !== rowId) {
-//     return null;
-//   }
+  if (selectedRow.id !== rowId) {
+    return null;
+  }
 
-//   return (
-//     <TableRow className="relative w-screen" data-state="selected">
-//       <TableCell colSpan={columnsLength}>
-//         {!detailsData ? (
-//           <div className="flex h-96 items-center justify-center">
-//             <LoaderCircle className="animate-spin" />
-//           </div>
-//         ) : (
-//           detailsContent(detailsData)
-//         )}
-//       </TableCell>
-//     </TableRow>
-//   );
-// };
+  return (
+    <TableRow className="relative w-screen" data-state="selected">
+      <TableCell colSpan={columnsLength}>
+        {!detailsData ? (
+          <div className="flex h-96 items-center justify-center">
+            <LoaderCircle className="animate-spin" />
+          </div>
+        ) : (
+          renderDetails(detailsData)
+        )}
+      </TableCell>
+    </TableRow>
+  );
+};

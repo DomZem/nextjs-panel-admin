@@ -1,4 +1,4 @@
-import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
+import { useAutoTableDetailsData } from "~/components/modular-auto-table/auto-table-details-data-provider";
 import {
   type ZodObjectSchemaIdentifierKey,
   type ZodObjectSchema,
@@ -19,7 +19,7 @@ export const useGetAutoTableDetailsData = <
 >({
   onDetails,
 }: IUseGetAutoTableDetailsData<TSchema, TDetailsData>) => {
-  const { setDetailsData } = useAutoTable<TSchema, TDetailsData>();
+  const { setDetailsData } = useAutoTableDetailsData<TDetailsData>();
 
   const handleGetDetailsData = async (
     rowId: ZodObjectSchemaIdentifierKey<TSchema>,

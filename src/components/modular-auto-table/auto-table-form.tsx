@@ -117,7 +117,6 @@ export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
 export const AutoTableUpdateFormSheet = <
   TFormSchema extends ZodObjectSchema,
   TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
 >({
   fieldsConfig,
   formSchema,
@@ -126,7 +125,7 @@ export const AutoTableUpdateFormSheet = <
   IUseUpdateAutoTableData<TFormSchema, TSchema> & {
     formSchema: TFormSchema;
   }) => {
-  const { selectedRow } = useAutoTable<TSchema, TDetailsData>();
+  const { selectedRow } = useAutoTable<TSchema>();
 
   const { isUpdateActionAcitve, handleUpdate, handleClose } =
     useUpdateAutoTableData({

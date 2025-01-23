@@ -9,16 +9,11 @@ export interface IUseCreateAutoTableData<TFormSchema extends ZodObjectSchema> {
 export const useCreateAutoTableData = <
   TFormSchema extends ZodObjectSchema,
   TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
 >({
   onCreate,
 }: IUseCreateAutoTableData<TFormSchema>) => {
-  const { currentAction, setCurrentAction } = useAutoTable<
-    TSchema,
-    TDetailsData
-  >();
-
-  const { handleSubmitData } = useSubmitAutoTableData<TSchema, TDetailsData>();
+  const { currentAction, setCurrentAction } = useAutoTable<TSchema>();
+  const { handleSubmitData } = useSubmitAutoTableData<TSchema>();
 
   const handleClose = () => {
     setCurrentAction(null);

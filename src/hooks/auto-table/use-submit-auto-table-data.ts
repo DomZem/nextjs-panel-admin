@@ -2,14 +2,9 @@ import { useAutoTable } from "~/components/modular-auto-table/auto-table-provide
 import { type ZodObjectSchema } from "~/utils/zod";
 import { toast } from "../use-toast";
 
-export const useSubmitAutoTableData = <
-  TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
->() => {
-  const { currentAction, setCurrentAction, refetchData } = useAutoTable<
-    TSchema,
-    TDetailsData
-  >();
+export const useSubmitAutoTableData = <TSchema extends ZodObjectSchema>() => {
+  const { currentAction, setCurrentAction, refetchData } =
+    useAutoTable<TSchema>();
 
   const handleSubmitData = async (callback: () => Promise<unknown>) => {
     try {

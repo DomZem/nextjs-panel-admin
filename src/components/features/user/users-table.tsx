@@ -2,6 +2,7 @@
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
+import { DetailsList, DetailsListItem } from "~/components/ui/details-list";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
@@ -40,13 +41,22 @@ export const UsersTable = () => {
         schema={userSchema}
         rowIdentifierKey="id"
         data={getAllUsers.data.users}
-        omitColumns={{
-          password: true,
-          image: true,
-        }}
-        onDelete={deleteUser.mutateAsync}
-        onDetails={getUserDetails.mutateAsync}
         onRefetchData={getAllUsers.refetch}
+        onDetails={getUserDetails.mutateAsync}
+        onDelete={deleteUser.mutateAsync}
+        renderDetails={(user) => {
+          return (
+            <DetailsList>
+              <DetailsListItem name="Name" value={user.name} />
+              <DetailsListItem name="Name" value={user.name} />
+              <DetailsListItem name="Name" value={user.name} />
+              <DetailsListItem name="Name" value={user.name} />
+              <DetailsListItem name="Name" value={user.name} />
+              <DetailsListItem name="Name" value={user.name} />
+              <DetailsListItem name="Name" value={user.name} />
+            </DetailsList>
+          );
+        }}
         create={{
           formSchema: userFormSchema,
           onCreate: createUser.mutateAsync,
