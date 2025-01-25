@@ -9,11 +9,14 @@ const PRODUCTS_COUNT = 55;
 
 async function main() {
   // clean up
-  await db.user.deleteMany();
+  await db.order_item.deleteMany();
+  await db.order.deleteMany();
   await db.product_accessory.deleteMany();
   await db.product.deleteMany();
+  await db.user_address.deleteMany();
+  await db.user.deleteMany();
 
-  const hashedUserPassowrd = await hash("Test1234!");
+  const hashedUserPassword = await hash("Test1234!");
 
   // create users
   await Promise.all(
@@ -29,7 +32,15 @@ async function main() {
             from: "2000-01-01",
             to: Date.now(),
           }),
-          password: hashedUserPassowrd,
+          addresses: {
+            create: {
+              city: faker.location.city(),
+              country: faker.location.country(),
+              street_address: faker.location.street(),
+              zip_code: faker.location.zipCode(),
+            },
+          },
+          password: hashedUserPassword,
         },
       });
     }),
@@ -71,6 +82,65 @@ async function main() {
     }),
   );
 
+  await Promise.all(
+    Array.from({ length: PRODUCTS_COUNT }).map(async () => {
+      const user = await db.user.findFirstOrThrow({
+        select: {
+          id: true,
+        },
+      });
+
+      let orderTotalCents = 0;
+
+      const order = await db.order.create({
+        data: {
+          total_cents: orderTotalCents,
+          status: Math.random() > 0.5 ? "PENDING" : "SHIPPED",
+          user_id: user.id,
+        },
+      });
+
+      await Promise.all(
+        Array.from({ length: faker.number.int({ min: 1, max: 5 }) }).map(
+          async () => {
+            const product = await db.product.findFirstOrThrow({
+              select: {
+                id: true,
+                price_cents: true,
+              },
+            });
+
+            const quantity = faker.number.int({ min: 1, max: 5 });
+
+            const orderItemTotalCents = Math.round(
+              product.price_cents * quantity,
+            );
+
+            await db.order_item.create({
+              data: {
+                quantity,
+                order_id: order.id,
+                product_id: product.id,
+                price_cents: orderItemTotalCents,
+              },
+            });
+
+            orderTotalCents += orderItemTotalCents;
+          },
+        ),
+      );
+
+      await db.order.update({
+        where: {
+          id: order.id,
+        },
+        data: {
+          total_cents: orderTotalCents,
+        },
+      });
+    }),
+  );
+
   // create admin user
   await db.user.create({
     data: {
@@ -78,7 +148,7 @@ async function main() {
       email: "admin@gmail.com",
       emailVerified: new Date(),
       role: "ADMIN",
-      password: hashedUserPassowrd,
+      password: hashedUserPassword,
     },
   });
 }
