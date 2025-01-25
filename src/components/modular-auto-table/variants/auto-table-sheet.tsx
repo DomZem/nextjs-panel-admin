@@ -176,6 +176,7 @@ export const AutoTableSheet = <
           formSchema={create.formSchema}
           onCreate={create.onCreate}
           fieldsConfig={create.fieldsConfig}
+          defaultValues={create.defaultValues}
         />
 
         <AutoTableUpdateFormSheet

@@ -85,10 +85,11 @@ export const AutoTableSheet = ({
 };
 
 export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
+  defaultValues,
   fieldsConfig,
-  onCreate,
   formSchema,
-}: Pick<AutoFormProps<TFormSchema>, "fieldsConfig"> &
+  onCreate,
+}: Pick<AutoFormProps<TFormSchema>, "fieldsConfig" | "defaultValues"> &
   IUseCreateAutoTableData<TFormSchema> & {
     formSchema: TFormSchema;
   }) => {
@@ -107,6 +108,7 @@ export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
       <AutoForm
         schema={formSchema}
         fieldsConfig={fieldsConfig}
+        defaultValues={defaultValues}
         mapLabel={mapDashedFieldName}
         onSubmit={handleCreate}
       />
@@ -121,7 +123,7 @@ export const AutoTableUpdateFormSheet = <
   fieldsConfig,
   formSchema,
   onUpdate,
-}: Pick<AutoFormProps<TFormSchema>, "fieldsConfig"> &
+}: Pick<AutoFormProps<TFormSchema>, "fieldsConfig" | "defaultValues"> &
   IUseUpdateAutoTableData<TFormSchema, TSchema> & {
     formSchema: TFormSchema;
   }) => {
