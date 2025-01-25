@@ -2,13 +2,13 @@
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { DetailsList, DetailsListItem } from "~/components/ui/details-list";
-import { LoaderCircle } from "lucide-react";
-import { api } from "~/trpc/react";
 import {
-  productAccessoryFormSchema,
-  productAccessoryFormSchemaWithId,
+  productAccessoryCreateSchema,
+  productAccessoryUpdateSchema,
   productAccessorySchema,
 } from "~/common/validations/product/product-accessory";
+import { LoaderCircle } from "lucide-react";
+import { api } from "~/trpc/react";
 
 export const ProductAccessoriesTable = ({
   productId,
@@ -40,6 +40,9 @@ export const ProductAccessoriesTable = ({
         data={getAllProductAccessories.data}
         onRefetchData={getAllProductAccessories.refetch}
         onDetails={getProductAccessoryDetails.mutateAsync}
+        omitColumns={{
+          product_id: true,
+        }}
         onDelete={deleteProductAccessory.mutateAsync}
         renderDetails={(product) => {
           return (
@@ -49,16 +52,25 @@ export const ProductAccessoriesTable = ({
           );
         }}
         create={{
-          formSchema: productAccessoryFormSchema,
+          formSchema: productAccessoryCreateSchema,
           onCreate: createProductAccessory.mutateAsync,
-
-          fieldsConfig: {},
+          defaultValues: {
+            product_id: productId,
+          },
+          fieldsConfig: {
+            product_id: {
+              hidden: true,
+            },
+          },
         }}
         update={{
-          formSchema: productAccessoryFormSchemaWithId,
+          formSchema: productAccessoryUpdateSchema,
           onUpdate: updateProductAccessory.mutateAsync,
           fieldsConfig: {
             id: {
+              hidden: true,
+            },
+            product_id: {
               hidden: true,
             },
           },

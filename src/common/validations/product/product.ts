@@ -2,11 +2,11 @@ import { ProductScalarSchema } from "~/zod-schemas/models";
 
 export const productSchema = ProductScalarSchema;
 
-export const productFormSchemaWithId = productSchema.omit({
+export const productUpdateSchema = productSchema.omit({
   created_at: true,
   updated_at: true,
 });
 
-export const productFormSchema = productFormSchemaWithId.omit({
+export const productCreateSchema = productUpdateSchema.omit({
   id: true,
 });

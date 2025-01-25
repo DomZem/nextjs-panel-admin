@@ -2,18 +2,16 @@
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
-import { DetailsList, DetailsListItem } from "~/components/ui/details-list";
+import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import {
-  productFormSchema,
-  productFormSchemaWithId,
+  productCreateSchema,
+  productUpdateSchema,
   productSchema,
 } from "~/common/validations/product/product";
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
-
 import { api } from "~/trpc/react";
-import { ProductAccessoriesTable } from "./product-accessories-table";
 
 export const ProductsTable = () => {
   const [rowsPerPage] = useRowsPerPage();
@@ -54,7 +52,7 @@ export const ProductsTable = () => {
           );
         }}
         create={{
-          formSchema: productFormSchema,
+          formSchema: productCreateSchema,
           onCreate: createProduct.mutateAsync,
           fieldsConfig: {
             description: {
@@ -66,7 +64,7 @@ export const ProductsTable = () => {
           },
         }}
         update={{
-          formSchema: productFormSchemaWithId,
+          formSchema: productUpdateSchema,
           onUpdate: updateProduct.mutateAsync,
           fieldsConfig: {
             id: {
