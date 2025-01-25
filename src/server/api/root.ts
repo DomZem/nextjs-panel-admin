@@ -1,6 +1,7 @@
 import { productAccessoryRouter } from "./routers/product/product-accessory";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { userAddressRouter } from "./routers/user/user-address";
+import { orderItemRouter } from "./routers/order/order-item";
 import { productRouter } from "./routers/product/product";
 import { orderRouter } from "./routers/order/order";
 import { userRouter } from "./routers/user/user";
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   product: productRouter,
   productAccessory: productAccessoryRouter,
   order: orderRouter,
+  orderItem: orderItemRouter,
 });
 
 // export type definition of API
