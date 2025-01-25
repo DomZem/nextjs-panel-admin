@@ -1,16 +1,16 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
-import { DetailsList, DetailsListItem } from "~/components/ui/details-list";
+import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
+import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
 import {
-  userFormSchema,
-  userFormSchemaWithId,
+  userCreateSchema,
+  userUpdateSchema,
   userSchema,
-} from "~/common/validations/user";
+} from "~/common/validations/user/user";
 import { api } from "~/trpc/react";
 
 export const UsersTable = () => {
@@ -46,19 +46,13 @@ export const UsersTable = () => {
         onDelete={deleteUser.mutateAsync}
         renderDetails={(user) => {
           return (
-            <DetailsList>
-              <DetailsListItem name="Name" value={user.name} />
-              <DetailsListItem name="Name" value={user.name} />
-              <DetailsListItem name="Name" value={user.name} />
-              <DetailsListItem name="Name" value={user.name} />
-              <DetailsListItem name="Name" value={user.name} />
-              <DetailsListItem name="Name" value={user.name} />
-              <DetailsListItem name="Name" value={user.name} />
-            </DetailsList>
+            <div>
+              <UserAddressesTable userId={user.id} />
+            </div>
           );
         }}
         create={{
-          formSchema: userFormSchema,
+          formSchema: userCreateSchema,
           onCreate: createUser.mutateAsync,
           fieldsConfig: {
             image: {
@@ -67,7 +61,7 @@ export const UsersTable = () => {
           },
         }}
         update={{
-          formSchema: userFormSchemaWithId,
+          formSchema: userUpdateSchema,
           onUpdate: updateUser.mutateAsync,
           fieldsConfig: {
             id: {

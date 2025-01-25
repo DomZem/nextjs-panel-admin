@@ -1,9 +1,9 @@
-import { adminProcedure, createTRPCRouter } from "../trpc";
+import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { UserScalarSchema } from "~/zod-schemas/models";
 import {
-  userFormSchema,
-  userFormSchemaWithId,
-} from "~/common/validations/user";
+  userCreateSchema,
+  userUpdateSchema,
+} from "~/common/validations/user/user";
 import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
@@ -42,7 +42,7 @@ export const userRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(userFormSchema)
+    .input(userCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.user.create({
         data: input,
@@ -51,7 +51,7 @@ export const userRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(userFormSchemaWithId)
+    .input(userUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.user.update({
         where: {

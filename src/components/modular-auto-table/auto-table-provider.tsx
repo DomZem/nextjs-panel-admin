@@ -1,4 +1,4 @@
-import { userSchema } from "~/common/validations/user";
+import { userSchema } from "~/common/validations/user/user";
 import React, { useState } from "react";
 import {
   type ZodObjectSchemaIdentifierKey,
