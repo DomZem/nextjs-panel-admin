@@ -1,4 +1,3 @@
-import { userSchema } from "~/common/validations/user/user";
 import React, { useState } from "react";
 import {
   type ZodObjectSchemaIdentifierKey,
@@ -70,16 +69,4 @@ export const useAutoTable = <TSchema extends ZodObjectSchema>() => {
   }
 
   return context;
-};
-
-const B = () => {
-  return (
-    <AutoTableProvider
-      schema={userSchema}
-      rowIdentifierKey="id"
-      onRefetchData={() => Promise.resolve()}
-    >
-      asda
-    </AutoTableProvider>
-  );
 };

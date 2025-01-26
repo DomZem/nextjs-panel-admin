@@ -3,15 +3,15 @@
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { OrderItemsTable } from "./order-items-table";
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
-import { api } from "~/trpc/react";
 import {
   orderCreateSchema,
   orderUpdateSchema,
   orderSchema,
 } from "~/common/validations/order/order";
-import { OrderItemsTable } from "./order-items-table";
+import { api } from "~/trpc/react";
 
 export const OrdersTable = () => {
   const [rowsPerPage] = useRowsPerPage();

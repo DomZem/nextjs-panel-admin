@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
+import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
 import {
   orderItemCreateSchema,
   orderItemSchema,
@@ -36,11 +36,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
         }}
         data={getAllOrderItems.data}
         onRefetchData={getAllOrderItems.refetch}
-        onDetails={() => Promise.resolve()}
         onDelete={deleteOrderItem.mutateAsync}
-        renderDetails={(order) => {
-          return <div></div>;
-        }}
         create={{
           formSchema: orderItemCreateSchema,
           onCreate: createOrderItem.mutateAsync,

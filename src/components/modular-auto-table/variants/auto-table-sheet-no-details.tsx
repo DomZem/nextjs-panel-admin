@@ -1,15 +1,10 @@
-import { type IUseGetAutoTableDetailsData } from "~/hooks/auto-table/use-get-auto-table-details-data";
 import { type IUseDeleteAutoTableData } from "~/hooks/auto-table/use-delete-auto-table";
-import {
-  AutoTableProvider,
-  type AutoTableImplementationProps,
-} from "../auto-table-provider";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { AutoTableDeleteDialog } from "../auto-table-delete-dialog";
 import {
-  AutoTableFullActionsColumn,
   AutoTableBody,
   AutoTableDetailsRow,
+  AutoTableBasicActionsColumn,
 } from "../auto-table";
 import { mapDashedFieldName } from "~/utils/mappers";
 import React, { type ComponentProps } from "react";
@@ -28,45 +23,44 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import {
+  AutoTableProvider,
+  type AutoTableImplementationProps,
+} from "../auto-table-provider";
+import {
   AutoTableCloseDetailsButton,
   AutoTableCreateButton,
   AutoTableHeader,
   AutoTableHeaderTitle,
   AutoTableRefreshButton,
 } from "../auto-table-header";
+import {
+  AutoTableCreateFormSheet,
+  AutoTableUpdateFormSheet,
+} from "../auto-table-form";
 import dayjs from "dayjs";
 import {
   extractFieldNamesFromSchema,
   type ZodObjectInfer,
   type ZodObjectSchema,
 } from "~/utils/zod";
-import {
-  AutoTableCreateFormSheet,
-  AutoTableUpdateFormSheet,
-} from "../auto-table-form";
-import { AutoTableDetailsDataProvider } from "../auto-table-details-data-provider";
 
 export const AutoTableSheet = <
   TSchema extends ZodObjectSchema,
   TCreateFormSchema extends ZodObjectSchema,
   TUpdateFormSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
 >({
   title,
   schema,
   rowIdentifierKey,
   onRefetchData,
   onDelete,
-  onDetails,
   data,
   extraColumns,
   create,
   update,
   omitColumns,
-  renderDetails,
 }: AutoTableImplementationProps<TSchema> &
-  IUseDeleteAutoTableData<TSchema> &
-  IUseGetAutoTableDetailsData<TSchema, TDetailsData> & {
+  IUseDeleteAutoTableData<TSchema> & {
     title: string;
     data: ZodObjectInfer<TSchema>[];
     omitColumns?: Partial<{
@@ -77,7 +71,6 @@ export const AutoTableSheet = <
     update: ComponentProps<
       typeof AutoTableUpdateFormSheet<TUpdateFormSchema, TSchema>
     >;
-    renderDetails: (data: TDetailsData) => React.ReactNode;
   }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -116,9 +109,7 @@ export const AutoTableSheet = <
     ...basicColumns,
     {
       header: "actions",
-      cell: ({ row }) => (
-        <AutoTableFullActionsColumn row={row.original} onDetails={onDetails} />
-      ),
+      cell: ({ row }) => <AutoTableBasicActionsColumn row={row.original} />,
     },
     ...(extraColumns ?? []),
   ];
@@ -130,45 +121,43 @@ export const AutoTableSheet = <
         rowIdentifierKey={rowIdentifierKey}
         onRefetchData={onRefetchData}
       >
-        <AutoTableDetailsDataProvider renderDetails={renderDetails}>
-          <DataTableProvider
-            tableOptions={{
-              data,
-              columns,
-              getCoreRowModel: getCoreRowModel(),
-              initialState: {
-                columnOrder: ["id"],
-              },
-              onSortingChange: setSorting,
-              getSortedRowModel: getSortedRowModel(),
-              state: {
-                sorting,
-              },
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-              getRowId: (row) => row[rowIdentifierKey],
-            }}
-          >
-            <AutoTableHeader>
-              <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
-              <div className="inline-flex items-center gap-3">
-                <AutoTableRefreshButton />
-                <DataTableSelectColumns mapColumnName={mapDashedFieldName} />
-                <AutoTableCloseDetailsButton />
-                <AutoTableCreateButton />
-              </div>
-            </AutoTableHeader>
+        <DataTableProvider
+          tableOptions={{
+            data,
+            columns,
+            getCoreRowModel: getCoreRowModel(),
+            initialState: {
+              columnOrder: ["id"],
+            },
+            onSortingChange: setSorting,
+            getSortedRowModel: getSortedRowModel(),
+            state: {
+              sorting,
+            },
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            getRowId: (row) => row[rowIdentifierKey],
+          }}
+        >
+          <AutoTableHeader>
+            <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
+            <div className="inline-flex items-center gap-3">
+              <AutoTableRefreshButton />
+              <DataTableSelectColumns mapColumnName={mapDashedFieldName} />
+              <AutoTableCloseDetailsButton />
+              <AutoTableCreateButton />
+            </div>
+          </AutoTableHeader>
 
-            <ScrollArea className="flex-1">
-              <DataTable>
-                <DataTableHeader />
-                <AutoTableBody
-                  extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
-                />
-              </DataTable>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </DataTableProvider>
-        </AutoTableDetailsDataProvider>
+          <ScrollArea className="flex-1">
+            <DataTable>
+              <DataTableHeader />
+              <AutoTableBody
+                extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+              />
+            </DataTable>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </DataTableProvider>
 
         <AutoTableDeleteDialog onDelete={onDelete} />
 

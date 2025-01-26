@@ -1,7 +1,6 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
-import { DetailsList, DetailsListItem } from "~/components/ui/details-list";
+import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
 import {
   productAccessoryCreateSchema,
   productAccessoryUpdateSchema,
@@ -21,7 +20,6 @@ export const ProductAccessoriesTable = ({
   const createProductAccessory = api.productAccessory.createOne.useMutation();
   const updateProductAccessory = api.productAccessory.updateOne.useMutation();
   const deleteProductAccessory = api.productAccessory.deleteOne.useMutation();
-  const getProductAccessoryDetails = api.productAccessory.getOne.useMutation();
 
   if (!getAllProductAccessories.data) {
     return (
@@ -39,18 +37,10 @@ export const ProductAccessoriesTable = ({
         rowIdentifierKey="id"
         data={getAllProductAccessories.data}
         onRefetchData={getAllProductAccessories.refetch}
-        onDetails={getProductAccessoryDetails.mutateAsync}
         omitColumns={{
           product_id: true,
         }}
         onDelete={deleteProductAccessory.mutateAsync}
-        renderDetails={(product) => {
-          return (
-            <DetailsList>
-              <DetailsListItem name="Name" value={product.name} />
-            </DetailsList>
-          );
-        }}
         create={{
           formSchema: productAccessoryCreateSchema,
           onCreate: createProductAccessory.mutateAsync,

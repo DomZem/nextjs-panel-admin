@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
+import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
 import {
   userAddressCreateSchema,
   userAddressSchema,
@@ -36,11 +36,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
           user_id: true,
         }}
         onRefetchData={getAllUserAddresses.refetch}
-        onDetails={() => Promise.resolve()}
         onDelete={deleteUserAddress.mutateAsync}
-        renderDetails={() => {
-          return <div>Details</div>;
-        }}
         create={{
           formSchema: userAddressCreateSchema,
           onCreate: createUserAddress.mutateAsync,
