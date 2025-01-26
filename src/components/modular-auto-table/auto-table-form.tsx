@@ -1,6 +1,20 @@
 "use client";
 
+import { AutoForm, type AutoFormProps } from "../ui/auto-form";
+import { sanitizeSchemaObject } from "~/utils/auto-form";
+import {
+  type IUseUpdateAutoTableData,
+  useUpdateAutoTableData,
+} from "~/hooks/auto-table/use-update-auto-table-data";
+import {
+  type IUseCreateAutoTableData,
+  useCreateAutoTableData,
+} from "~/hooks/auto-table/use-create-auto-table-data";
+import { useAutoTable } from "./auto-table-provider";
+import { mapDashedFieldName } from "~/utils/mappers";
 import { type DefaultValues } from "react-hook-form";
+import { type ZodObjectSchema } from "~/utils/zod";
+import { ScrollArea } from "../ui/scroll-area";
 import { type TypeOf } from "zod";
 import {
   Dialog,
@@ -16,19 +30,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "../ui/sheet";
-import { AutoForm, type AutoFormProps } from "../ui/auto-form";
-import { type ZodObjectSchema } from "~/utils/zod";
-import { sanitizeSchemaObject } from "~/utils/auto-form";
-import { mapDashedFieldName } from "~/utils/mappers";
-import {
-  type IUseUpdateAutoTableData,
-  useUpdateAutoTableData,
-} from "~/hooks/auto-table/use-update-auto-table-data";
-import {
-  type IUseCreateAutoTableData,
-  useCreateAutoTableData,
-} from "~/hooks/auto-table/use-create-auto-table-data";
-import { useAutoTable } from "./auto-table-provider";
 
 export const AutoTableDialog = ({
   isOpen,
@@ -73,12 +74,14 @@ export const AutoTableSheet = ({
 }) => {
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent>
-        <SheetHeader>
+      <SheetContent className="p-2 sm:max-w-md">
+        <SheetHeader className="p-4 pb-0">
           <SheetTitle>{title}</SheetTitle>
           <SheetDescription className="sr-only">{description}</SheetDescription>
         </SheetHeader>
-        {children}
+        <ScrollArea className="h-full">
+          <div className="mb-11 p-4">{children}</div>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );
