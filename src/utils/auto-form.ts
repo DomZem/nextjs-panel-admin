@@ -24,9 +24,9 @@ export type SelectOption = { label: string; value: string };
 export type FormInputFieldType =
   | "string"
   | "number"
-  | "date"
   | "boolean"
-  | "select";
+  | "select"
+  | "datetime";
 
 export type FormInputField =
   | {
@@ -58,7 +58,7 @@ export const getFieldType = (field: ZodTypeAny): FormInputFieldType => {
   const baseField = getBaseField(field); // Get the actual base type
 
   if (baseField instanceof ZodNumber) return "number";
-  if (baseField instanceof ZodDate) return "date";
+  if (baseField instanceof ZodDate) return "datetime";
   if (baseField instanceof ZodBoolean) return "boolean";
   if (baseField instanceof ZodString) return "string";
   if (baseField instanceof ZodNativeEnum || baseField instanceof ZodEnum)
@@ -134,8 +134,8 @@ export const getFormFieldsDefaultValues = (
         ? false
         : field.type === "number"
           ? 0
-          : field.type === "date"
-            ? new Date()
+          : field.type === "datetime"
+            ? undefined
             : "";
 
     return {

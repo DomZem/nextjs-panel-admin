@@ -36,17 +36,18 @@ import { Input } from "./input";
 import { Button } from "./button";
 import { ImageUpload } from "./image-upload-input";
 import { Checkbox } from "./checkbox";
+import { DateTimePicker } from "./datetime-picker";
 
 type InputType =
   | "text"
   | "number"
   | "checkbox"
-  | "date"
   | "textarea"
   | "select"
   | "password"
   | "image"
-  | "custom";
+  | "custom"
+  | "datetime";
 
 type BaseFieldConfig = {
   type?: Exclude<InputType, "select" | "custom">;
@@ -202,6 +203,16 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                             {/* TODO: ADD default value */}
                             <ImageUpload
                               onUploadComplete={(url) => field.onChange(url)}
+                            />
+                          </FormControl>
+                        ) : config?.type === "datetime" ||
+                          formField.type === "datetime" ? (
+                          <FormControl>
+                            <DateTimePicker
+                              modal
+                              value={field.value}
+                              onChange={field.onChange}
+                              clearable
                             />
                           </FormControl>
                         ) : (
