@@ -161,7 +161,10 @@ export const sanitizeSchemaObject = (
   const newObject = filteredKeys.reduce((acc, field) => {
     return {
       ...acc,
-      [field]: schemaObject[field] as unknown,
+      [field]:
+        schemaObject[field] === null
+          ? undefined
+          : (schemaObject[field] as unknown),
     };
   }, {});
 
