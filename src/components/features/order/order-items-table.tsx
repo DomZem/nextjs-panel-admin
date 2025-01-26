@@ -29,6 +29,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
         title="Items"
+        technicalTableName="order-items"
         schema={orderItemSchema}
         rowIdentifierKey="id"
         omitColumns={{

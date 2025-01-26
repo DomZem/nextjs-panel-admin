@@ -29,6 +29,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
         title="Addresses"
+        technicalTableName="user-addresses"
         schema={userAddressSchema}
         rowIdentifierKey="id"
         data={getAllUserAddresses.data}

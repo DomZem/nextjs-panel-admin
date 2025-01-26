@@ -53,6 +53,7 @@ export const AutoTableSheet = <
   TDetailsData extends Record<string, unknown>,
 >({
   title,
+  technicalTableName,
   schema,
   rowIdentifierKey,
   onRefetchData,
@@ -68,6 +69,7 @@ export const AutoTableSheet = <
   IUseDeleteAutoTableData<TSchema> &
   IUseGetAutoTableDetailsData<TSchema, TDetailsData> & {
     title: string;
+    technicalTableName: string;
     data: ZodObjectInfer<TSchema>[];
     omitColumns?: Partial<{
       [K in keyof ZodObjectInfer<TSchema>]: true;
@@ -152,7 +154,10 @@ export const AutoTableSheet = <
               <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
               <div className="inline-flex items-center gap-3">
                 <AutoTableRefreshButton />
-                <DataTableSelectColumns mapColumnName={mapDashedFieldName} />
+                <DataTableSelectColumns
+                  tableName={technicalTableName}
+                  mapColumnName={mapDashedFieldName}
+                />
                 <AutoTableCloseDetailsButton />
                 <AutoTableCreateButton />
               </div>

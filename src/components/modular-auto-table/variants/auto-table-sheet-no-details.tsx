@@ -50,6 +50,7 @@ export const AutoTableSheet = <
   TUpdateFormSchema extends ZodObjectSchema,
 >({
   title,
+  technicalTableName,
   schema,
   rowIdentifierKey,
   onRefetchData,
@@ -62,6 +63,7 @@ export const AutoTableSheet = <
 }: AutoTableImplementationProps<TSchema> &
   IUseDeleteAutoTableData<TSchema> & {
     title: string;
+    technicalTableName: string;
     data: ZodObjectInfer<TSchema>[];
     omitColumns?: Partial<{
       [K in keyof ZodObjectInfer<TSchema>]: true;
@@ -142,7 +144,10 @@ export const AutoTableSheet = <
             <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
             <div className="inline-flex items-center gap-3">
               <AutoTableRefreshButton />
-              <DataTableSelectColumns mapColumnName={mapDashedFieldName} />
+              <DataTableSelectColumns
+                tableName={technicalTableName}
+                mapColumnName={mapDashedFieldName}
+              />
               <AutoTableCloseDetailsButton />
               <AutoTableCreateButton />
             </div>

@@ -33,6 +33,7 @@ export const ProductAccessoriesTable = ({
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
         title="Accessories"
+        technicalTableName="product-accessories"
         schema={productAccessorySchema}
         rowIdentifierKey="id"
         data={getAllProductAccessories.data}

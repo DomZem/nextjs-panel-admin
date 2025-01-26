@@ -38,6 +38,7 @@ export const ProductsTable = () => {
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
         title="Products"
+        technicalTableName="products"
         schema={productSchema}
         rowIdentifierKey="id"
         data={getAllProducts.data.products}

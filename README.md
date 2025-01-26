@@ -1,6 +1,6 @@
 # Todo List
 
-- [ ] Save selected colums to display in local storage
+- [x] Save selected colums to display in local storage
 - [x] Add scroll to sheet
 - [x] Add option to add default value for field through prop in auto form
 - [ ] Add combobox to choose relation data. Ex. adding user to order, or adding product to order_item model
