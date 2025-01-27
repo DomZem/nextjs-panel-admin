@@ -17,8 +17,8 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -30,33 +30,32 @@ export const LoginForm = () => {
     },
   });
 
-  const login = api.auth.login.useMutation();
-
   const handleLogin = async (data: z.infer<typeof loginSchema>) => {
-    const response = await login.mutateAsync({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-    if (response.status === "success") {
+      if (response?.error) {
+        form.setError("email", {
+          type: "manual",
+          message: "Invalid email or password",
+        });
+
+        return;
+      }
+
       router.push("/admin");
-      return;
-    }
+      router.refresh();
+    } catch (error) {
+      console.error("login error:", error);
 
-    if (response.code === "EMAIL_NOT_FOUND") {
       form.setError("email", {
         type: "manual",
-        message: response.message,
+        message: "Invalid email or password",
       });
-      return;
-    }
-
-    if (response.code === "INVALID_PASSWORD") {
-      form.setError("password", {
-        type: "manual",
-        message: response.message,
-      });
-      return;
     }
   };
 
@@ -102,7 +101,7 @@ export const LoginForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={login.isPending}>
+          <Button type="submit" className="w-full">
             Login
           </Button>
         </form>

@@ -45,15 +45,10 @@ export const useDeleteAutoTableData = <TSchema extends ZodObjectSchema>({
     } catch (e) {
       console.error(e);
 
-      const description =
-        e instanceof Error
-          ? e.message
-          : "There was a problem with your request.";
-
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description,
+        description: "There was a problem with your request.",
       });
     } finally {
       setCurrentAction(null);
