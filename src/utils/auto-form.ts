@@ -54,6 +54,7 @@ const getBaseField = (field: ZodTypeAny): ZodTypeAny => {
   return field;
 };
 
+// Tested in mapSchemaToFormFields
 export const getFieldType = (field: ZodTypeAny): FormInputFieldType => {
   const baseField = getBaseField(field); // Get the actual base type
 
@@ -65,6 +66,27 @@ export const getFieldType = (field: ZodTypeAny): FormInputFieldType => {
     return "select";
 
   throw new Error("Unsupported field type");
+};
+
+// Tested in mapSchemaToFormFields
+const getEnumOptions = (
+  field: ZodTypeAny,
+  isRequired: boolean,
+): SelectOption[] => {
+  const enumField = (
+    isRequired ? field : getBaseField(field)
+  ) as ZodNativeEnum<EnumLike>;
+
+  const options = Object.entries(enumField._def.values).map(([_, value]) => {
+    const stringValue = value.toString();
+
+    return {
+      label: stringValue,
+      value: stringValue,
+    };
+  });
+
+  return options;
 };
 
 export const mapSchemaToFormFields = (
@@ -101,26 +123,7 @@ export const mapSchemaToFormFields = (
   return result;
 };
 
-const getEnumOptions = (
-  field: ZodTypeAny,
-  isRequired: boolean,
-): SelectOption[] => {
-  const enumField = (
-    isRequired ? field : getBaseField(field)
-  ) as ZodNativeEnum<EnumLike>;
-
-  const options = Object.entries(enumField._def.values).map(([_, value]) => {
-    const stringValue = value.toString();
-
-    return {
-      label: stringValue,
-      value: stringValue,
-    };
-  });
-
-  return options;
-};
-
+// TODO: Test this function
 export const getFormFieldsDefaultValues = (
   formFields: ReturnType<typeof mapSchemaToFormFields>,
 ): Record<string, false | 0 | ""> => {
@@ -147,6 +150,7 @@ export const getFormFieldsDefaultValues = (
   return result;
 };
 
+// TODO: Test this function
 export const sanitizeSchemaObject = (
   schemaObject: ZodObjectInfer<ZodObjectSchema>,
   destinySchema: ZodObjectSchema,
