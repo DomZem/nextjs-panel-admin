@@ -8,3 +8,4 @@
 - [ ] Add wysiwg editor as input to auto form
 - [x] Add component for date input
 - [x] Fix issue: `value` prop on `input` should not be null. Consider using an empty string to clear the component or `undefined` for uncontrolled components. It appears on update product.
+- [ ] Add to each input in auto form which can be nullable button that will set the field to null
