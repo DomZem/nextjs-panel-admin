@@ -110,11 +110,13 @@ model product extends standard_cuid_model {
 }
 
 model product_accessory extends standard_cuid_model {
-    name       String
-    quantity   Int
+    name        String
+    quantity    Int
 
-    product    product @relation(fields: [product_id], references: [id])
-    product_id String
+    description String?
+
+    product     product @relation(fields: [product_id], references: [id])
+    product_id  String
 }
 
 model product_image extends standard_cuid_model {

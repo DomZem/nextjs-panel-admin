@@ -81,6 +81,7 @@ CREATE TABLE "product_accessory" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "description" TEXT,
     "product_id" TEXT NOT NULL,
 
     CONSTRAINT "product_accessory_pkey" PRIMARY KEY ("id")
