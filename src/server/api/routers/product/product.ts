@@ -30,6 +30,23 @@ export const productRouter = createTRPCRouter({
         products,
       };
     }),
+  getAllFiltered: adminProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const products = await ctx.db.product.findMany({
+        where: {
+          name: {
+            contains: input.name,
+          },
+        },
+      });
+
+      return products;
+    }),
   getOne: adminProcedure
     .input(ProductScalarSchema.pick({ id: true }))
     .mutation(async ({ ctx, input }) => {

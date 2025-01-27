@@ -30,6 +30,23 @@ export const userRouter = createTRPCRouter({
         users,
       };
     }),
+  getFilteredUsers: adminProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const users = await ctx.db.user.findMany({
+        where: {
+          name: {
+            contains: input.name,
+          },
+        },
+      });
+
+      return users;
+    }),
   getOne: adminProcedure
     .input(UserScalarSchema.pick({ id: true }))
     .mutation(async ({ ctx, input }) => {
