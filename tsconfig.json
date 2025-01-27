@@ -9,6 +9,8 @@
     "moduleDetection": "force",
     "isolatedModules": true,
 
+    "types": ["jest", "node"],
+
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
