@@ -14,6 +14,7 @@ async function main() {
   await db.product_accessory.deleteMany();
   await db.product.deleteMany();
   await db.user_address.deleteMany();
+  await db.user_transaction.deleteMany();
   await db.user.deleteMany();
 
   const hashedUserPassword = await hash("Test1234!");
@@ -38,6 +39,19 @@ async function main() {
               country: faker.location.country(),
               street_address: faker.location.street(),
               zip_code: faker.location.zipCode(),
+            },
+          },
+          transactions: {
+            createMany: {
+              data: Array.from({
+                length: faker.number.int({ min: 30, max: 50 }),
+              }).map(() => ({
+                amount_cents: faker.number.int({ min: 1, max: 2_000 }),
+                description: "",
+                method: Math.random() > 0.5 ? "Blik" : "Card",
+                type: Math.random() > 0.5 ? "DEPOSIT" : "WITHDRAW",
+                status: Math.random() > 0.5 ? "SUCCESS" : "FAILED",
+              })),
             },
           },
           password: hashedUserPassword,
@@ -151,6 +165,8 @@ async function main() {
       password: hashedUserPassword,
     },
   });
+
+  console.log("Database has been seeded 🌱");
 }
 
 main()
