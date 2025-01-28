@@ -102,8 +102,8 @@ export const AutoTableSheet = <
         if (typeof cellData === "object" && dayjs(cellData as Date).isValid()) {
           return dayjs(cellData as Date).format("DD MMMM YYYY HH:mm");
         }
-
-        return <div>{cellData}</div>;
+     
+        return <>{cellData}</>;
       },
     }));
 

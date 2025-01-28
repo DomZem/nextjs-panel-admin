@@ -2,6 +2,7 @@
 
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
+import { UserTransactionsTable } from "./user-transactions-table";
 import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { LoaderCircle } from "lucide-react";
@@ -47,8 +48,9 @@ export const UsersTable = () => {
         onDelete={deleteUser.mutateAsync}
         renderDetails={(user) => {
           return (
-            <div>
+            <div className="space-y-4">
               <UserAddressesTable userId={user.id} />
+              <UserTransactionsTable userId={user.id} />
             </div>
           );
         }}

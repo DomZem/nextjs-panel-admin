@@ -9,10 +9,12 @@ import {
 
 export const Pagination = ({
   totalPagesCount,
+  queryByPage,
 }: {
   totalPagesCount: number;
+  queryByPage?: string;
 }) => {
-  const [page, setPage] = usePage();
+  const [page, setPage] = usePage(queryByPage);
 
   const isPreviousPageDisabled = page === 1;
   const isNextPageDisabled = page === totalPagesCount;
@@ -28,6 +30,7 @@ export const Pagination = ({
           aria-label="Go to first page"
           variant="outline"
           size="icon"
+          disabled={isPreviousPageDisabled}
           onClick={() => setPage(1)}
         >
           <ChevronsLeft aria-hidden="true" />
@@ -54,6 +57,7 @@ export const Pagination = ({
           aria-label="Go to last page"
           variant="outline"
           size="icon"
+          disabled={isNextPageDisabled}
           onClick={() => setPage(totalPagesCount)}
         >
           <ChevronsRight aria-hidden="true" />

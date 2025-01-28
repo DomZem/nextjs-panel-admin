@@ -17,17 +17,21 @@ export const AutoTablePagination = ({
   className,
   totalPagesCount,
   pageSizeOptions,
+  queryByPage,
+  queryByRowsPerPage,
   ...props
 }: {
   pageSizeOptions?: number[];
+  queryByPage?: string;
+  queryByRowsPerPage?: string;
 } & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > &
   ComponentProps<typeof Pagination>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setPage] = usePage();
-  const [rowsPerPage, setRowsPerPage] = useRowsPerPage();
+  const [_, setPage] = usePage(queryByPage);
+  const [rowsPerPage, setRowsPerPage] = useRowsPerPage(queryByRowsPerPage);
 
   return (
     <div className={cn("flex justify-end", className)} {...props}>
@@ -40,7 +44,10 @@ export const AutoTablePagination = ({
             await setRowsPerPage(parseInt(v, 10));
           }}
         />
-        <Pagination totalPagesCount={totalPagesCount} />
+        <Pagination
+          totalPagesCount={totalPagesCount}
+          queryByPage={queryByPage}
+        />
       </div>
     </div>
   );
