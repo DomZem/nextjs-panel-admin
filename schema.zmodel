@@ -54,18 +54,19 @@ enum UserRole {
 }
 
 model User {
-    id            String         @id @default(cuid())
+    id            String             @id @default(cuid())
     name          String?
-    email         String?        @unique
+    email         String?            @unique
     emailVerified DateTime?
     image         String?
     password      String
-    role          UserRole       @default(USER)
+    role          UserRole           @default(USER)
     accounts      Account[]
     sessions      Session[]
 
     addresses     user_address[]
     orders        order[]
+    transactions  user_transaction[]
 }
 
 model VerificationToken {
@@ -162,4 +163,27 @@ model user_address extends standard_cuid_model {
 
     user           User   @relation(fields: [user_id], references: [id])
     user_id        String
+}
+
+enum TransactionType {
+    DEPOSIT
+    WITHDRAW
+}
+
+enum TransactionStatus {
+    PENDING
+    SUCCESS
+    FAILED
+}
+
+model user_transaction extends standard_cuid_model {
+    amount_cents Int
+    method       String
+    description  String
+
+    type         TransactionType
+    status       TransactionStatus @default(PENDING)
+
+    user         User              @relation(fields: [user_id], references: [id])
+    user_id      String
 }
