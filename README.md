@@ -11,3 +11,4 @@
 - [ ] Add to each input in auto form which can be nullable button that will set the field to null
 - [ ] Try to add filters between title and table options
 - [ ] min height of loading table should be calcualted by: `rows per page * height of the row`
+- [ ] Fix: After refresh selected row disappear. 
