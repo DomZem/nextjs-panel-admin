@@ -19,7 +19,7 @@
     "preview": "next build && next start",
     "start": "next start",
     "seed:dev": "tsx src/server/seeds/basic-seed.ts",
-    "generate:prisma": "npx zenstack generate",
+    "generate:prisma": "npx --no-install zenstack generate",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
@@ -69,6 +69,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.2",
+    "use-debounce": "^10.0.4",
     "zod": "^3.24.1"
   },
   "devDependencies": {
