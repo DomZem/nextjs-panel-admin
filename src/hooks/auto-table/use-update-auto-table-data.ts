@@ -32,13 +32,9 @@ export const useUpdateAutoTableData = <
     setCurrentAction(null);
   };
 
-  const handleUpdate = async (
-    data: {
-      id: ZodObjectSchemaIdentifierKey<TSchema>;
-    } & ZodObjectInfer<TFormSchema>,
-  ) => {
+  const handleUpdate = async (data: ZodObjectInfer<TFormSchema>) => {
     if (!selectedRow) {
-      throw new Error("No selected row to update");
+      throw new Error("no selected row to update");
     }
 
     await handleSubmitData(async () => {
