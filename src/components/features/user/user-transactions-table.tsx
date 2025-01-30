@@ -1,7 +1,12 @@
 "use client";
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
+import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import {
+  AutoTableToolbarHeader,
+  AutoTableWithoutRowDetails,
+} from "~/components/modular-auto-table/auto-table";
 import {
   userTransactionCreateSchema,
   userTransactionSchema,
@@ -10,7 +15,6 @@ import {
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
-import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 
 const queryByPage = "user-transactions-page";
 const rowsPerPageKey = "user-trasactions-rows-per-page";
@@ -39,8 +43,6 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
-        title="Transactions"
-        technicalTableName="user-transactions"
         schema={userTransactionSchema}
         rowIdentifierKey="id"
         data={getAllUserTransactions.data.userTransactions}
@@ -73,7 +75,13 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader
+          title="Transactions"
+          technicalTableName="user-transactions"
+        />
+        <AutoTableWithoutRowDetails />
+      </AutoTableSheet>
 
       <AutoTablePagination
         totalPagesCount={getAllUserTransactions.data.totalPagesCount}

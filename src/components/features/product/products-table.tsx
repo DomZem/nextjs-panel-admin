@@ -1,47 +1,52 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
+import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { type ProductCategory } from "@prisma/client";
+import {
+  AutoTableToolbarHeader,
+  AutoTableWithRowDetails,
+} from "~/components/modular-auto-table/auto-table";
+import { ProductFilters } from "./product-filters";
 import {
   productCreateSchema,
   productUpdateSchema,
   productSchema,
 } from "~/common/validations/product/product";
-import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
+import { useState } from "react";
 
 export const ProductsTable = () => {
-  const [rowsPerPage] = useRowsPerPage();
+  const [productName, setProductName] = useState("");
+  const [productCategory, setProductCategory] = useState<
+    ProductCategory | undefined
+  >(undefined);
+
+  const [pageSize] = useRowsPerPage();
   const [page] = usePage();
 
   const getAllProducts = api.product.getAll.useQuery({
     page,
-    pageSize: rowsPerPage,
+    pageSize,
+    filters: {
+      productName,
+      productCategory,
+    },
   });
   const deleteProduct = api.product.deleteOne.useMutation();
   const createProduct = api.product.createOne.useMutation();
   const updateProduct = api.product.updateOne.useMutation();
   const getProductDetails = api.product.getOne.useMutation();
 
-  if (!getAllProducts.data) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <LoaderCircle className="animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheet
-        title="Products"
-        technicalTableName="products"
+      <AutoTableSheetProvider
         schema={productSchema}
         rowIdentifierKey="id"
-        data={getAllProducts.data.products}
+        data={getAllProducts.data?.products ?? []}
         onRefetchData={getAllProducts.refetch}
         onDetails={getProductDetails.mutateAsync}
         onDelete={deleteProduct.mutateAsync}
@@ -79,11 +84,27 @@ export const ProductsTable = () => {
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader
+          title="Products"
+          technicalTableName="products"
+        />
 
-      <AutoTablePagination
-        totalPagesCount={getAllProducts.data.totalPagesCount}
-      />
+        <ProductFilters
+          productName={productName}
+          onProductNameChange={setProductName}
+          productCategory={productCategory}
+          onProductCategoryChange={setProductCategory}
+        />
+
+        <AutoTableWithRowDetails />
+      </AutoTableSheetProvider>
+
+      {getAllProducts.data && (
+        <AutoTablePagination
+          totalPagesCount={getAllProducts.data.totalPagesCount}
+        />
+      )}
     </div>
   );
 };

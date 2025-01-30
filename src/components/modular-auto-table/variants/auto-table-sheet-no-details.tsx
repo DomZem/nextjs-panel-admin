@@ -1,38 +1,21 @@
 import { type IUseDeleteAutoTableData } from "~/hooks/auto-table/use-delete-auto-table";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { AutoTableDeleteDialog } from "../auto-table-delete-dialog";
-import {
-  AutoTableBody,
-  AutoTableDetailsRow,
-  AutoTableBasicActionsColumn,
-} from "../auto-table";
+import { DataTableProvider } from "~/components/ui/data-table";
+import { AutoTableBasicActionsColumn } from "../auto-table";
 import { mapDashedFieldName } from "~/utils/mappers";
 import React, { type ComponentProps } from "react";
 import { Button } from "~/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import {
-  DataTable,
-  DataTableHeader,
-  DataTableProvider,
-  DataTableSelectColumns,
-} from "~/components/ui/data-table";
+  AutoTableProvider,
+  type AutoTableImplementationProps,
+} from "../auto-table-provider";
 import {
   type ColumnDef,
   getCoreRowModel,
   getSortedRowModel,
   type SortingState,
 } from "@tanstack/react-table";
-import {
-  AutoTableProvider,
-  type AutoTableImplementationProps,
-} from "../auto-table-provider";
-import {
-  AutoTableCloseDetailsButton,
-  AutoTableCreateButton,
-  AutoTableHeader,
-  AutoTableHeaderTitle,
-  AutoTableRefreshButton,
-} from "../auto-table-header";
 import {
   AutoTableCreateFormSheet,
   AutoTableUpdateFormSheet,
@@ -49,8 +32,6 @@ export const AutoTableSheet = <
   TCreateFormSchema extends ZodObjectSchema,
   TUpdateFormSchema extends ZodObjectSchema,
 >({
-  title,
-  technicalTableName,
   schema,
   rowIdentifierKey,
   onRefetchData,
@@ -60,10 +41,9 @@ export const AutoTableSheet = <
   create,
   update,
   omitColumns,
+  children,
 }: AutoTableImplementationProps<TSchema> &
   IUseDeleteAutoTableData<TSchema> & {
-    title: string;
-    technicalTableName: string;
     data: ZodObjectInfer<TSchema>[];
     omitColumns?: Partial<{
       [K in keyof ZodObjectInfer<TSchema>]: true;
@@ -73,6 +53,7 @@ export const AutoTableSheet = <
     update: ComponentProps<
       typeof AutoTableUpdateFormSheet<TUpdateFormSchema, TSchema>
     >;
+    children: React.ReactNode;
   }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -102,7 +83,7 @@ export const AutoTableSheet = <
         if (typeof cellData === "object" && dayjs(cellData as Date).isValid()) {
           return dayjs(cellData as Date).format("DD MMMM YYYY HH:mm");
         }
-     
+
         return <>{cellData}</>;
       },
     }));
@@ -140,28 +121,7 @@ export const AutoTableSheet = <
             getRowId: (row) => row[rowIdentifierKey],
           }}
         >
-          <AutoTableHeader>
-            <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
-            <div className="inline-flex items-center gap-3">
-              <AutoTableRefreshButton />
-              <DataTableSelectColumns
-                tableName={technicalTableName}
-                mapColumnName={mapDashedFieldName}
-              />
-              <AutoTableCloseDetailsButton />
-              <AutoTableCreateButton />
-            </div>
-          </AutoTableHeader>
-
-          <ScrollArea className="flex-1">
-            <DataTable>
-              <DataTableHeader />
-              <AutoTableBody
-                extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
-              />
-            </DataTable>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          {children}
         </DataTableProvider>
 
         <AutoTableDeleteDialog onDelete={onDelete} />

@@ -8,7 +8,14 @@ import {
   type IUseGetAutoTableDetailsData,
   useGetAutoTableDetailsData,
 } from "~/hooks/auto-table/use-get-auto-table-details-data";
-import { useDataTable } from "../ui/data-table";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { mapDashedFieldName } from "~/utils/mappers";
+import {
+  DataTable,
+  DataTableHeader,
+  DataTableSelectColumns,
+  useDataTable,
+} from "../ui/data-table";
 import React, { useMemo } from "react";
 import { Button } from "../ui/button";
 import {
@@ -19,6 +26,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  AutoTableCloseDetailsButton,
+  AutoTableCreateButton,
+  AutoTableHeader,
+  AutoTableHeaderTitle,
+  AutoTableRefreshButton,
+} from "./auto-table-header";
 
 export const AutoTableFullActionsColumn = <
   TSchema extends ZodObjectSchema,
@@ -142,6 +156,55 @@ export const AutoTableBody = ({
   );
 };
 
+export const AutoTableToolbarHeader = ({
+  title,
+  technicalTableName,
+}: {
+  title: string;
+  technicalTableName: string;
+}) => {
+  return (
+    <AutoTableHeader>
+      <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
+      <div className="inline-flex items-center gap-3">
+        <AutoTableRefreshButton />
+        <DataTableSelectColumns
+          tableName={technicalTableName}
+          mapColumnName={mapDashedFieldName}
+        />
+        <AutoTableCloseDetailsButton />
+        <AutoTableCreateButton />
+      </div>
+    </AutoTableHeader>
+  );
+};
+
+export const AutoTableWithRowDetails = () => {
+  return (
+    <ScrollArea className="flex-1">
+      <DataTable>
+        <DataTableHeader />
+        <AutoTableBody
+          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+        />
+      </DataTable>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+  );
+};
+
+export const AutoTableWithoutRowDetails = () => {
+  return (
+    <ScrollArea className="flex-1">
+      <DataTable>
+        <DataTableHeader />
+        <AutoTableBody />
+      </DataTable>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
+  );
+};
+
 export const AutoTableDetailsRow = ({ rowId }: { rowId: string | number }) => {
   const { detailsData, renderDetails } = useAutoTableDetailsData();
   const { selectedRow, currentAction } = useAutoTable();
@@ -159,7 +222,7 @@ export const AutoTableDetailsRow = ({ rowId }: { rowId: string | number }) => {
 
   return (
     <TableRow className="relative w-screen" data-state="selected">
-      <TableCell colSpan={columnsLength}>
+      <TableCell className="py-4" colSpan={columnsLength}>
         {!detailsData ? (
           <div className="flex h-96 items-center justify-center">
             <LoaderCircle className="animate-spin" />

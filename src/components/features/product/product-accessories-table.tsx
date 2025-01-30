@@ -6,6 +6,10 @@ import {
   productAccessoryUpdateSchema,
   productAccessorySchema,
 } from "~/common/validations/product/product-accessory";
+import {
+  AutoTableToolbarHeader,
+  AutoTableWithoutRowDetails,
+} from "~/components/modular-auto-table/auto-table";
 import { LoaderCircle } from "lucide-react";
 import { api } from "~/trpc/react";
 
@@ -32,8 +36,6 @@ export const ProductAccessoriesTable = ({
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
-        title="Accessories"
-        technicalTableName="product-accessories"
         schema={productAccessorySchema}
         rowIdentifierKey="id"
         data={getAllProductAccessories.data}
@@ -66,7 +68,13 @@ export const ProductAccessoriesTable = ({
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader
+          title="Accessories"
+          technicalTableName="product-accessories"
+        />
+        <AutoTableWithoutRowDetails />
+      </AutoTableSheet>
     </div>
   );
 };

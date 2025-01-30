@@ -35,9 +35,7 @@ export const extractFieldNamesFromSchema = <TSchema extends ZodObjectSchema>(
 const foo = <TSchema extends ZodObjectSchema>(
   schema: TSchema,
   rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>,
-) => {
-  console.log("hello world");
-};
+) => {};
 
 const dummySchema = z.object({
   id: z.number(),

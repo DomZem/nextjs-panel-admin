@@ -1,11 +1,16 @@
 "use client";
 
+import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { UserTransactionsTable } from "./user-transactions-table";
 import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
-import { LoaderCircle } from "lucide-react";
+import {
+  AutoTableToolbarHeader,
+  AutoTableWithRowDetails,
+} from "~/components/modular-auto-table/auto-table";
+import { type UserRole } from "@prisma/client";
+import { UserFilters } from "./user-filters";
 import { usePage } from "~/hooks/use-page";
 import {
   userCreateSchema,
@@ -13,36 +18,36 @@ import {
   userSchema,
 } from "~/common/validations/user/user";
 import { api } from "~/trpc/react";
+import { useState } from "react";
 
 export const UsersTable = () => {
-  const [rowsPerPage] = useRowsPerPage();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userRole, setUserRole] = useState<UserRole | undefined>(undefined);
+
+  const [pageSize] = useRowsPerPage();
   const [page] = usePage();
 
   const getAllUsers = api.user.getAll.useQuery({
     page,
-    pageSize: rowsPerPage,
+    pageSize,
+    filters: {
+      userName,
+      userEmail,
+      userRole,
+    },
   });
   const deleteUser = api.user.deleteOne.useMutation();
   const createUser = api.user.createOne.useMutation();
   const updateUser = api.user.updateOne.useMutation();
   const getUserDetails = api.user.getOne.useMutation();
 
-  if (!getAllUsers.data) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <LoaderCircle className="animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheet
-        title="Users"
-        technicalTableName="users"
+      <AutoTableSheetProvider
         schema={userSchema}
         rowIdentifierKey="id"
-        data={getAllUsers.data.users}
+        data={getAllUsers.data?.users ?? []}
         onRefetchData={getAllUsers.refetch}
         onDetails={getUserDetails.mutateAsync}
         onDelete={deleteUser.mutateAsync}
@@ -75,9 +80,26 @@ export const UsersTable = () => {
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader title="Users" technicalTableName="users" />
 
-      <AutoTablePagination totalPagesCount={getAllUsers.data.totalPagesCount} />
+        <UserFilters
+          userName={userName}
+          userEmail={userEmail}
+          userRole={userRole}
+          onUserNameChange={setUserName}
+          onUserEmailChange={setUserEmail}
+          onUserRoleChange={setUserRole}
+        />
+
+        <AutoTableWithRowDetails />
+      </AutoTableSheetProvider>
+
+      {getAllUsers.data && (
+        <AutoTablePagination
+          totalPagesCount={getAllUsers.data.totalPagesCount}
+        />
+      )}
     </div>
   );
 };

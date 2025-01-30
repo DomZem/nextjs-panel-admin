@@ -1,10 +1,15 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet";
+import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants/auto-table-sheet";
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
-import { LoaderCircle } from "lucide-react";
+import {
+  AutoTableToolbarHeader,
+  AutoTableWithRowDetails,
+} from "~/components/modular-auto-table/auto-table";
+import { type OrderStatus } from "@prisma/client";
+import { OrderFilters } from "./order-filters";
 import { usePage } from "~/hooks/use-page";
 import {
   orderCreateSchema,
@@ -12,36 +17,39 @@ import {
   orderSchema,
 } from "~/common/validations/order/order";
 import { api } from "~/trpc/react";
+import { useState } from "react";
 
 export const OrdersTable = () => {
-  const [rowsPerPage] = useRowsPerPage();
+  const [orderId, setOrderId] = useState("");
+  const [orderStatus, setOrderStatus] = useState<OrderStatus | undefined>(
+    undefined,
+  );
+
+  const [pageSize] = useRowsPerPage();
   const [page] = usePage();
 
   const getAllOrders = api.order.getAll.useQuery({
     page,
-    pageSize: rowsPerPage,
+    pageSize,
+    filters: {
+      orderId,
+      orderStatus,
+    },
   });
   const createOrder = api.order.createOne.useMutation();
   const deleteOrder = api.order.deleteOne.useMutation();
   const updateOrder = api.order.updateOne.useMutation();
   const getOrderDetails = api.order.getOne.useMutation();
 
-  if (!getAllOrders.data) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <LoaderCircle className="animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheet
-        title="Orders"
-        technicalTableName="orders"
+      <AutoTableSheetProvider
         schema={orderSchema}
         rowIdentifierKey="id"
-        data={getAllOrders.data.orders}
+        omitColumns={{
+          user_id: true,
+        }}
+        data={getAllOrders.data?.orders ?? []}
         onRefetchData={getAllOrders.refetch}
         onDetails={getOrderDetails.mutateAsync}
         onDelete={deleteOrder.mutateAsync}
@@ -66,11 +74,24 @@ export const OrdersTable = () => {
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader title="Orders" technicalTableName="orders" />
 
-      <AutoTablePagination
-        totalPagesCount={getAllOrders.data.totalPagesCount}
-      />
+        <OrderFilters
+          orderId={orderId}
+          onOrderIdChange={setOrderId}
+          orderStatus={orderStatus}
+          onOrderStatusChange={setOrderStatus}
+        />
+
+        <AutoTableWithRowDetails />
+      </AutoTableSheetProvider>
+
+      {getAllOrders.data && (
+        <AutoTablePagination
+          totalPagesCount={getAllOrders.data.totalPagesCount}
+        />
+      )}
     </div>
   );
 };

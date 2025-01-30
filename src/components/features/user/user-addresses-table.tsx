@@ -2,6 +2,10 @@
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
 import {
+  AutoTableToolbarHeader,
+  AutoTableWithoutRowDetails,
+} from "~/components/modular-auto-table/auto-table";
+import {
   userAddressCreateSchema,
   userAddressSchema,
   userAddressUpdateSchema,
@@ -28,8 +32,6 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
-        title="Addresses"
-        technicalTableName="user-addresses"
         schema={userAddressSchema}
         rowIdentifierKey="id"
         data={getAllUserAddresses.data}
@@ -62,7 +64,13 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader
+          title="Addresses"
+          technicalTableName="user-addresses"
+        />
+        <AutoTableWithoutRowDetails />
+      </AutoTableSheet>
     </div>
   );
 };

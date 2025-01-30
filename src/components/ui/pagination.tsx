@@ -17,7 +17,7 @@ export const Pagination = ({
   const [page, setPage] = usePage(queryByPage);
 
   const isPreviousPageDisabled = page === 1;
-  const isNextPageDisabled = page === totalPagesCount;
+  const isNextPageDisabled = page >= totalPagesCount;
 
   return (
     <div className="flex items-center gap-2">

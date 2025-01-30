@@ -2,6 +2,10 @@
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
 import {
+  AutoTableToolbarHeader,
+  AutoTableWithoutRowDetails,
+} from "~/components/modular-auto-table/auto-table";
+import {
   orderItemCreateSchema,
   orderItemSchema,
   orderItemUpdateSchema,
@@ -28,8 +32,6 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSheet
-        title="Items"
-        technicalTableName="order-items"
         schema={orderItemSchema}
         rowIdentifierKey="id"
         omitColumns={{
@@ -62,7 +64,13 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
             },
           },
         }}
-      />
+      >
+        <AutoTableToolbarHeader
+          title="Items"
+          technicalTableName="order-items"
+        />
+        <AutoTableWithoutRowDetails />
+      </AutoTableSheet>
     </div>
   );
 };

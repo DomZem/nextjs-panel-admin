@@ -1,13 +1,20 @@
 import { OrderCreateSchema } from "~/zod-schemas/models";
+import { z } from "zod";
 
-export const orderSchema = OrderCreateSchema.required({
+const orderRawSchema = OrderCreateSchema.required({
   id: true,
   created_at: true,
   updated_at: true,
   status: true,
 });
 
-export const orderUpdateSchema = orderSchema.omit({
+export const orderSchema = orderRawSchema.merge(
+  z.object({
+    username: z.string(),
+  }),
+);
+
+export const orderUpdateSchema = orderRawSchema.omit({
   created_at: true,
   updated_at: true,
 });

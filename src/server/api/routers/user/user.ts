@@ -1,5 +1,7 @@
+import { paginationSchema } from "~/common/validations/pagination";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { UserScalarSchema } from "~/zod-schemas/models";
+import { UserRole } from "@prisma/client";
 import {
   userCreateSchema,
   userUpdateSchema,
@@ -9,13 +11,31 @@ import { z } from "zod";
 export const userRouter = createTRPCRouter({
   getAll: adminProcedure
     .input(
-      z.object({
-        page: z.number(),
-        pageSize: z.number(),
-      }),
+      paginationSchema.merge(
+        z.object({
+          filters: z
+            .object({
+              userName: z.string().optional(),
+              userEmail: z.string().optional(),
+              userRole: z.nativeEnum(UserRole).optional(),
+            })
+            .optional(),
+        }),
+      ),
     )
     .query(async ({ ctx, input }) => {
+      const where = {
+        name: {
+          contains: input.filters?.userName,
+        },
+        email: {
+          contains: input.filters?.userEmail,
+        },
+        role: input.filters?.userRole,
+      };
+
       const users = await ctx.db.user.findMany({
+        where,
         skip: (input.page - 1) * input.pageSize,
         take: input.pageSize,
         orderBy: {
@@ -23,7 +43,9 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      const totalUsersCount = await ctx.db.user.count();
+      const totalUsersCount = await ctx.db.user.count({
+        where,
+      });
 
       return {
         totalPagesCount: Math.ceil(totalUsersCount / input.pageSize),
