@@ -1,15 +1,22 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { type TypeOf, type z } from "zod";
-import { cn } from "~/lib/utils";
 import { type DefaultValues, type Path, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ImageUpload } from "./image-upload-input";
+import { type ZodObjectSchema } from "~/utils/zod";
+import { DateTimePicker } from "./datetime-picker";
+import { type TypeOf, type z } from "zod";
+import { Checkbox } from "./checkbox";
+import { Textarea } from "./textarea";
+import { Button } from "./button";
+import { cn } from "~/lib/utils";
+import { Input } from "./input";
+import { Badge } from "./badge";
 import {
   type ComponentPropsWithoutRef,
   useMemo,
   type ChangeEvent,
 } from "react";
-import { type ZodObjectSchema } from "~/utils/zod";
 import {
   getFormFieldsDefaultValues,
   mapSchemaToFormFields,
@@ -31,12 +38,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { Textarea } from "./textarea";
-import { Input } from "./input";
-import { Button } from "./button";
-import { ImageUpload } from "./image-upload-input";
-import { Checkbox } from "./checkbox";
-import { DateTimePicker } from "./datetime-picker";
 
 type InputType =
   | "text"
@@ -131,6 +132,12 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                 const label =
                   config?.label ?? mapLabel?.(fieldName) ?? fieldName;
 
+                const shouldShowClearButton =
+                  !formField.isRequired &&
+                  formField.type !== "datetime" &&
+                  config?.type !== "datetime" &&
+                  config?.type !== "image";
+
                 return (
                   <FormItem className={cn("", config?.hidden && "hidden")}>
                     {config?.type === "checkbox" ||
@@ -146,7 +153,21 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                       </div>
                     ) : (
                       <>
-                        <FormLabel>{label}</FormLabel>
+                        <div className="flex items-center justify-between">
+                          <FormLabel>{label}</FormLabel>
+
+                          {shouldShowClearButton && (
+                            <Badge
+                              role="button"
+                              className="cursor-pointer"
+                              onClick={() => {
+                                field.onChange(undefined);
+                              }}
+                            >
+                              Clear
+                            </Badge>
+                          )}
+                        </div>
 
                         {formField.type === "select" ? (
                           <Select
