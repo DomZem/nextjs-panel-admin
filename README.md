@@ -12,3 +12,4 @@
 - [x] Feat: add filters between header and table
 - [ ] Sugestion: min height of loading table should be calcualted by: `rows per page * height of the row`
 - [ ] Fix: after refresh selected row disappear.
+- [x] Feat: added columns map to auto table. By adding that i will be able to modify the end result of column. Like for example rendering user avatar.

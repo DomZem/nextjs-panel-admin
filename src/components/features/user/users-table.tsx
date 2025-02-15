@@ -10,6 +10,7 @@ import {
   AutoTableWithRowDetails,
 } from "~/components/modular-auto-table/auto-table";
 import { type UserRole } from "@prisma/client";
+import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
 import { usePage } from "~/hooks/use-page";
 import {
@@ -19,6 +20,7 @@ import {
 } from "~/common/validations/user/user";
 import { api } from "~/trpc/react";
 import { useState } from "react";
+import Image from "next/image";
 
 export const UsersTable = () => {
   const [userName, setUserName] = useState("");
@@ -47,6 +49,31 @@ export const UsersTable = () => {
       <AutoTableSheetProvider
         schema={userSchema}
         rowIdentifierKey="id"
+        columnsMap={{
+          image: (value) => {
+            if (!value) return "no image";
+
+            return (
+              <Image
+                className="rounded-full"
+                src={value}
+                width={32}
+                height={32}
+                alt="user profile"
+              />
+            );
+          },
+          emailVerified: (value) => {
+            return (
+              <Badge
+                className="rounded-xl"
+                variant={value ? "success" : "destructive"}
+              >
+                {value ? "Verified" : "Not verified"}
+              </Badge>
+            );
+          },
+        }}
         data={getAllUsers.data?.users ?? []}
         onRefetchData={getAllUsers.refetch}
         onDetails={getUserDetails.mutateAsync}

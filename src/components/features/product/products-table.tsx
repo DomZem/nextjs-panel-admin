@@ -46,6 +46,14 @@ export const ProductsTable = () => {
       <AutoTableSheetProvider
         schema={productSchema}
         rowIdentifierKey="id"
+        columnsMap={{
+          price_cents: (value) => {
+            return `$${(value / 100).toFixed(2)}`;
+          },
+          vat_percentage: (value) => {
+            return `${value}%`;
+          },
+        }}
         data={getAllProducts.data?.products ?? []}
         onRefetchData={getAllProducts.refetch}
         onDetails={getProductDetails.mutateAsync}

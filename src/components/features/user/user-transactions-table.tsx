@@ -15,6 +15,7 @@ import {
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
+import { Badge } from "~/components/ui/badge";
 
 const queryByPage = "user-transactions-page";
 const rowsPerPageKey = "user-trasactions-rows-per-page";
@@ -48,6 +49,30 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
         data={getAllUserTransactions.data.userTransactions}
         omitColumns={{
           user_id: true,
+        }}
+        columnsMap={{
+          amount_cents: (value) => {
+            return `$${(value / 100).toFixed(2)}`;
+          },
+          status: (value) => {
+            return (
+              <Badge
+                variant={
+                  value === "PENDING"
+                    ? "outline"
+                    : value === "SUCCESS"
+                      ? "success"
+                      : "destructive"
+                }
+              >
+                {value === "PENDING"
+                  ? "Pending"
+                  : value === "SUCCESS"
+                    ? "Success"
+                    : "Failed"}
+              </Badge>
+            );
+          },
         }}
         onRefetchData={getAllUserTransactions.refetch}
         onDelete={deleteUserTransaction.mutateAsync}

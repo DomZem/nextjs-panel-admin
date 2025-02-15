@@ -41,12 +41,18 @@ export const AutoTableSheet = <
   create,
   update,
   omitColumns,
+  columnsMap,
   children,
 }: AutoTableImplementationProps<TSchema> &
   IUseDeleteAutoTableData<TSchema> & {
     data: ZodObjectInfer<TSchema>[];
     omitColumns?: Partial<{
       [K in keyof ZodObjectInfer<TSchema>]: true;
+    }>;
+    columnsMap?: Partial<{
+      [K in keyof ZodObjectInfer<TSchema>]: (
+        data: ZodObjectInfer<TSchema>[K],
+      ) => React.ReactNode;
     }>;
     extraColumns?: ColumnDef<ZodObjectInfer<TSchema>>[];
     create: ComponentProps<typeof AutoTableCreateFormSheet<TCreateFormSchema>>;
@@ -79,6 +85,10 @@ export const AutoTableSheet = <
       },
       cell: ({ row }) => {
         const cellData = row.original[fieldName];
+
+        if (columnsMap && columnsMap[fieldName]) {
+          return columnsMap[fieldName](cellData);
+        }
 
         if (typeof cellData === "object" && dayjs(cellData as Date).isValid()) {
           return dayjs(cellData as Date).format("DD MMMM YYYY HH:mm");

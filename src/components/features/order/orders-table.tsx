@@ -50,6 +50,11 @@ export const OrdersTable = () => {
         omitColumns={{
           user_id: true,
         }}
+        columnsMap={{
+          total_cents: (value) => {
+            return `$${value / 100}`;
+          },
+        }}
         data={getAllOrders.data?.orders ?? []}
         onRefetchData={getAllOrders.refetch}
         onDetails={getOrderDetails.mutateAsync}

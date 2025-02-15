@@ -29,10 +29,14 @@ async function main() {
         data: {
           name: `${firstName} ${lastName}`,
           email: faker.internet.email({ firstName, lastName }),
-          emailVerified: faker.date.between({
-            from: "2000-01-01",
-            to: Date.now(),
-          }),
+          image: faker.image.avatarGitHub(),
+          emailVerified:
+            Math.random() > 0.5
+              ? faker.date.between({
+                  from: "2000-01-01",
+                  to: Date.now(),
+                })
+              : null,
           addresses: {
             create: {
               city: faker.location.city(),
