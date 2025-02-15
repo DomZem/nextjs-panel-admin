@@ -4,6 +4,7 @@ import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants
 import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
+import { UserCombobox } from "../user/user-combobox";
 import {
   AutoTableToolbarHeader,
   AutoTableWithRowDetails,
@@ -63,7 +64,19 @@ export const OrdersTable = () => {
         create={{
           formSchema: orderCreateSchema,
           onCreate: createOrder.mutateAsync,
-          fieldsConfig: {},
+          fieldsConfig: {
+            user_id: {
+              type: "custom",
+              render: ({ field }) => {
+                return (
+                  <UserCombobox
+                    selectedValue={field.value}
+                    onSelect={field.onChange}
+                  />
+                );
+              },
+            },
+          },
         }}
         update={{
           formSchema: orderUpdateSchema,
@@ -71,6 +84,17 @@ export const OrdersTable = () => {
           fieldsConfig: {
             id: {
               hidden: true,
+            },
+            user_id: {
+              type: "custom",
+              render: ({ field }) => {
+                return (
+                  <UserCombobox
+                    selectedValue={field.value}
+                    onSelect={field.onChange}
+                  />
+                );
+              },
             },
           },
         }}

@@ -48,6 +48,46 @@ export const productRouter = createTRPCRouter({
         products,
       };
     }),
+  getSearchProducts: adminProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        id: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.name) {
+        const products = await ctx.db.product.findMany({
+          take: 5,
+          orderBy: {
+            id: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
+
+        return products;
+      }
+
+      const filteredProducts = await ctx.db.product.findMany({
+        where: {
+          name: {
+            contains: input.name,
+          },
+        },
+        orderBy: {
+          id: "asc",
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      return filteredProducts;
+    }),
   getAllFiltered: adminProcedure
     .input(
       z.object({

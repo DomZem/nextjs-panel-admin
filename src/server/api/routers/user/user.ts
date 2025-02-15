@@ -52,6 +52,45 @@ export const userRouter = createTRPCRouter({
         users,
       };
     }),
+  getSearchUsers: adminProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.name) {
+        const users = await ctx.db.user.findMany({
+          take: 5,
+          orderBy: {
+            id: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
+
+        return users;
+      }
+
+      const filteredUsers = await ctx.db.user.findMany({
+        where: {
+          name: {
+            contains: input.name,
+          },
+        },
+        orderBy: {
+          id: "asc",
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      return filteredUsers;
+    }),
   getFilteredUsers: adminProcedure
     .input(
       z.object({

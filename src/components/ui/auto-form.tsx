@@ -67,20 +67,34 @@ type SelectFieldConfig = {
   options: SelectOption[];
 };
 
-interface CustomFieldConfig {
+type CustomFieldConfig<
+  TSchema extends ZodObjectSchema,
+  TKey extends Path<TypeOf<TSchema>>,
+> = {
   type: "custom";
-  render: ComponentPropsWithoutRef<typeof FormField>["render"];
+  render: (
+    props: Parameters<
+      ComponentPropsWithoutRef<
+        typeof FormField<TypeOf<TSchema>, TKey>
+      >["render"]
+    >[0],
+  ) => JSX.Element;
   hidden?: true;
-}
+};
 
-type FieldConfig = BaseFieldConfig | SelectFieldConfig | CustomFieldConfig;
+type FieldConfig<
+  TSchema extends ZodObjectSchema,
+  TKey extends Path<TypeOf<TSchema>>,
+> = BaseFieldConfig | SelectFieldConfig | CustomFieldConfig<TSchema, TKey>;
 
 export interface AutoFormProps<TSchema extends ZodObjectSchema> {
   schema: TSchema;
   onSubmit: (data: z.infer<TSchema>) => void;
   className?: string;
   mapLabel?: (fieldName: string) => string;
-  fieldsConfig?: Partial<Record<keyof z.infer<TSchema>, FieldConfig>>;
+  fieldsConfig?: {
+    [TKey in Path<TypeOf<TSchema>>]?: FieldConfig<TSchema, TKey>;
+  };
   defaultValues?: DefaultValues<TypeOf<TSchema>>;
 }
 
@@ -117,7 +131,8 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
         className={cn("space-y-8", className)}
       >
         {Object.entries(formFields).map(([fieldName, formField]) => {
-          const config = fieldsConfig?.[fieldName];
+          const key = fieldName as Path<TypeOf<TSchema>>;
+          const config = fieldsConfig?.[key];
 
           return (
             <FormField

@@ -1,6 +1,7 @@
 "use client";
 
 import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
+import { ProductCombobox } from "../product/product-combobox";
 import {
   AutoTableToolbarHeader,
   AutoTableWithoutRowDetails,
@@ -47,6 +48,17 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
             order_id: {
               hidden: true,
             },
+            product_id: {
+              type: "custom",
+              render: ({ field }) => {
+                return (
+                  <ProductCombobox
+                    selectedValue={field.value}
+                    onSelect={field.onChange}
+                  />
+                );
+              },
+            },
           },
           defaultValues: {
             order_id: orderId,
@@ -61,6 +73,17 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
             },
             order_id: {
               hidden: true,
+            },
+            product_id: {
+              type: "custom",
+              render: ({ field }) => {
+                return (
+                  <ProductCombobox
+                    selectedValue={field.value}
+                    onSelect={field.onChange}
+                  />
+                );
+              },
             },
           },
         }}

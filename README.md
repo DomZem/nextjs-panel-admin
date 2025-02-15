@@ -3,7 +3,7 @@
 - [x] Feat: add saving selected columns to display in local storage
 - [x] Feat: add scroll to sheet
 - [x] Feat: add option to add default value for field through prop in auto form
-- [ ] Feat: add combobox to choose relation data. Ex. adding user to order, or adding product to order_item model
+- [x] Feat: add combobox to choose relation data. Ex. adding user to order, or adding product to order_item model
 - [x] Feat: add another variant of auto table without required onDetails and renderDetails
 - [ ] Feat: add wysiwg editor as input to auto form
 - [x] Feat: add component for date input
