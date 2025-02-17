@@ -1,7 +1,9 @@
 "use client";
 
+import { useAutoTable } from "./providers/auto-table-provider";
 import { CirclePlus, CopyX, RotateCw } from "lucide-react";
-import { useAutoTable } from "./auto-table-provider";
+import { DataTableSelectColumns } from "../ui/data-table";
+import { mapDashedFieldName } from "~/utils/mappers";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
 import { useState } from "react";
@@ -123,5 +125,28 @@ export const AutoTableRefreshButton = () => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  );
+};
+
+export const AutoTableToolbarHeader = ({
+  title,
+  technicalTableName,
+}: {
+  title: string;
+  technicalTableName: string;
+}) => {
+  return (
+    <AutoTableHeader>
+      <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
+      <div className="inline-flex items-center gap-3">
+        <AutoTableRefreshButton />
+        <DataTableSelectColumns
+          tableName={technicalTableName}
+          mapColumnName={mapDashedFieldName}
+        />
+        <AutoTableCloseDetailsButton />
+        <AutoTableCreateButton />
+      </div>
+    </AutoTableHeader>
   );
 };

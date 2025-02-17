@@ -1,20 +1,9 @@
-import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
+import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
+import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
-import {
-  type ZodObjectSchemaIdentifierKey,
-  type ZodObjectInfer,
-  type ZodObjectSchema,
-} from "~/utils/zod";
 
-export interface IUseUpdateAutoTableData<
-  TFormSchema extends ZodObjectSchema,
-  TSchema extends ZodObjectSchema,
-> {
-  onUpdate: (
-    data: {
-      id: ZodObjectSchemaIdentifierKey<TSchema>;
-    } & ZodObjectInfer<TFormSchema>,
-  ) => Promise<unknown>;
+export interface IUseUpdateAutoTableData<TFormSchema extends ZodObjectSchema> {
+  onUpdate: (data: ZodObjectInfer<TFormSchema>) => Promise<unknown>;
 }
 
 export const useUpdateAutoTableData = <
@@ -22,8 +11,8 @@ export const useUpdateAutoTableData = <
   TSchema extends ZodObjectSchema,
 >({
   onUpdate,
-}: IUseUpdateAutoTableData<TFormSchema, TSchema>) => {
-  const { selectedRow, rowIdentifierKey, currentAction, setCurrentAction } =
+}: IUseUpdateAutoTableData<TFormSchema>) => {
+  const { selectedRow, currentAction, setCurrentAction } =
     useAutoTable<TSchema>();
 
   const { handleSubmitData } = useSubmitAutoTableData<TSchema>();
@@ -38,10 +27,7 @@ export const useUpdateAutoTableData = <
     }
 
     await handleSubmitData(async () => {
-      await onUpdate({
-        ...data,
-        id: selectedRow[rowIdentifierKey],
-      });
+      await onUpdate(data);
     });
   };
 

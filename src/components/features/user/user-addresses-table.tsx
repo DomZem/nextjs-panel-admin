@@ -1,10 +1,8 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
-import {
-  AutoTableToolbarHeader,
-  AutoTableWithoutRowDetails,
-} from "~/components/modular-auto-table/auto-table";
+import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
+import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import {
   userAddressCreateSchema,
   userAddressSchema,
@@ -31,7 +29,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheet
+      <AutoTableSecondary
         schema={userAddressSchema}
         rowIdentifierKey="id"
         data={getAllUserAddresses.data}
@@ -69,8 +67,9 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
           title="Addresses"
           technicalTableName="user-addresses"
         />
-        <AutoTableWithoutRowDetails />
-      </AutoTableSheet>
+
+        <AutoTableDndTable />
+      </AutoTableSecondary>
     </div>
   );
 };

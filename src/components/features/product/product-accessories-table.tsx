@@ -1,15 +1,13 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
+import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
+import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import {
   productAccessoryCreateSchema,
   productAccessoryUpdateSchema,
   productAccessorySchema,
 } from "~/common/validations/product/product-accessory";
-import {
-  AutoTableToolbarHeader,
-  AutoTableWithoutRowDetails,
-} from "~/components/modular-auto-table/auto-table";
 import { LoaderCircle } from "lucide-react";
 import { api } from "~/trpc/react";
 
@@ -35,7 +33,7 @@ export const ProductAccessoriesTable = ({
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheet
+      <AutoTableSecondary
         schema={productAccessorySchema}
         rowIdentifierKey="id"
         data={getAllProductAccessories.data}
@@ -73,8 +71,8 @@ export const ProductAccessoriesTable = ({
           title="Accessories"
           technicalTableName="product-accessories"
         />
-        <AutoTableWithoutRowDetails />
-      </AutoTableSheet>
+        <AutoTableDndTable />
+      </AutoTableSecondary>
     </div>
   );
 };

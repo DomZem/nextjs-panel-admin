@@ -1,4 +1,4 @@
-import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
+import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
 import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
 

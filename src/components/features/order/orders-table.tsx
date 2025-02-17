@@ -1,14 +1,13 @@
 "use client";
 
-import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants/auto-table-sheet";
-import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
+import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
+import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
+import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
 import { UserCombobox } from "../user/user-combobox";
-import {
-  AutoTableToolbarHeader,
-  AutoTableWithRowDetails,
-} from "~/components/modular-auto-table/auto-table";
 import { type OrderStatus } from "@prisma/client";
 import { OrderFilters } from "./order-filters";
 import { usePage } from "~/hooks/use-page";
@@ -44,7 +43,7 @@ export const OrdersTable = () => {
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheetProvider
+      <AutoTablePrimary
         schema={orderSchema}
         rowIdentifierKey="id"
         omitColumns={{
@@ -113,8 +112,10 @@ export const OrdersTable = () => {
           onOrderStatusChange={setOrderStatus}
         />
 
-        <AutoTableWithRowDetails />
-      </AutoTableSheetProvider>
+        <AutoTableDndTable
+          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+        />
+      </AutoTablePrimary>
 
       {getAllOrders.data && (
         <AutoTablePagination

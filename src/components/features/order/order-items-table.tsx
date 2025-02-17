@@ -1,11 +1,9 @@
 "use client";
 
-import { AutoTableSheet } from "~/components/modular-auto-table/variants/auto-table-sheet-no-details";
+import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
+import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { ProductCombobox } from "../product/product-combobox";
-import {
-  AutoTableToolbarHeader,
-  AutoTableWithoutRowDetails,
-} from "~/components/modular-auto-table/auto-table";
 import {
   orderItemCreateSchema,
   orderItemSchema,
@@ -32,7 +30,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheet
+      <AutoTableSecondary
         schema={orderItemSchema}
         rowIdentifierKey="id"
         omitColumns={{
@@ -92,8 +90,8 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
           title="Items"
           technicalTableName="order-items"
         />
-        <AutoTableWithoutRowDetails />
-      </AutoTableSheet>
+        <AutoTableDndTable />
+      </AutoTableSecondary>
     </div>
   );
 };

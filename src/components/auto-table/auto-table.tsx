@@ -1,21 +1,9 @@
-import { useAutoTableDetailsData } from "./auto-table-details-data-provider";
+import { useAutoTableDetailsData } from "./providers/auto-table-details-data-provider";
+import { type ActionType, useAutoTable } from "./providers/auto-table-provider";
 import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
-import { type ActionType, useAutoTable } from "./auto-table-provider";
-import { flexRender, type Row } from "@tanstack/react-table";
-import { TableBody, TableCell, TableRow } from "../ui/table";
 import { LoaderCircle, MoreHorizontal } from "lucide-react";
-import {
-  type IUseGetAutoTableDetailsData,
-  useGetAutoTableDetailsData,
-} from "~/hooks/auto-table/use-get-auto-table-details-data";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { mapDashedFieldName } from "~/utils/mappers";
-import {
-  DataTable,
-  DataTableHeader,
-  DataTableSelectColumns,
-  useDataTable,
-} from "../ui/data-table";
+import { TableCell, TableRow } from "../ui/table";
+import { useDataTable } from "../ui/data-table";
 import React, { useMemo } from "react";
 import { Button } from "../ui/button";
 import {
@@ -26,29 +14,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  AutoTableCloseDetailsButton,
-  AutoTableCreateButton,
-  AutoTableHeader,
-  AutoTableHeaderTitle,
-  AutoTableRefreshButton,
-} from "./auto-table-header";
 
-export const AutoTableFullActionsColumn = <
-  TSchema extends ZodObjectSchema,
-  TDetailsData extends Record<string, unknown>,
->({
+export const AutoTableFullActionsColumn = <TSchema extends ZodObjectSchema>({
   row,
-  onDetails,
 }: {
   row: ZodObjectInfer<TSchema>;
-} & IUseGetAutoTableDetailsData<TSchema, TDetailsData>) => {
-  const { handleGetDetailsData } = useGetAutoTableDetailsData<
-    TSchema,
-    TDetailsData
-  >({
-    onDetails,
-  });
+}) => {
+  const { getDetailsData } = useAutoTableDetailsData();
 
   const { setCurrentAction, setSelectedRow } = useAutoTable<TSchema>();
 
@@ -71,7 +43,7 @@ export const AutoTableFullActionsColumn = <
           onClick={async () => {
             setSelectedRow(row);
             setCurrentAction("DETAILS");
-            await handleGetDetailsData(row.id);
+            await getDetailsData();
           }}
         >
           Details
@@ -119,89 +91,6 @@ export const AutoTableBasicActionsColumn = <TSchema extends ZodObjectSchema>({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
-
-export const AutoTableBody = ({
-  extraRow,
-}: {
-  extraRow?: (row: Row<unknown>) => React.ReactNode;
-}) => {
-  const { table } = useDataTable();
-  const columnsLength = table.getAllColumns().length;
-
-  return (
-    <TableBody>
-      {table.getRowModel().rows?.length ? (
-        table.getRowModel().rows.map((row) => (
-          <React.Fragment key={row.id}>
-            <TableRow data-state={row.getIsSelected() && "selected"}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-            {extraRow?.(row)}
-          </React.Fragment>
-        ))
-      ) : (
-        <TableRow>
-          <TableCell colSpan={columnsLength} className="h-24 text-center">
-            No results.
-          </TableCell>
-        </TableRow>
-      )}
-    </TableBody>
-  );
-};
-
-export const AutoTableToolbarHeader = ({
-  title,
-  technicalTableName,
-}: {
-  title: string;
-  technicalTableName: string;
-}) => {
-  return (
-    <AutoTableHeader>
-      <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
-      <div className="inline-flex items-center gap-3">
-        <AutoTableRefreshButton />
-        <DataTableSelectColumns
-          tableName={technicalTableName}
-          mapColumnName={mapDashedFieldName}
-        />
-        <AutoTableCloseDetailsButton />
-        <AutoTableCreateButton />
-      </div>
-    </AutoTableHeader>
-  );
-};
-
-export const AutoTableWithRowDetails = () => {
-  return (
-    <ScrollArea className="flex-1">
-      <DataTable>
-        <DataTableHeader />
-        <AutoTableBody
-          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
-        />
-      </DataTable>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
-  );
-};
-
-export const AutoTableWithoutRowDetails = () => {
-  return (
-    <ScrollArea className="flex-1">
-      <DataTable>
-        <DataTableHeader />
-        <AutoTableBody />
-      </DataTable>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
   );
 };
 

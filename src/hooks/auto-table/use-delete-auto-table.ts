@@ -1,28 +1,16 @@
-import { useAutoTable } from "~/components/modular-auto-table/auto-table-provider";
+import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
+import { type ZodObjectSchema, type ZodObjectInfer } from "~/utils/zod";
 import { toast } from "../use-toast";
-import {
-  type ZodObjectSchemaIdentifierKey,
-  type ZodObjectSchema,
-} from "~/utils/zod";
 
 export interface IUseDeleteAutoTableData<TSchema extends ZodObjectSchema> {
-  onDelete: ({
-    id,
-  }: {
-    id: ZodObjectSchemaIdentifierKey<TSchema>;
-  }) => Promise<unknown>;
+  onDelete: (selectedRow: ZodObjectInfer<TSchema>) => Promise<unknown>;
 }
 
 export const useDeleteAutoTableData = <TSchema extends ZodObjectSchema>({
   onDelete,
 }: IUseDeleteAutoTableData<TSchema>) => {
-  const {
-    selectedRow,
-    refetchData,
-    setCurrentAction,
-    rowIdentifierKey,
-    currentAction,
-  } = useAutoTable<TSchema>();
+  const { selectedRow, refetchData, setCurrentAction, currentAction } =
+    useAutoTable<TSchema>();
 
   const handleClose = () => {
     setCurrentAction(null);
@@ -31,11 +19,10 @@ export const useDeleteAutoTableData = <TSchema extends ZodObjectSchema>({
   const handleDelete = async () => {
     try {
       if (!selectedRow) {
-        throw new Error("No selected row to delete");
+        throw new Error("no selected row to delete");
       }
 
-      const id = selectedRow[rowIdentifierKey];
-      await onDelete({ id });
+      await onDelete(selectedRow);
       await refetchData();
 
       toast({

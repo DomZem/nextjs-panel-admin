@@ -1,33 +1,53 @@
+import { type ZodObjectSchema, type ZodObjectInfer } from "~/utils/zod";
+import { useAutoTable } from "./auto-table-provider";
 import React, { useState } from "react";
 
 interface IAutoTableDetailsDataContext<
   TDetailsData extends Record<string, unknown>,
 > {
   detailsData: TDetailsData | null;
-  setDetailsData: (data: TDetailsData | null) => void;
   renderDetails: (data: TDetailsData) => React.ReactNode;
+  getDetailsData: () => Promise<void>;
 }
 
 const AutoTableDetailsDataContext =
   React.createContext<IAutoTableDetailsDataContext<any> | null>(null);
 
+export interface IAutoTableDetailsDataProvider<
+  TSchema extends ZodObjectSchema,
+  TDetailsData extends Record<string, unknown>,
+> {
+  renderDetails: (data: TDetailsData) => React.ReactNode;
+  onDetails: (selectedRow: ZodObjectInfer<TSchema>) => Promise<TDetailsData>;
+}
+
 export const AutoTableDetailsDataProvider = <
+  TSchema extends ZodObjectSchema,
   TDetailsData extends Record<string, unknown>,
 >({
   renderDetails,
+  onDetails,
   children,
-}: {
-  renderDetails: (data: TDetailsData) => React.ReactNode;
+}: IAutoTableDetailsDataProvider<TSchema, TDetailsData> & {
   children: React.ReactNode;
 }) => {
   const [detailsData, setDetailsData] = useState<TDetailsData | null>(null);
+  const { selectedRow } = useAutoTable<TSchema>();
+
+  const handleGetDetailsData = async () => {
+    if (!selectedRow) return;
+
+    const data = await onDetails(selectedRow);
+
+    setDetailsData(data);
+  };
 
   return (
     <AutoTableDetailsDataContext.Provider
       value={{
         detailsData,
-        setDetailsData: (data) => setDetailsData(data as TDetailsData),
         renderDetails,
+        getDetailsData: handleGetDetailsData,
       }}
     >
       {children}

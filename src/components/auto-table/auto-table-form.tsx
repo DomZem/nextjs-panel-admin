@@ -1,6 +1,7 @@
 "use client";
 
 import { AutoForm, type AutoFormProps } from "../ui/auto-form";
+import { useAutoTable } from "./providers/auto-table-provider";
 import { sanitizeSchemaObject } from "~/utils/auto-form";
 import {
   type IUseUpdateAutoTableData,
@@ -10,7 +11,6 @@ import {
   type IUseCreateAutoTableData,
   useCreateAutoTableData,
 } from "~/hooks/auto-table/use-create-auto-table-data";
-import { useAutoTable } from "./auto-table-provider";
 import { mapDashedFieldName } from "~/utils/mappers";
 import { type DefaultValues } from "react-hook-form";
 import { type ZodObjectSchema } from "~/utils/zod";
@@ -127,7 +127,7 @@ export const AutoTableUpdateFormSheet = <
   formSchema,
   onUpdate,
 }: Pick<AutoFormProps<TFormSchema>, "fieldsConfig" | "defaultValues"> &
-  IUseUpdateAutoTableData<TFormSchema, TSchema> & {
+  IUseUpdateAutoTableData<TFormSchema> & {
     formSchema: TFormSchema;
   }) => {
   const { selectedRow } = useAutoTable<TSchema>();

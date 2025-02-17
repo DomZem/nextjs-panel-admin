@@ -1,14 +1,13 @@
 "use client";
 
-import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants/auto-table-sheet";
-import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
+import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
+import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
+import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { UserTransactionsTable } from "./user-transactions-table";
 import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
-import {
-  AutoTableToolbarHeader,
-  AutoTableWithRowDetails,
-} from "~/components/modular-auto-table/auto-table";
 import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
@@ -46,7 +45,7 @@ export const UsersTable = () => {
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheetProvider
+      <AutoTablePrimary
         schema={userSchema}
         rowIdentifierKey="id"
         columnsMap={{
@@ -119,8 +118,10 @@ export const UsersTable = () => {
           onUserRoleChange={setUserRole}
         />
 
-        <AutoTableWithRowDetails />
-      </AutoTableSheetProvider>
+        <AutoTableDndTable
+          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+        />
+      </AutoTablePrimary>
 
       {getAllUsers.data && (
         <AutoTablePagination

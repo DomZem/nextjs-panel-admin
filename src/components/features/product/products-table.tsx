@@ -1,14 +1,13 @@
 "use client";
 
-import { AutoTableSheetProvider } from "~/components/modular-auto-table/variants/auto-table-sheet";
-import { AutoTablePagination } from "~/components/modular-auto-table/auto-table-pagination";
+import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
+import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
+import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { type ProductCategory } from "@prisma/client";
-import {
-  AutoTableToolbarHeader,
-  AutoTableWithRowDetails,
-} from "~/components/modular-auto-table/auto-table";
 import { ProductFilters } from "./product-filters";
 import {
   productCreateSchema,
@@ -43,7 +42,7 @@ export const ProductsTable = () => {
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
-      <AutoTableSheetProvider
+      <AutoTablePrimary
         schema={productSchema}
         rowIdentifierKey="id"
         columnsMap={{
@@ -105,8 +104,10 @@ export const ProductsTable = () => {
           onProductCategoryChange={setProductCategory}
         />
 
-        <AutoTableWithRowDetails />
-      </AutoTableSheetProvider>
+        <AutoTableDndTable
+          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+        />
+      </AutoTablePrimary>
 
       {getAllProducts.data && (
         <AutoTablePagination
