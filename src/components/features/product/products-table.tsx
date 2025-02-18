@@ -17,6 +17,13 @@ import {
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { Info } from "lucide-react";
 
 export const ProductsTable = () => {
   const [productName, setProductName] = useState("");
@@ -52,6 +59,20 @@ export const ProductsTable = () => {
           },
           vat_percentage: (value) => {
             return `${value}%`;
+          },
+          features_content: (value) => {
+            return (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Info size={18} />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{value}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            );
           },
         }}
         data={getAllProducts.data?.products ?? []}

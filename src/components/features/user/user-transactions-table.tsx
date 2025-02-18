@@ -62,12 +62,19 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
                 height={40}
                 alt="blik method"
               />
-            ) : (
+            ) : value === "CREDIT_CARD" ? (
               <Image
                 src="/assets/visa.png"
                 width={40}
                 height={40}
                 alt="card method"
+              />
+            ) : (
+              <Image
+                src="/assets/pay-pal.png"
+                width={36}
+                height={36}
+                alt="pay pal method"
               />
             );
           },

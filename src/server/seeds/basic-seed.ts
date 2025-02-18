@@ -1,4 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import {
+  OrderStatus,
+  PrismaClient,
+  ProductCategory,
+  TransactionMethod,
+  TransactionStatus,
+  TransactionType,
+} from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import { hash } from "@node-rs/argon2";
 
@@ -52,9 +59,10 @@ async function main() {
               }).map(() => ({
                 amount_cents: faker.number.int({ min: 1, max: 2_000 }),
                 description: "",
-                method: Math.random() > 0.5 ? "BLIK" : "CREDIT_CARD",
-                type: Math.random() > 0.5 ? "DEPOSIT" : "WITHDRAW",
-                status: Math.random() > 0.5 ? "SUCCESS" : "FAILED",
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                method: getRandomEnum(TransactionMethod),
+                type: getRandomEnum(TransactionType),
+                status: getRandomEnum(TransactionStatus),
               })),
             },
           },
@@ -76,7 +84,7 @@ async function main() {
             max: 25,
             multipleOf: 0.5,
           }),
-          category: Math.random() > 0.5 ? "EARPHONES" : "HEADPHONES",
+          category: getRandomEnum(ProductCategory),
           price_cents: faker.number.float({
             min: 100_00,
             max: 1000_00,
@@ -84,7 +92,7 @@ async function main() {
           }),
           quantity: faker.number.int({ min: 1, max: 500 }),
           card_image_url: "",
-          features_content: "",
+          features_content: faker.commerce.productDescription(),
           accessories: {
             createMany: {
               data: Array.from({
@@ -113,7 +121,7 @@ async function main() {
       const order = await db.order.create({
         data: {
           total_cents: orderTotalCents,
-          status: Math.random() > 0.5 ? "PENDING" : "SHIPPED",
+          status: getRandomEnum(OrderStatus),
           user_id: user.id,
         },
       });
@@ -170,7 +178,7 @@ async function main() {
     },
   });
 
-  console.log("Database has been seeded 🌱");
+  console.log("database has been seeded 🌱");
 }
 
 main()
@@ -182,3 +190,9 @@ main()
     await db.$disconnect();
     process.exit(1);
   });
+
+export const getRandomEnum = <T extends object>(enumObj: T): T[keyof T] => {
+  const values = Object.values(enumObj) as unknown as T[keyof T][];
+  const randomIndex = Math.floor(Math.random() * values.length);
+  return values[randomIndex];
+};

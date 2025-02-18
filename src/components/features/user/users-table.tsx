@@ -64,10 +64,7 @@ export const UsersTable = () => {
           },
           emailVerified: (value) => {
             return (
-              <Badge
-                className="rounded-xl"
-                variant={value ? "success" : "destructive"}
-              >
+              <Badge variant={value ? "success" : "destructive"}>
                 {value ? "Verified" : "Not verified"}
               </Badge>
             );
