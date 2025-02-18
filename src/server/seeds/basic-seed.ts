@@ -52,7 +52,7 @@ async function main() {
               }).map(() => ({
                 amount_cents: faker.number.int({ min: 1, max: 2_000 }),
                 description: "",
-                method: Math.random() > 0.5 ? "Blik" : "Card",
+                method: Math.random() > 0.5 ? "BLIK" : "CREDIT_CARD",
                 type: Math.random() > 0.5 ? "DEPOSIT" : "WITHDRAW",
                 status: Math.random() > 0.5 ? "SUCCESS" : "FAILED",
               })),

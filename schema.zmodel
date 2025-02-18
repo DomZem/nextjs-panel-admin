@@ -86,6 +86,10 @@ abstract model standard_cuid_model extends standard_model {
     id String @id @default(cuid())
 }
 
+abstract model standard_numeric_model extends standard_model {
+    id Int @id @default(autoincrement())
+}
+
 // ==================== Custom Models ====================
 
 enum ProductCategory {
@@ -176,9 +180,16 @@ enum TransactionStatus {
     FAILED
 }
 
+enum TransactionMethod {
+    CREDIT_CARD
+    PAYPAL
+    BLIK
+    PAYSAFECARD
+}
+
 model user_transaction extends standard_cuid_model {
     amount_cents Int
-    method       String
+    method       TransactionMethod @default(BLIK)
     description  String
 
     type         TransactionType

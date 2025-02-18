@@ -13,6 +13,9 @@ CREATE TYPE "TransactionType" AS ENUM ('DEPOSIT', 'WITHDRAW');
 -- CreateEnum
 CREATE TYPE "TransactionStatus" AS ENUM ('PENDING', 'SUCCESS', 'FAILED');
 
+-- CreateEnum
+CREATE TYPE "TransactionMethod" AS ENUM ('CREDIT_CARD', 'PAYPAL', 'BLIK', 'PAYSAFECARD');
+
 -- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
@@ -150,7 +153,7 @@ CREATE TABLE "user_transaction" (
     "updated_at" TIMESTAMPTZ NOT NULL,
     "id" TEXT NOT NULL,
     "amount_cents" INTEGER NOT NULL,
-    "method" TEXT NOT NULL,
+    "method" "TransactionMethod" NOT NULL DEFAULT 'BLIK',
     "description" TEXT NOT NULL,
     "type" "TransactionType" NOT NULL,
     "status" "TransactionStatus" NOT NULL DEFAULT 'PENDING',
