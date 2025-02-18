@@ -50,8 +50,7 @@ export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
         currentAction,
         setCurrentAction: (action) => setCurrentAction(action),
         rowIdentifierKey,
-        setSelectedRow: (row: ZodObjectInfer<TSchema> | null) =>
-          setSelectedRow(row),
+        setSelectedRow: (row) => setSelectedRow(row),
       }}
     >
       {children}

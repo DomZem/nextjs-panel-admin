@@ -43,7 +43,7 @@ export const AutoTableFullActionsColumn = <TSchema extends ZodObjectSchema>({
           onClick={async () => {
             setSelectedRow(row);
             setCurrentAction("DETAILS");
-            await getDetailsData();
+            await getDetailsData(row);
           }}
         >
           Details

@@ -1,17 +1,18 @@
 import { type ZodObjectSchema, type ZodObjectInfer } from "~/utils/zod";
-import { useAutoTable } from "./auto-table-provider";
 import React, { useState } from "react";
 
 interface IAutoTableDetailsDataContext<
+  TSchema extends ZodObjectSchema,
   TDetailsData extends Record<string, unknown>,
 > {
   detailsData: TDetailsData | null;
   renderDetails: (data: TDetailsData) => React.ReactNode;
-  getDetailsData: () => Promise<void>;
+  getDetailsData: (row: ZodObjectInfer<TSchema>) => Promise<void>;
 }
 
 const AutoTableDetailsDataContext =
-  React.createContext<IAutoTableDetailsDataContext<any> | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  React.createContext<IAutoTableDetailsDataContext<any, any> | null>(null);
 
 export interface IAutoTableDetailsDataProvider<
   TSchema extends ZodObjectSchema,
@@ -32,22 +33,16 @@ export const AutoTableDetailsDataProvider = <
   children: React.ReactNode;
 }) => {
   const [detailsData, setDetailsData] = useState<TDetailsData | null>(null);
-  const { selectedRow } = useAutoTable<TSchema>();
-
-  const handleGetDetailsData = async () => {
-    if (!selectedRow) return;
-
-    const data = await onDetails(selectedRow);
-
-    setDetailsData(data);
-  };
 
   return (
     <AutoTableDetailsDataContext.Provider
       value={{
         detailsData,
         renderDetails,
-        getDetailsData: handleGetDetailsData,
+        getDetailsData: async (row: ZodObjectInfer<TSchema>) => {
+          const data = await onDetails(row);
+          setDetailsData(data);
+        },
       }}
     >
       {children}
@@ -56,10 +51,14 @@ export const AutoTableDetailsDataProvider = <
 };
 
 export const useAutoTableDetailsData = <
+  TSchema extends ZodObjectSchema,
   TDetailsData extends Record<string, unknown>,
 >() => {
   const context = React.useContext(
-    AutoTableDetailsDataContext as React.Context<IAutoTableDetailsDataContext<TDetailsData> | null>,
+    AutoTableDetailsDataContext as React.Context<IAutoTableDetailsDataContext<
+      TSchema,
+      TDetailsData
+    > | null>,
   );
 
   if (!context) {
