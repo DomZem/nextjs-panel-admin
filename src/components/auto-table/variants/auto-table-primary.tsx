@@ -21,6 +21,7 @@ export const AutoTablePrimary = <
   TDetailsData extends Record<string, unknown>,
 >({
   schema,
+  technicalTableName,
   rowIdentifierKey,
   update,
   create,
@@ -41,6 +42,7 @@ export const AutoTablePrimary = <
   return (
     <AutoTableCrudProvider
       schema={schema}
+      technicalTableName={technicalTableName}
       rowIdentifierKey={rowIdentifierKey}
       onRefetchData={onRefetchData}
       onDelete={onDelete}

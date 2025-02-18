@@ -29,6 +29,7 @@ export const AutoTableCrudProvider = <
   TUpdateFormSchema extends ZodObjectSchema,
 >({
   schema,
+  technicalTableName,
   rowIdentifierKey,
   onRefetchData,
   onDelete,
@@ -42,6 +43,7 @@ export const AutoTableCrudProvider = <
     <div className="flex flex-1 flex-col gap-4 overflow-hidden">
       <AutoTableProvider
         schema={schema}
+        technicalTableName={technicalTableName}
         rowIdentifierKey={rowIdentifierKey}
         onRefetchData={onRefetchData}
       >

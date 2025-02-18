@@ -36,6 +36,7 @@ export const ProductAccessoriesTable = ({
       <AutoTableSecondary
         schema={productAccessorySchema}
         rowIdentifierKey="id"
+        technicalTableName="product-accessories"
         data={getAllProductAccessories.data}
         onRefetchData={getAllProductAccessories.refetch}
         omitColumns={{
@@ -67,10 +68,7 @@ export const ProductAccessoriesTable = ({
           },
         }}
       >
-        <AutoTableToolbarHeader
-          title="Accessories"
-          technicalTableName="product-accessories"
-        />
+        <AutoTableToolbarHeader title="Accessories" />
         <AutoTableDndTable />
       </AutoTableSecondary>
     </div>

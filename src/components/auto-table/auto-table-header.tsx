@@ -1,8 +1,8 @@
 "use client";
 
+import { useAutoTableColumnsSelect } from "~/hooks/auto-table/use-auto-table-columns-select";
+import { CirclePlus, CopyX, RotateCw, Settings2 } from "lucide-react";
 import { useAutoTable } from "./providers/auto-table-provider";
-import { CirclePlus, CopyX, RotateCw } from "lucide-react";
-import { DataTableSelectColumns } from "../ui/data-table";
 import { mapDashedFieldName } from "~/utils/mappers";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
@@ -13,6 +13,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export const AutoTableHeader = ({
   className,
@@ -128,22 +134,49 @@ export const AutoTableRefreshButton = () => {
   );
 };
 
-export const AutoTableToolbarHeader = ({
-  title,
-  technicalTableName,
+export const AutoTableSelectColumns = ({
+  mapColumnName,
 }: {
-  title: string;
-  technicalTableName: string;
+  mapColumnName?: (name: string) => string;
 }) => {
+  const { table, handleCheckedChange } = useAutoTableColumnsSelect();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Settings2 />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {table
+          .getAllColumns()
+          .filter((column) => column.getCanHide())
+          .map((column) => {
+            return (
+              <DropdownMenuCheckboxItem
+                key={column.id}
+                checked={column.getIsVisible()}
+                onCheckedChange={(value) =>
+                  handleCheckedChange(column.id, value)
+                }
+              >
+                {mapColumnName ? mapColumnName(column.id) : column.id}
+              </DropdownMenuCheckboxItem>
+            );
+          })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export const AutoTableToolbarHeader = ({ title }: { title: string }) => {
   return (
     <AutoTableHeader>
       <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
       <div className="inline-flex items-center gap-3">
         <AutoTableRefreshButton />
-        <DataTableSelectColumns
-          tableName={technicalTableName}
-          mapColumnName={mapDashedFieldName}
-        />
+        <AutoTableSelectColumns mapColumnName={mapDashedFieldName} />
         <AutoTableCloseDetailsButton />
         <AutoTableCreateButton />
       </div>

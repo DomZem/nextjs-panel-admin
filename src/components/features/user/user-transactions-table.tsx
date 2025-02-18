@@ -14,6 +14,7 @@ import { Badge } from "~/components/ui/badge";
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
+import Image from "next/image";
 
 const queryByPage = "user-transactions-page";
 const rowsPerPageKey = "user-trasactions-rows-per-page";
@@ -44,6 +45,7 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
       <AutoTableSecondary
         schema={userTransactionSchema}
         rowIdentifierKey="id"
+        technicalTableName="user-transactions"
         data={getAllUserTransactions.data.userTransactions}
         omitColumns={{
           user_id: true,
@@ -51,6 +53,23 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
         columnsMap={{
           amount_cents: (value) => {
             return `$${(value / 100).toFixed(2)}`;
+          },
+          method: (value) => {
+            return value === "BLIK" ? (
+              <Image
+                src="/assets/blik.png"
+                width={40}
+                height={40}
+                alt="blik method"
+              />
+            ) : (
+              <Image
+                src="/assets/visa.png"
+                width={40}
+                height={40}
+                alt="card method"
+              />
+            );
           },
           status: (value) => {
             return (
@@ -73,7 +92,9 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
           },
         }}
         onRefetchData={getAllUserTransactions.refetch}
-        onDelete={deleteUserTransaction.mutateAsync}
+        onDelete={async (row) =>
+          await deleteUserTransaction.mutateAsync({ id: row.id })
+        }
         create={{
           formSchema: userTransactionCreateSchema,
           onCreate: createUserTransaction.mutateAsync,
@@ -99,10 +120,7 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
           },
         }}
       >
-        <AutoTableToolbarHeader
-          title="Transactions"
-          technicalTableName="user-transactions"
-        />
+        <AutoTableToolbarHeader title="Transactions" />
         <AutoTableDndTable />
       </AutoTableSecondary>
 

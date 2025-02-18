@@ -1,3 +1,4 @@
+import { useAutoTableColumnsOrder } from "~/hooks/auto-table/use-auto-table-columns-order";
 import { DataTableProvider } from "../../ui/data-table";
 import { useAutoTable } from "./auto-table-provider";
 import { useState } from "react";
@@ -69,9 +70,9 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
     ...(extraColumns ?? []),
   ];
 
-  const [columnOrder, setColumnOrder] = useState<string[]>(() =>
-    columns.map((c) => c.id!),
-  );
+  const { columnOrder, handleColumnOrderChange } = useAutoTableColumnsOrder({
+    columns,
+  });
 
   return (
     <DataTableProvider
@@ -85,7 +86,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
           columnOrder,
         },
         onSortingChange: setSorting,
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: handleColumnOrderChange,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         getRowId: (row) => row[rowIdentifierKey],
       }}

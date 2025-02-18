@@ -46,6 +46,7 @@ export const OrdersTable = () => {
       <AutoTablePrimary
         schema={orderSchema}
         rowIdentifierKey="id"
+        technicalTableName="orders"
         omitColumns={{
           user_id: true,
         }}
@@ -103,7 +104,7 @@ export const OrdersTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader title="Orders" technicalTableName="orders" />
+        <AutoTableToolbarHeader title="Orders" />
 
         <OrderFilters
           orderId={orderId}

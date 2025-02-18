@@ -45,6 +45,7 @@ export const ProductsTable = () => {
       <AutoTablePrimary
         schema={productSchema}
         rowIdentifierKey="id"
+        technicalTableName="products"
         columnsMap={{
           price_cents: (value) => {
             return `$${(value / 100).toFixed(2)}`;
@@ -92,10 +93,7 @@ export const ProductsTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader
-          title="Products"
-          technicalTableName="products"
-        />
+        <AutoTableToolbarHeader title="Products" />
 
         <ProductFilters
           productName={productName}

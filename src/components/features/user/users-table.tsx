@@ -46,12 +46,12 @@ export const UsersTable = () => {
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTablePrimary
+        technicalTableName="users"
         schema={userSchema}
         rowIdentifierKey="id"
         columnsMap={{
           image: (value) => {
             if (!value) return "no image";
-
             return (
               <Image
                 className="rounded-full"
@@ -75,8 +75,12 @@ export const UsersTable = () => {
         }}
         data={getAllUsers.data?.users ?? []}
         onRefetchData={getAllUsers.refetch}
-        onDetails={getUserDetails.mutateAsync}
-        onDelete={deleteUser.mutateAsync}
+        onDetails={async (row) =>
+          await getUserDetails.mutateAsync({
+            id: row.id,
+          })
+        }
+        onDelete={async (row) => await deleteUser.mutateAsync({ id: row.id })}
         renderDetails={(user) => {
           return (
             <div className="space-y-4">
@@ -107,7 +111,7 @@ export const UsersTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader title="Users" technicalTableName="users" />
+        <AutoTableToolbarHeader title="Users" />
 
         <UserFilters
           userName={userName}

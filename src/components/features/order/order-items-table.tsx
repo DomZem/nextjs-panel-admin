@@ -33,6 +33,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
       <AutoTableSecondary
         schema={orderItemSchema}
         rowIdentifierKey="id"
+        technicalTableName="order-items"
         omitColumns={{
           order_id: true,
         }}
@@ -86,10 +87,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
           },
         }}
       >
-        <AutoTableToolbarHeader
-          title="Items"
-          technicalTableName="order-items"
-        />
+        <AutoTableToolbarHeader title="Items" />
         <AutoTableDndTable />
       </AutoTableSecondary>
     </div>

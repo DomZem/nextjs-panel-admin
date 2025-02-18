@@ -16,6 +16,7 @@ export const AutoTableSecondary = <
   TUpdateFormSchema extends ZodObjectSchema,
 >({
   schema,
+  technicalTableName,
   rowIdentifierKey,
   update,
   create,
@@ -33,6 +34,7 @@ export const AutoTableSecondary = <
   return (
     <AutoTableCrudProvider
       schema={schema}
+      technicalTableName={technicalTableName}
       rowIdentifierKey={rowIdentifierKey}
       onRefetchData={onRefetchData}
       onDelete={onDelete}

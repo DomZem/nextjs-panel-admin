@@ -9,6 +9,7 @@ export type ActionType = "CREATE" | "UPDATE" | "DELETE" | "DETAILS" | null;
 
 interface IAutoTableContext<TSchema extends ZodObjectSchema> {
   schema: TSchema;
+  technicalTableName: string;
   rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   selectedRow: ZodObjectInfer<TSchema> | null;
   setSelectedRow: (row: ZodObjectInfer<TSchema> | null) => void;
@@ -22,19 +23,18 @@ const AutoTableContext =
 
 export interface AutoTableImplementationProps<TSchema extends ZodObjectSchema> {
   schema: TSchema;
+  technicalTableName: string;
   rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   onRefetchData: () => Promise<unknown>;
 }
 
 export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
   schema,
+  technicalTableName,
   rowIdentifierKey,
   onRefetchData,
   children,
-}: {
-  schema: TSchema;
-  rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
-  onRefetchData: () => Promise<unknown>;
+}: AutoTableImplementationProps<TSchema> & {
   children: React.ReactNode;
 }) => {
   const [selectedRow, setSelectedRow] =
@@ -45,6 +45,7 @@ export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
     <AutoTableContext.Provider
       value={{
         schema,
+        technicalTableName,
         selectedRow,
         refetchData: onRefetchData,
         currentAction,

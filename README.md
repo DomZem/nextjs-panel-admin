@@ -12,4 +12,4 @@
 - [x] Feat: add filters between header and table
 - [ ] Fix: after refresh selected row disappear
 - [x] Feat: added columns map to auto table. By adding that i will be able to modify the end result of column. Like for example rendering user avatar
-- [ ] Feat: add saving columns order in local storage for dnd table
+- [x] Feat: add saving columns order in local storage for dnd table

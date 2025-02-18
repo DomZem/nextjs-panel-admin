@@ -30,6 +30,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
   return (
     <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
       <AutoTableSecondary
+        technicalTableName="user-addresses"
         schema={userAddressSchema}
         rowIdentifierKey="id"
         data={getAllUserAddresses.data}
@@ -63,10 +64,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
           },
         }}
       >
-        <AutoTableToolbarHeader
-          title="Addresses"
-          technicalTableName="user-addresses"
-        />
+        <AutoTableToolbarHeader title="Addresses" />
 
         <AutoTableDndTable />
       </AutoTableSecondary>
