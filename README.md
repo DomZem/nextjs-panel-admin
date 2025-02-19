@@ -13,3 +13,5 @@
 - [ ] Fix: after refresh selected row disappear
 - [x] Feat: added columns map to auto table. By adding that i will be able to modify the end result of column. Like for example rendering user avatar
 - [x] Feat: add saving columns order in local storage for dnd table
+- [ ] Fix: add clear option to filters
+- [ ] Fix: fix issue with clearing values in update form for nullable inputs
