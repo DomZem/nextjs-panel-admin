@@ -15,6 +15,7 @@ import {
   productSchema,
 } from "~/common/validations/product/product";
 import { usePage } from "~/hooks/use-page";
+import { Info } from "lucide-react";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
@@ -23,7 +24,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { Info } from "lucide-react";
 
 export const ProductsTable = () => {
   const [productName, setProductName] = useState("");
@@ -77,8 +77,16 @@ export const ProductsTable = () => {
         }}
         data={getAllProducts.data?.products ?? []}
         onRefetchData={getAllProducts.refetch}
-        onDetails={getProductDetails.mutateAsync}
-        onDelete={deleteProduct.mutateAsync}
+        onDetails={async (selectedRow) =>
+          await getProductDetails.mutateAsync({
+            id: selectedRow.id,
+          })
+        }
+        onDelete={async (selectedRow) =>
+          await deleteProduct.mutateAsync({
+            id: selectedRow.id,
+          })
+        }
         renderDetails={(product) => {
           return (
             <div>

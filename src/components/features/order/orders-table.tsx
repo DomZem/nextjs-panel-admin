@@ -57,8 +57,16 @@ export const OrdersTable = () => {
         }}
         data={getAllOrders.data?.orders ?? []}
         onRefetchData={getAllOrders.refetch}
-        onDetails={getOrderDetails.mutateAsync}
-        onDelete={deleteOrder.mutateAsync}
+        onDetails={async (selectedRow) =>
+          await getOrderDetails.mutateAsync({
+            id: selectedRow.id,
+          })
+        }
+        onDelete={async (selectedRow) =>
+          await deleteOrder.mutateAsync({
+            id: selectedRow.id,
+          })
+        }
         renderDetails={(order) => {
           return (
             <div>

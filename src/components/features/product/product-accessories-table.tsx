@@ -42,7 +42,11 @@ export const ProductAccessoriesTable = ({
         omitColumns={{
           product_id: true,
         }}
-        onDelete={deleteProductAccessory.mutateAsync}
+        onDelete={async (selectedRow) => {
+          await deleteProductAccessory.mutateAsync({
+            id: selectedRow.id,
+          });
+        }}
         create={{
           formSchema: productAccessoryCreateSchema,
           onCreate: createProductAccessory.mutateAsync,

@@ -39,7 +39,11 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
         }}
         data={getAllOrderItems.data}
         onRefetchData={getAllOrderItems.refetch}
-        onDelete={deleteOrderItem.mutateAsync}
+        onDelete={async (selectedRow) =>
+          await deleteOrderItem.mutateAsync({
+            id: selectedRow.id,
+          })
+        }
         create={{
           formSchema: orderItemCreateSchema,
           onCreate: createOrderItem.mutateAsync,

@@ -38,7 +38,11 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
           user_id: true,
         }}
         onRefetchData={getAllUserAddresses.refetch}
-        onDelete={deleteUserAddress.mutateAsync}
+        onDelete={async (selectedRow) =>
+          await deleteUserAddress.mutateAsync({
+            id: selectedRow.id,
+          })
+        }
         create={{
           formSchema: userAddressCreateSchema,
           onCreate: createUserAddress.mutateAsync,
