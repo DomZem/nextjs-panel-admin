@@ -128,7 +128,7 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn("space-y-8", className)}
+        className={cn("flex flex-col gap-8", className)}
       >
         {Object.entries(formFields).map(([fieldName, formField]) => {
           const key = fieldName as Path<TypeOf<TSchema>>;
@@ -283,7 +283,9 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
           );
         })}
 
-        <Button type="submit">Submit</Button>
+        <Button className="w-fit" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
