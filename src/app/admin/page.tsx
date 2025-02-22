@@ -1,9 +1,12 @@
+import { ExampleForm } from "~/components/features/ExampleForm";
 import { MainWrapper } from "~/components/ui/main-wrapper";
 
 export default function DashboardPage() {
   return (
     <MainWrapper>
-      <div>hello world</div>
+      <div>
+        <ExampleForm />
+      </div>
     </MainWrapper>
   );
 }
