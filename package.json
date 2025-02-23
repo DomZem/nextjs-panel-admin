@@ -19,7 +19,8 @@
     "start": "next start",
     "seed:dev": "tsx src/server/seeds/basic-seed.ts",
     "generate:prisma": "npx --no-install zenstack generate",
-    "test": "jest",
+    "test:jest": "jest --config jest.config.ts",
+    "test:playwright": "playwright test",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
