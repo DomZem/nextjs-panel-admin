@@ -23,6 +23,8 @@ async function main() {
   await db.user_address.deleteMany();
   await db.user_transaction.deleteMany();
   await db.user.deleteMany();
+  await db.region_country.deleteMany();
+  await db.region.deleteMany();
 
   const hashedUserPassword = await hash("Test1234!");
 
@@ -167,7 +169,66 @@ async function main() {
     }),
   );
 
-  // create admin user
+  await db.region.create({
+    data: {
+      name: "Europe",
+      countries: {
+        createMany: {
+          data: [
+            { name: "Germany", iso_2_code: "DE" },
+            { name: "France", iso_2_code: "FR" },
+            { name: "Italy", iso_2_code: "IT" },
+          ],
+        },
+      },
+    },
+  });
+
+  await db.region.create({
+    data: {
+      name: "Asia",
+      countries: {
+        createMany: {
+          data: [
+            { name: "China", iso_2_code: "CN" },
+            { name: "Japan", iso_2_code: "JP" },
+            { name: "India", iso_2_code: "IN" },
+          ],
+        },
+      },
+    },
+  });
+
+  await db.region.create({
+    data: {
+      name: "North America",
+      countries: {
+        createMany: {
+          data: [
+            { name: "United States", iso_2_code: "US" },
+            { name: "Canada", iso_2_code: "CA" },
+            { name: "Mexico", iso_2_code: "MX" },
+          ],
+        },
+      },
+    },
+  });
+
+  await db.region.create({
+    data: {
+      name: "South America",
+      countries: {
+        createMany: {
+          data: [
+            { name: "Brazil", iso_2_code: "BR" },
+            { name: "Argentina", iso_2_code: "AR" },
+            { name: "Colombia", iso_2_code: "CO" },
+          ],
+        },
+      },
+    },
+  });
+
   await db.user.create({
     data: {
       name: "admin",

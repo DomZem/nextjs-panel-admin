@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, ShoppingCart, Speaker, User } from "lucide-react";
+import { Home, ShoppingCart, Speaker, User, Flag } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   SidebarMenu,
@@ -29,6 +29,11 @@ const items = [
     title: "Orders",
     url: "/admin/orders",
     icon: ShoppingCart,
+  },
+  {
+    title: "Regions",
+    url: "/admin/regions",
+    icon: Flag,
   },
 ];
 
