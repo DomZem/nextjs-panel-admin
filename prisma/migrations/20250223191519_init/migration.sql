@@ -162,6 +162,28 @@ CREATE TABLE "user_transaction" (
     CONSTRAINT "user_transaction_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "region" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "region_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "region_country" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "iso_2_code" TEXT NOT NULL,
+    "region_id" INTEGER NOT NULL,
+
+    CONSTRAINT "region_country_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -203,3 +225,6 @@ ALTER TABLE "user_address" ADD CONSTRAINT "user_address_user_id_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "user_transaction" ADD CONSTRAINT "user_transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "region_country" ADD CONSTRAINT "region_country_region_id_fkey" FOREIGN KEY ("region_id") REFERENCES "region"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

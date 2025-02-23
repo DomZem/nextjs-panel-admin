@@ -198,3 +198,17 @@ model user_transaction extends standard_cuid_model {
     user         User              @relation(fields: [user_id], references: [id])
     user_id      String
 }
+
+model region extends standard_numeric_model {
+    name      String
+
+    countries region_country[]
+}
+
+model region_country extends standard_numeric_model {
+    name       String
+    iso_2_code String
+
+    region     region @relation(fields: [region_id], references: [id])
+    region_id  Int
+}
