@@ -1,23 +1,31 @@
 "use client";
 
+import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
+import { DataTable, useDataTable } from "../../ui/data-table";
+import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
+import { useId, type CSSProperties } from "react";
+import { GripVertical } from "lucide-react";
+import { CSS } from "@dnd-kit/utilities";
 import {
   type Cell,
   flexRender,
   type Header,
   type Row,
 } from "@tanstack/react-table";
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
-import { DataTable, useDataTable } from "../../ui/data-table";
-import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
-import { GripVertical } from "lucide-react";
-import { CSS } from "@dnd-kit/utilities";
-import { type CSSProperties } from "react";
 import {
   arrayMove,
   horizontalListSortingStrategy,
   SortableContext,
   useSortable,
 } from "@dnd-kit/sortable";
+import React from "react";
+import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../ui/table";
 import {
   closestCenter,
   DndContext,
@@ -28,20 +36,13 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../ui/table";
-import React from "react";
 
 export const AutoTableDndTable = ({
   extraRow,
 }: {
   extraRow?: (row: Row<unknown>) => React.ReactNode;
 }) => {
+  const id = useId();
   const { table } = useDataTable();
 
   const columnOrder = table.getState().columnOrder;
@@ -70,6 +71,7 @@ export const AutoTableDndTable = ({
       modifiers={[restrictToHorizontalAxis]}
       onDragEnd={handleDragEnd}
       sensors={sensors}
+      id={id}
     >
       <ScrollArea className="flex-1">
         <DataTable>
