@@ -26,10 +26,14 @@ export const userRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const where = {
         name: {
-          contains: input.filters?.userName,
+          contains: input.filters?.userName?.trim()
+            ? input.filters?.userName
+            : undefined,
         },
         email: {
-          contains: input.filters?.userEmail,
+          contains: input.filters?.userEmail?.trim()
+            ? input.filters?.userEmail
+            : undefined,
         },
         role: input.filters?.userRole,
       };

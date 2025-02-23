@@ -132,18 +132,9 @@ export const getFormFieldsDefaultValues = (
 
     if (!field) return acc;
 
-    const fieldValue =
-      field.type === "boolean"
-        ? false
-        : field.type === "number"
-          ? 0
-          : field.type === "datetime"
-            ? undefined
-            : "";
-
     return {
       ...acc,
-      [fieldName]: fieldValue,
+      [fieldName]: undefined,
     };
   }, {});
 

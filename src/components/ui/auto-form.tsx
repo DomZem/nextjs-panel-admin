@@ -124,6 +124,13 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
     },
   });
 
+  const handleClearField = (fieldName: Path<TypeOf<TSchema>>) => {
+    form.setValue(
+      fieldName,
+      null as unknown as TypeOf<TSchema>[typeof fieldName],
+    );
+  };
+
   return (
     <Form {...form}>
       <form
@@ -137,8 +144,8 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
           return (
             <FormField
               control={form.control}
-              name={fieldName as Path<TypeOf<TSchema>>}
-              key={fieldName}
+              name={key}
+              key={key}
               render={({ field, fieldState, formState }) => {
                 if (config?.type === "custom") {
                   return config.render({ field, fieldState, formState });
@@ -157,14 +164,26 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                   <FormItem className={cn("", config?.hidden && "hidden")}>
                     {config?.type === "checkbox" ||
                     formField.type === "boolean" ? (
-                      <div className="flex items-center space-x-2">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>{label}</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormLabel>{label}</FormLabel>
+                        </div>
+
+                        {shouldShowClearButton && (
+                          <Badge
+                            role="button"
+                            className="cursor-pointer"
+                            onClick={() => handleClearField(key)}
+                          >
+                            Clear
+                          </Badge>
+                        )}
                       </div>
                     ) : (
                       <>
@@ -175,9 +194,7 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                             <Badge
                               role="button"
                               className="cursor-pointer"
-                              onClick={() => {
-                                field.onChange(undefined);
-                              }}
+                              onClick={() => handleClearField(key)}
                             >
                               Clear
                             </Badge>
@@ -254,9 +271,10 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                         ) : (
                           <FormControl>
                             <Input
+                              {...field}
+                              value={field.value ?? ""}
                               type={config?.type ?? formField.type}
                               placeholder={config?.placeholder}
-                              {...field}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 const value =
                                   config?.type === "number" ||
