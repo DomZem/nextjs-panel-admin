@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUpload } from "./image-upload-input";
 import { type ZodObjectSchema } from "~/utils/zod";
 import { DateTimePicker } from "./datetime-picker";
+import { WysiwygInput } from "./wysiwyg-input";
 import { type TypeOf, type z } from "zod";
 import { Checkbox } from "./checkbox";
 import { Textarea } from "./textarea";
@@ -48,7 +49,8 @@ type InputType =
   | "password"
   | "image"
   | "custom"
-  | "datetime";
+  | "datetime"
+  | "wysiwyg";
 
 type BaseFieldConfig = {
   type?: Exclude<InputType, "select" | "custom">;
@@ -250,6 +252,13 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                         ) : config?.type === "textarea" ? (
                           <FormControl>
                             <Textarea className="resize-none" {...field} />
+                          </FormControl>
+                        ) : config?.type === "wysiwyg" ? (
+                          <FormControl>
+                            <WysiwygInput
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
                         ) : config?.type === "image" ? (
                           <FormControl>

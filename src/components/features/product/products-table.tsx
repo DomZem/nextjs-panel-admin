@@ -15,15 +15,8 @@ import {
   productSchema,
 } from "~/common/validations/product/product";
 import { usePage } from "~/hooks/use-page";
-import { Info } from "lucide-react";
 import { api } from "~/trpc/react";
 import { useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
 
 export const ProductsTable = () => {
   const [productName, setProductName] = useState("");
@@ -60,20 +53,6 @@ export const ProductsTable = () => {
           vat_percentage: (value) => {
             return `${value}%`;
           },
-          features_content: (value) => {
-            return (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info size={18} />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{value}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            );
-          },
         }}
         data={getAllProducts.data?.products ?? []}
         onRefetchData={getAllProducts.refetch}
@@ -104,6 +83,9 @@ export const ProductsTable = () => {
             card_image_url: {
               type: "image",
             },
+            features_content: {
+              type: "wysiwyg",
+            },
           },
         }}
         update={{
@@ -118,6 +100,9 @@ export const ProductsTable = () => {
             },
             card_image_url: {
               type: "image",
+            },
+            features_content: {
+              type: "wysiwyg",
             },
           },
         }}

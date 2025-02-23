@@ -1,6 +1,8 @@
-import { GalleryVerticalEnd } from "lucide-react";
 import { ModeToggle } from "~/components/ui/mode-toggle";
 import { Separator } from "~/components/ui/separator";
+import { GalleryVerticalEnd } from "lucide-react";
+import { NavUser } from "~/layout/nav-user";
+import { Menu } from "~/layout/menu";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +17,6 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-import { Menu } from "~/layout/menu";
-import { NavUser } from "~/layout/nav-user";
 
 export default function AdminLayout({
   children,
@@ -32,7 +32,7 @@ export default function AdminLayout({
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <GalleryVerticalEnd className="size-4" />
                   </div>
 
@@ -59,7 +59,7 @@ export default function AdminLayout({
         </Sidebar>
 
         <SidebarInset className="h-screen overflow-hidden">
-          <header className="bg-background flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+          <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b bg-background px-4">
             <div className="flex items-center gap-3">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />

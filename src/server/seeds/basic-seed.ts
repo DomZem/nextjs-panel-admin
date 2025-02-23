@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker";
+import { hash } from "@node-rs/argon2";
 import {
   OrderStatus,
   PrismaClient,
@@ -6,13 +8,11 @@ import {
   TransactionStatus,
   TransactionType,
 } from "@prisma/client";
-import { faker } from "@faker-js/faker";
-import { hash } from "@node-rs/argon2";
 
 const db = new PrismaClient();
 
-const USERS_COUNT = 55;
-const PRODUCTS_COUNT = 55;
+const USERS_COUNT = 2;
+const PRODUCTS_COUNT = 1;
 
 async function main() {
   // clean up
@@ -92,7 +92,7 @@ async function main() {
           }),
           quantity: faker.number.int({ min: 1, max: 500 }),
           card_image_url: "",
-          features_content: faker.commerce.productDescription(),
+          features_content: "",
           accessories: {
             createMany: {
               data: Array.from({
@@ -173,6 +173,7 @@ async function main() {
       name: "admin",
       email: "admin@gmail.com",
       emailVerified: new Date(),
+      image: faker.image.avatarGitHub(),
       role: "ADMIN",
       password: hashedUserPassword,
     },
