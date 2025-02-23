@@ -1,6 +1,7 @@
 import { useAutoTableColumnsOrder } from "~/hooks/auto-table/use-auto-table-columns-order";
 import { DataTableProvider } from "../../ui/data-table";
 import { useAutoTable } from "./auto-table-provider";
+import { Badge } from "~/components/ui/badge";
 import { useState } from "react";
 import {
   type ColumnDef,
@@ -59,6 +60,18 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
 
         if (typeof cellData === "object" && dayjs(cellData as Date).isValid()) {
           return dayjs(cellData as Date).format("DD MMMM YYYY HH:mm");
+        }
+
+        if (typeof cellData === "boolean") {
+          return (
+            <Badge variant={cellData ? "success" : "destructive"}>
+              {cellData ? "true" : "false"}
+            </Badge>
+          );
+        }
+
+        if (typeof cellData === undefined || cellData === null) {
+          return "N/A";
         }
 
         return <>{cellData}</>;
