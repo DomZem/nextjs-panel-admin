@@ -44,7 +44,7 @@ export const useAutoTableColumnsOrder = <TSchema extends ZodObjectSchema>({
         setColumnOrder(tableSetting.columnOrder);
       }
     }
-  }, [technicalTableName]);
+  }, []);
 
   const handleColumnOrderChange: OnChangeFn<ColumnOrderState> = (
     updaterOrValue,

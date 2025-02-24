@@ -2,7 +2,7 @@ import { useAutoTableColumnsOrder } from "~/hooks/auto-table/use-auto-table-colu
 import { DataTableProvider } from "../../ui/data-table";
 import { useAutoTable } from "./auto-table-provider";
 import { Badge } from "~/components/ui/badge";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   type ColumnDef,
   getCoreRowModel,
@@ -43,45 +43,55 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
 
   const fieldNames = extractFieldNamesFromSchema(schema);
 
-  const filteredFieldNames = omitColumns
-    ? fieldNames.filter((fieldName) => !omitColumns[fieldName])
-    : fieldNames;
+  const filteredFieldNames = useMemo(
+    () =>
+      omitColumns
+        ? fieldNames.filter((fieldName) => !omitColumns[fieldName])
+        : fieldNames,
+    [],
+  );
 
-  const basicColumns: ColumnDef<ZodObjectInfer<TSchema>>[] =
-    filteredFieldNames.map((fieldName) => ({
-      accessorKey: fieldName,
-      id: fieldName.toString(),
-      cell: ({ row }) => {
-        const cellData = row.original[fieldName];
+  const basicColumns: ColumnDef<ZodObjectInfer<TSchema>>[] = useMemo(
+    () =>
+      filteredFieldNames.map((fieldName) => ({
+        accessorKey: fieldName,
+        id: fieldName.toString(),
+        cell: ({ row }) => {
+          const cellData = row.original[fieldName];
 
-        if (columnsMap && columnsMap[fieldName]) {
-          return columnsMap[fieldName](cellData);
-        }
+          if (columnsMap && columnsMap[fieldName]) {
+            return columnsMap[fieldName](cellData);
+          }
 
-        if (typeof cellData === "object" && dayjs(cellData as Date).isValid()) {
-          return dayjs(cellData as Date).format("DD MMMM YYYY HH:mm");
-        }
+          if (
+            typeof cellData === "object" &&
+            dayjs(cellData as Date).isValid()
+          ) {
+            return dayjs(cellData as Date).format("DD MMMM YYYY HH:mm");
+          }
 
-        if (typeof cellData === "boolean") {
-          return (
-            <Badge variant={cellData ? "success" : "destructive"}>
-              {cellData ? "true" : "false"}
-            </Badge>
-          );
-        }
+          if (typeof cellData === "boolean") {
+            return (
+              <Badge variant={cellData ? "success" : "destructive"}>
+                {cellData ? "true" : "false"}
+              </Badge>
+            );
+          }
 
-        if (typeof cellData === undefined || cellData === null) {
-          return "N/A";
-        }
+          if (typeof cellData === undefined || cellData === null) {
+            return "N/A";
+          }
 
-        return <>{cellData}</>;
-      },
-    }));
+          return <>{cellData}</>;
+        },
+      })),
+    [],
+  );
 
-  const columns: ColumnDef<ZodObjectInfer<TSchema>>[] = [
-    ...basicColumns,
-    ...(extraColumns ?? []),
-  ];
+  const columns: ColumnDef<ZodObjectInfer<TSchema>>[] = useMemo(
+    () => [...basicColumns, ...(extraColumns ?? [])],
+    [],
+  );
 
   const { columnOrder, handleColumnOrderChange } = useAutoTableColumnsOrder({
     columns,
