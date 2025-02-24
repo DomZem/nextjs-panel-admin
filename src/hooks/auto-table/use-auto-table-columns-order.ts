@@ -22,11 +22,15 @@ export const useAutoTableColumnsOrder = <TSchema extends ZodObjectSchema>({
 
   const [columnOrder, setColumnOrder] = useState<string[]>(() => {
     const defaultOrder = columns.map((c) => c.id!);
+
     const idIndex = defaultOrder.indexOf("id");
+
     if (idIndex > 0) {
+      // we want to move the id column to the first position
       defaultOrder.splice(idIndex, 1);
       defaultOrder.unshift("id");
     }
+
     return defaultOrder;
   });
 
@@ -41,7 +45,11 @@ export const useAutoTableColumnsOrder = <TSchema extends ZodObjectSchema>({
       );
 
       if (tableSetting?.columnOrder) {
-        setColumnOrder(tableSetting.columnOrder);
+        const missingColumns = columnOrder.filter(
+          (c) => !tableSetting.columnOrder?.includes(c),
+        );
+
+        setColumnOrder([...tableSetting.columnOrder, ...missingColumns]);
       }
     }
   }, []);

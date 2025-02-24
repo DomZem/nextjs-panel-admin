@@ -15,4 +15,4 @@
 - [x] Feat: add saving columns order in local storage for dnd table
 - [ ] Fix: add clear option to filters
 - [x] Fix: fix issue with clearing values in update form for nullable inputs
-- [ ] Fix: after add some fields to existing models, dragging columns is not possible
+- [x] Fix: after add some fields to existing models, dragging columns is not possible
