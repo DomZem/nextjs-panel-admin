@@ -1,14 +1,15 @@
 "use client";
 
+import { PasswordInput } from "~/components/ui/password-input";
 import { loginSchema } from "~/common/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GalleryVerticalEnd } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
 import { cn } from "~/lib/utils";
-import Link from "next/link";
-import { type z } from "zod";
 import {
   Form,
   FormControl,
@@ -17,8 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { type z } from "zod";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -78,7 +79,7 @@ export const LoginForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input placeholder="anakin.skywalker@gmail.com" {...field} />
                 </FormControl>
@@ -94,7 +95,7 @@ export const LoginForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <PasswordInput {...field} autoComplete="new-password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
