@@ -1,3 +1,4 @@
+import { PageBreadcrumb } from "~/layout/page-breadcrumb";
 import { ModeToggle } from "~/components/ui/mode-toggle";
 import { Separator } from "~/components/ui/separator";
 import { GalleryVerticalEnd } from "lucide-react";
@@ -18,7 +19,7 @@ import {
   SidebarTrigger,
 } from "~/components/ui/sidebar";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -63,6 +64,7 @@ export default function AdminLayout({
             <div className="flex items-center gap-3">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
+              <PageBreadcrumb />
             </div>
             <ModeToggle />
           </header>
