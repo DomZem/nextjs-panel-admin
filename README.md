@@ -16,3 +16,5 @@
 - [ ] Fix: add clear option to filters
 - [x] Fix: fix issue with clearing values in update form for nullable inputs
 - [x] Fix: after add some fields to existing models, dragging columns is not possible
+- [ ] Test: add basic tests for AutoForm in jest
+- [ ] Fix: on mobile view filters takes a lot of space. We should hide them some where
