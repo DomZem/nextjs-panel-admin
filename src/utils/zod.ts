@@ -1,4 +1,4 @@
-import { z, ZodEffects, ZodObject, type ZodRawShape } from "zod";
+import { type z, ZodEffects, ZodObject, type ZodRawShape } from "zod";
 
 export type ZodObjectSchema =
   | ZodObject<ZodRawShape>
@@ -31,17 +31,3 @@ export const extractFieldNamesFromSchema = <TSchema extends ZodObjectSchema>(
 
   return fieldNames;
 };
-
-const foo = <TSchema extends ZodObjectSchema>(
-  schema: TSchema,
-  rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>,
-) => {};
-
-const dummySchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  create_at: z.date(),
-  opt: z.string().optional(),
-});
-
-foo(dummySchema, "id");

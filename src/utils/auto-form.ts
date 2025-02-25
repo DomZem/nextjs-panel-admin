@@ -123,10 +123,9 @@ export const mapSchemaToFormFields = (
   return result;
 };
 
-// TODO: Test this function
 export const getFormFieldsDefaultValues = (
   formFields: ReturnType<typeof mapSchemaToFormFields>,
-): Record<string, false | 0 | ""> => {
+): Record<string, undefined> => {
   const result = Object.keys(formFields).reduce((acc, fieldName) => {
     const field = formFields[fieldName];
 
@@ -141,7 +140,6 @@ export const getFormFieldsDefaultValues = (
   return result;
 };
 
-// TODO: Test this function
 export const sanitizeSchemaObject = (
   schemaObject: ZodObjectInfer<ZodObjectSchema>,
   destinySchema: ZodObjectSchema,
