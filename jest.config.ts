@@ -21,5 +21,18 @@ const config: Config = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
 
+async function hackJestConfig() {
+  // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+  const nextJestConfig = await createJestConfig(config)();
+  // /node_modules/ is the first pattern, so overwrite it with the correct version
+  if (nextJestConfig.transformIgnorePatterns) {
+    nextJestConfig.transformIgnorePatterns[0] =
+      "/node_modules/(?!(@blocknote))/";
+    nextJestConfig.transformIgnorePatterns[1] =
+      "/node_modules/(?!(lucide-react))/";
+  }
+  return nextJestConfig;
+}
+
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config);
+export default hackJestConfig;
