@@ -1,10 +1,11 @@
 "use client";
 
+import { ArrowUpDown, GripVertical, ArrowUp, ArrowDown } from "lucide-react";
 import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import { DataTable, useDataTable } from "../../ui/data-table";
 import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
 import { useId, type CSSProperties } from "react";
-import { GripVertical } from "lucide-react";
+import { Button } from "~/components/ui/button";
 import { CSS } from "@dnd-kit/utilities";
 import {
   type Cell,
@@ -142,6 +143,8 @@ const DraggableTableHeader = ({
     zIndex: isDragging ? 1 : 0,
   };
 
+  console.log("sort", header.column.getIsSorted());
+
   return (
     <TableHead colSpan={header.colSpan} ref={setNodeRef} style={style}>
       <div className="flex items-center gap-2">
@@ -149,9 +152,25 @@ const DraggableTableHeader = ({
           ? null
           : flexRender(header.column.columnDef.header, header.getContext())}
 
-        <button {...attributes} {...listeners}>
+        <Button {...attributes} {...listeners} size="icon" variant="ghost">
           <GripVertical size={20} />
-        </button>
+        </Button>
+
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() =>
+            header.column.toggleSorting(header.column.getIsSorted() === "asc")
+          }
+        >
+          {!header.column.getIsSorted() ? (
+            <ArrowUpDown size={20} />
+          ) : header.column.getIsSorted() === "asc" ? (
+            <ArrowDown size={20} />
+          ) : (
+            <ArrowUp size={20} />
+          )}
+        </Button>
       </div>
     </TableHead>
   );
