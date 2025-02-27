@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoForm, type AutoFormProps } from "../ui/auto-form";
+import { AutoForm, type AutoFormProps } from "../auto-form/auto-form";
 import { useAutoTable } from "./providers/auto-table-provider";
 import { sanitizeSchemaObject } from "~/utils/auto-form";
 import {

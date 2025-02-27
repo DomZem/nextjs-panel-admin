@@ -143,8 +143,6 @@ const DraggableTableHeader = ({
     zIndex: isDragging ? 1 : 0,
   };
 
-  console.log("sort", header.column.getIsSorted());
-
   return (
     <TableHead colSpan={header.colSpan} ref={setNodeRef} style={style}>
       <div className="flex items-center gap-2">

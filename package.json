@@ -20,6 +20,7 @@
     "seed:dev": "tsx src/server/seeds/basic-seed.ts",
     "generate:prisma": "npx --no-install zenstack generate",
     "test:jest": "jest --config jest.config.ts",
+    "test:jest:watch": "jest --config jest.config.ts --watch",
     "test:playwright": "playwright test",
     "typecheck": "tsc --noEmit"
   },

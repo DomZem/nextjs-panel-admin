@@ -116,7 +116,7 @@ describe("auto-form utilities", () => {
       );
     });
 
-    it("it should handle refine for field", () => {
+    it("should handle refine for field", () => {
       const userSchema = z.object({
         firstName: z.string(),
         lastName: z.string(),

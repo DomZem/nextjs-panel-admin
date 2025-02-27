@@ -1,20 +1,22 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import Image from "next/image";
 import { CloudUpload, LoaderCircle } from "lucide-react";
-import { Label } from "./label";
-import { Button } from "./button";
+import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { Button } from "./button";
+import { Label } from "./label";
+import Image from "next/image";
 
 export const ImageUpload = ({
+  value,
   onUploadComplete,
 }: {
+  value?: string;
   onUploadComplete?: (url: string | null) => void;
 }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [uploadedImagePath, setUploadedImagePath] = useState<string | null>(
-    null,
+    value ?? null,
   );
 
   const handleImageUpload = async (image: File) => {

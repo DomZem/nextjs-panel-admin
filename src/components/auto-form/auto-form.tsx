@@ -1,28 +1,30 @@
 "use client";
 
 import { type DefaultValues, type Path, useForm } from "react-hook-form";
+import { ImageUpload } from "../ui/image-upload-input";
+import { DateTimePicker } from "../ui/datetime-picker";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageUpload } from "./image-upload-input";
+import { WysiwygInput } from "../ui/wysiwyg-input";
 import { type ZodObjectSchema } from "~/utils/zod";
-import { DateTimePicker } from "./datetime-picker";
-import { WysiwygInput } from "./wysiwyg-input";
+import { badgeVariants } from "../ui/badge";
 import { type TypeOf, type z } from "zod";
-import { Checkbox } from "./checkbox";
-import { Textarea } from "./textarea";
-import { Button } from "./button";
+import { Checkbox } from "../ui/checkbox";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { cn } from "~/lib/utils";
-import { Input } from "./input";
-import { Badge } from "./badge";
-import {
-  type ComponentPropsWithoutRef,
-  useMemo,
-  type ChangeEvent,
-} from "react";
 import {
   getFormFieldsDefaultValues,
   mapSchemaToFormFields,
   type SelectOption,
 } from "~/utils/auto-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import {
   Form,
   FormControl,
@@ -31,14 +33,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./form";
+} from "../ui/form";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
+  type ComponentPropsWithoutRef,
+  useMemo,
+  type ChangeEvent,
+} from "react";
 
 type InputType =
   | "text"
@@ -136,7 +136,7 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((data) => onSubmit(data))}
         className={cn("flex flex-col gap-8", className)}
       >
         {Object.entries(formFields).map(([fieldName, formField]) => {
@@ -178,13 +178,19 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                         </div>
 
                         {shouldShowClearButton && (
-                          <Badge
-                            role="button"
-                            className="cursor-pointer"
+                          <button
+                            type="button"
+                            className={cn(
+                              "cursor-pointer",
+                              badgeVariants({
+                                variant: "default",
+                              }),
+                            )}
                             onClick={() => handleClearField(key)}
+                            data-testid={`clear-${key}`}
                           >
                             Clear
-                          </Badge>
+                          </button>
                         )}
                       </div>
                     ) : (
@@ -193,13 +199,19 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                           <FormLabel>{label}</FormLabel>
 
                           {shouldShowClearButton && (
-                            <Badge
-                              role="button"
-                              className="cursor-pointer"
+                            <button
+                              type="button"
+                              className={cn(
+                                "cursor-pointer",
+                                badgeVariants({
+                                  variant: "default",
+                                }),
+                              )}
                               onClick={() => handleClearField(key)}
+                              data-testid={`clear-${key}`}
                             >
                               Clear
-                            </Badge>
+                            </button>
                           )}
                         </div>
 
@@ -262,8 +274,8 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                           </FormControl>
                         ) : config?.type === "image" ? (
                           <FormControl>
-                            {/* TODO: ADD default value */}
                             <ImageUpload
+                              value={field.value}
                               onUploadComplete={(url) => field.onChange(url)}
                             />
                           </FormControl>
