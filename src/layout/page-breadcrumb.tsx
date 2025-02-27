@@ -8,11 +8,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
+import React from "react";
 
 export const PageBreadcrumb = () => {
   const pathname = usePathname();
-
-  console.log("pathname", pathname);
 
   const splitedPath = pathname.split("/");
 
@@ -20,12 +19,12 @@ export const PageBreadcrumb = () => {
     <Breadcrumb>
       <BreadcrumbList>
         {splitedPath.map((path, i) => (
-          <>
+          <React.Fragment key={path}>
             <BreadcrumbItem>
               <BreadcrumbPage className="capitalize">{path}</BreadcrumbPage>
             </BreadcrumbItem>
             {i !== 0 && i !== splitedPath.length - 1 && <BreadcrumbSeparator />}
-          </>
+          </React.Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
