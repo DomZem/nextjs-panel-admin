@@ -18,9 +18,11 @@ import { Button } from "./button";
 export const WysiwygInput = ({
   value,
   onChange,
+  id,
 }: {
   value: string;
   onChange: (data: string) => void;
+  id?: string;
 }) => {
   const editor = useCreateBlockNote({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -33,6 +35,7 @@ export const WysiwygInput = ({
         <input
           value={value || ""}
           disabled
+          id={id}
           className="flex-1 bg-transparent text-base outline-none disabled:cursor-not-allowed disabled:opacity-50"
         />
         <DialogTrigger asChild>

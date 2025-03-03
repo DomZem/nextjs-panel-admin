@@ -18,4 +18,4 @@
 - [x] Fix: after add some fields to existing models, dragging columns is not possible
 - [ ] Test: add basic tests for AutoForm in jest
 - [ ] Fix: on mobile view filters takes a lot of space. We should hide them some where
-- [ ] Feat: replace date-fns by dayjs in date time picker
+- [x] Feat: replace date-fns by dayjs in date time picker

@@ -1,8 +1,8 @@
 "use client";
 
 import { type DefaultValues, type Path, useForm } from "react-hook-form";
-import { ImageUpload } from "../ui/image-upload-input";
 import { DateTimePicker } from "../ui/datetime-picker";
+import { ImageUpload } from "../ui/image-upload-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { WysiwygInput } from "../ui/wysiwyg-input";
 import { type ZodObjectSchema } from "~/utils/zod";
@@ -143,6 +143,10 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
           const key = fieldName as Path<TypeOf<TSchema>>;
           const config = fieldsConfig?.[key];
 
+          if (config?.hidden) {
+            return null;
+          }
+
           return (
             <FormField
               control={form.control}
@@ -157,41 +161,41 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                   config?.label ?? mapLabel?.(fieldName) ?? fieldName;
 
                 const shouldShowClearButton =
-                  !formField.isRequired &&
-                  formField.type !== "datetime" &&
-                  config?.type !== "datetime" &&
-                  config?.type !== "image";
+                  !formField.isRequired && config?.type !== "image";
 
                 return (
-                  <FormItem className={cn("", config?.hidden && "hidden")}>
+                  <FormItem>
                     {config?.type === "checkbox" ||
                     formField.type === "boolean" ? (
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <FormLabel>{label}</FormLabel>
-                        </div>
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel>{label}</FormLabel>
+                          </div>
 
-                        {shouldShowClearButton && (
-                          <button
-                            type="button"
-                            className={cn(
-                              "cursor-pointer",
-                              badgeVariants({
-                                variant: "default",
-                              }),
-                            )}
-                            onClick={() => handleClearField(key)}
-                            data-testid={`clear-${key}`}
-                          >
-                            Clear
-                          </button>
-                        )}
+                          {shouldShowClearButton && (
+                            <button
+                              type="button"
+                              className={cn(
+                                "cursor-pointer",
+                                badgeVariants({
+                                  variant: "default",
+                                }),
+                              )}
+                              onClick={() => handleClearField(key)}
+                              data-testid={`clear-${key}`}
+                            >
+                              Clear
+                            </button>
+                          )}
+                        </div>
+                        <FormMessage data-testid={`${key}-error`} />
                       </div>
                     ) : (
                       <>
@@ -281,14 +285,10 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                           </FormControl>
                         ) : config?.type === "datetime" ||
                           formField.type === "datetime" ? (
-                          <FormControl>
-                            <DateTimePicker
-                              modal
-                              value={field.value}
-                              onChange={field.onChange}
-                              clearable
-                            />
-                          </FormControl>
+                          <DateTimePicker
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
                         ) : (
                           <FormControl>
                             <Input
@@ -308,7 +308,7 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
                           </FormControl>
                         )}
 
-                        <FormMessage />
+                        <FormMessage data-testid={`${key}-error`} />
                       </>
                     )}
 

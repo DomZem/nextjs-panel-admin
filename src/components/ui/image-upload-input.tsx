@@ -4,15 +4,16 @@ import { CloudUpload, LoaderCircle } from "lucide-react";
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "./button";
-import { Label } from "./label";
 import Image from "next/image";
 
 export const ImageUpload = ({
   value,
   onUploadComplete,
+  id,
 }: {
   value?: string;
   onUploadComplete?: (url: string | null) => void;
+  id?: string;
 }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [uploadedImagePath, setUploadedImagePath] = useState<string | null>(
@@ -78,10 +79,10 @@ export const ImageUpload = ({
               <CloudUpload />
             </div>
 
-            <Label htmlFor="image-upload">Drag an image</Label>
+            <p>Drag an image</p>
 
             <input
-              id="image-upload"
+              id={id}
               className="focus:outline-none"
               accept="image/png, image/jpeg"
               disabled={isLoading}
