@@ -8,10 +8,9 @@ import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { UserTransactionsTable } from "./user-transactions-table";
 import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
-import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
-import { UserFilters } from "./user-filters";
 import { usePage } from "~/hooks/use-page";
+import { UserRole } from "@prisma/client";
 import {
   userCreateSchema,
   userUpdateSchema,
@@ -19,12 +18,18 @@ import {
 } from "~/common/validations/user/user";
 import { api } from "~/trpc/react";
 import { useState } from "react";
+import {
+  enumToSelectOptions,
+  FilterCard,
+  FilterCardItemString,
+  FilterCardItemSelect,
+} from "~/components/ui/filter";
 import Image from "next/image";
 
 export const UsersTable = () => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [userRole, setUserRole] = useState<UserRole | undefined>(undefined);
+  const [userRole, setUserRole] = useState<UserRole | "ALL">("ALL");
 
   const [pageSize] = useRowsPerPage();
   const [page] = usePage();
@@ -35,7 +40,7 @@ export const UsersTable = () => {
     filters: {
       userName,
       userEmail,
-      userRole,
+      userRole: userRole === "ALL" ? undefined : userRole,
     },
   });
   const deleteUser = api.user.deleteOne.useMutation();
@@ -110,14 +115,27 @@ export const UsersTable = () => {
       >
         <AutoTableToolbarHeader title="Users" />
 
-        <UserFilters
-          userName={userName}
-          userEmail={userEmail}
-          userRole={userRole}
-          onUserNameChange={setUserName}
-          onUserEmailChange={setUserEmail}
-          onUserRoleChange={setUserRole}
-        />
+        <FilterCard>
+          <FilterCardItemString
+            label="name"
+            placeholder="Search by user name"
+            value={userName}
+            onValueChange={setUserName}
+          />
+          <FilterCardItemString
+            label="email"
+            placeholder="Search by user email"
+            value={userEmail}
+            onValueChange={setUserEmail}
+          />
+          <FilterCardItemSelect
+            label="role"
+            placeholder="Search by user role"
+            value={userRole}
+            options={enumToSelectOptions(UserRole)}
+            onValueChange={setUserRole}
+          />
+        </FilterCard>
 
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}

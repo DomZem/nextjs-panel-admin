@@ -8,8 +8,7 @@ import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
 import { UserCombobox } from "../user/user-combobox";
-import { type OrderStatus } from "@prisma/client";
-import { OrderFilters } from "./order-filters";
+import { OrderStatus } from "@prisma/client";
 import { usePage } from "~/hooks/use-page";
 import {
   orderCreateSchema,
@@ -18,12 +17,16 @@ import {
 } from "~/common/validations/order/order";
 import { api } from "~/trpc/react";
 import { useState } from "react";
+import {
+  enumToSelectOptions,
+  FilterCard,
+  FilterCardItemSelect,
+  FilterCardItemString,
+} from "~/components/ui/filter";
 
 export const OrdersTable = () => {
   const [orderId, setOrderId] = useState("");
-  const [orderStatus, setOrderStatus] = useState<OrderStatus | undefined>(
-    undefined,
-  );
+  const [orderStatus, setOrderStatus] = useState<OrderStatus | "ALL">("ALL");
 
   const [pageSize] = useRowsPerPage();
   const [page] = usePage();
@@ -33,7 +36,7 @@ export const OrdersTable = () => {
     pageSize,
     filters: {
       orderId,
-      orderStatus,
+      orderStatus: orderStatus === "ALL" ? undefined : orderStatus,
     },
   });
   const createOrder = api.order.createOne.useMutation();
@@ -114,12 +117,21 @@ export const OrdersTable = () => {
       >
         <AutoTableToolbarHeader title="Orders" />
 
-        <OrderFilters
-          orderId={orderId}
-          onOrderIdChange={setOrderId}
-          orderStatus={orderStatus}
-          onOrderStatusChange={setOrderStatus}
-        />
+        <FilterCard>
+          <FilterCardItemString
+            label="id"
+            placeholder="Search by order id"
+            value={orderId}
+            onValueChange={setOrderId}
+          />
+          <FilterCardItemSelect
+            label="status"
+            placeholder="Search by order status"
+            value={orderStatus}
+            options={enumToSelectOptions(OrderStatus)}
+            onValueChange={setOrderStatus}
+          />
+        </FilterCard>
 
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}

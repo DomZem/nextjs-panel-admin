@@ -7,8 +7,7 @@ import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-heade
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
-import { type ProductCategory } from "@prisma/client";
-import { ProductFilters } from "./product-filters";
+import { ProductCategory } from "@prisma/client";
 import {
   productCreateSchema,
   productUpdateSchema,
@@ -17,12 +16,18 @@ import {
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
+import {
+  enumToSelectOptions,
+  FilterCard,
+  FilterCardItemSelect,
+  FilterCardItemString,
+} from "~/components/ui/filter";
 
 export const ProductsTable = () => {
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState<
-    ProductCategory | undefined
-  >(undefined);
+    ProductCategory | "ALL"
+  >("ALL");
 
   const [pageSize] = useRowsPerPage();
   const [page] = usePage();
@@ -32,7 +37,7 @@ export const ProductsTable = () => {
     pageSize,
     filters: {
       productName,
-      productCategory,
+      productCategory: productCategory === "ALL" ? undefined : productCategory,
     },
   });
   const deleteProduct = api.product.deleteOne.useMutation();
@@ -109,12 +114,21 @@ export const ProductsTable = () => {
       >
         <AutoTableToolbarHeader title="Products" />
 
-        <ProductFilters
-          productName={productName}
-          onProductNameChange={setProductName}
-          productCategory={productCategory}
-          onProductCategoryChange={setProductCategory}
-        />
+        <FilterCard>
+          <FilterCardItemString
+            label="name"
+            placeholder="Search by product name"
+            value={productName}
+            onValueChange={setProductName}
+          />
+          <FilterCardItemSelect
+            label="category"
+            placeholder="Search by product category"
+            value={productCategory}
+            options={enumToSelectOptions(ProductCategory)}
+            onValueChange={setProductCategory}
+          />
+        </FilterCard>
 
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
