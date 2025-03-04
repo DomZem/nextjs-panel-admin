@@ -3,13 +3,14 @@
 import { PasswordInput } from "~/components/ui/password-input";
 import { loginSchema } from "~/common/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GalleryVerticalEnd } from "lucide-react";
+import { GalleryVerticalEnd, LoaderCircle } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { cn } from "~/lib/utils";
+import { useState } from "react";
 import {
   Form,
   FormControl,
@@ -22,6 +23,7 @@ import Link from "next/link";
 import { type z } from "zod";
 
 export const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -33,11 +35,13 @@ export const LoginForm = () => {
 
   const handleLogin = async (data: z.infer<typeof loginSchema>) => {
     try {
+      setIsLoading(true);
       const response = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
+      setIsLoading(false);
 
       if (response?.error) {
         form.setError("email", {
@@ -63,12 +67,12 @@ export const LoginForm = () => {
   return (
     <div className={cn("flex flex-col gap-6")}>
       <div className="flex flex-col items-center gap-2">
-        <a href="#" className="flex flex-col items-center gap-2 font-medium">
+        <Link href="/" className="flex flex-col items-center gap-2 font-medium">
           <div className="flex h-8 w-8 items-center justify-center rounded-md">
             <GalleryVerticalEnd className="size-6" />
           </div>
           <span className="sr-only">Brand Name</span>
-        </a>
+        </Link>
         <h1 className="text-xl font-bold">Welcome to Brand Name</h1>
       </div>
 
@@ -102,8 +106,8 @@ export const LoginForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Login
+          <Button type="submit" disabled={isLoading} className="w-full">
+            {isLoading ? <LoaderCircle className="animate-spin" /> : "Login"}
           </Button>
         </form>
       </Form>
