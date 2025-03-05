@@ -8,6 +8,7 @@ import { Calendar } from "./calendar";
 import { Button } from "./button";
 import { cn } from "~/lib/utils";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 export const DateTimePicker = ({
   value,
@@ -16,6 +17,8 @@ export const DateTimePicker = ({
   value?: Date;
   onChange: (date: Date) => void;
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleDateSelect = (date?: Date) => {
     if (date) {
       onChange(date);
@@ -31,13 +34,14 @@ export const DateTimePicker = ({
       newDate.setHours(parseInt(timeValue, 10));
     } else if (type === "minute") {
       newDate.setMinutes(parseInt(timeValue, 10));
+      setIsOpen(false);
     }
 
     onChange(newDate);
   };
 
   return (
-    <Popover modal>
+    <Popover modal open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <FormControl>
           <Button
@@ -46,6 +50,7 @@ export const DateTimePicker = ({
               "w-full pl-3 text-left font-normal",
               !value && "text-muted-foreground",
             )}
+            onClick={() => setIsOpen(true)}
           >
             {value ? (
               dayjs(value).format("DD/MMM/YYYY HH:mm")
@@ -64,7 +69,6 @@ export const DateTimePicker = ({
             selected={value}
             onSelect={handleDateSelect}
             initialFocus
-            data-testid="calendar"
           />
           <div className="flex flex-col divide-y sm:h-[300px] sm:flex-row sm:divide-x sm:divide-y-0">
             <ScrollArea className="w-64 sm:w-auto">
