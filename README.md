@@ -19,3 +19,4 @@
 - [x] Test: add basic tests for AutoForm in jest
 - [ ] Fix: on mobile view filters takes a lot of space. We should hide them some where
 - [x] Feat: replace date-fns by dayjs in date time picker
+- [ ] Feat: add some tests for auto table
