@@ -3,11 +3,22 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
-import { ProductCategory } from "@prisma/client";
+import { type ProductCategory } from "@prisma/client";
+import { mapDashedFieldName } from "~/utils/mappers";
+import {
+  AutoTableCloseDetailsButton,
+  AutoTableCreateButton,
+  AutoTableDialogFilters,
+  AutoTableHeader,
+  AutoTableHeaderContent,
+  AutoTableHeaderTitle,
+  AutoTableRefreshButton,
+  AutoTableSelectColumns,
+} from "~/components/auto-table/auto-table-header";
+import { ProductFilters } from "./product-filters";
 import {
   productCreateSchema,
   productUpdateSchema,
@@ -17,10 +28,9 @@ import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
-  enumToSelectOptions,
   FilterCard,
-  FilterCardItemSelect,
-  FilterCardItemString,
+  FilterCardContent,
+  FilterCardTitle,
 } from "~/components/ui/filter";
 
 export const ProductsTable = () => {
@@ -112,22 +122,34 @@ export const ProductsTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader title="Products" />
+        <AutoTableHeader>
+          <AutoTableHeaderTitle>Products</AutoTableHeaderTitle>
+          <AutoTableHeaderContent>
+            <AutoTableRefreshButton />
+            <AutoTableDialogFilters>
+              <ProductFilters
+                productName={productName}
+                setProductName={setProductName}
+                productCategory={productCategory}
+                setProductCategory={setProductCategory}
+              />
+            </AutoTableDialogFilters>
+            <AutoTableSelectColumns mapColumnName={mapDashedFieldName} />
+            <AutoTableCloseDetailsButton />
+            <AutoTableCreateButton />
+          </AutoTableHeaderContent>
+        </AutoTableHeader>
 
-        <FilterCard>
-          <FilterCardItemString
-            label="name"
-            placeholder="Search by product name"
-            value={productName}
-            onValueChange={setProductName}
-          />
-          <FilterCardItemSelect
-            label="category"
-            placeholder="Search by product category"
-            value={productCategory}
-            options={enumToSelectOptions(ProductCategory)}
-            onValueChange={setProductCategory}
-          />
+        <FilterCard className="hidden lg:grid">
+          <FilterCardTitle />
+          <FilterCardContent>
+            <ProductFilters
+              productName={productName}
+              setProductName={setProductName}
+              productCategory={productCategory}
+              setProductCategory={setProductCategory}
+            />
+          </FilterCardContent>
         </FilterCard>
 
         <AutoTableDndTable

@@ -17,6 +17,6 @@
 - [x] Fix: fix issue with clearing values in update form for nullable inputs
 - [x] Fix: after add some fields to existing models, dragging columns is not possible
 - [x] Test: add basic tests for AutoForm in jest
-- [ ] Fix: on mobile view filters takes a lot of space. We should hide them some where
+- [x] Fix: on mobile view filters takes a lot of space. We should hide them some where
 - [x] Feat: replace date-fns by dayjs in date time picker
 - [ ] Feat: add some tests for auto table

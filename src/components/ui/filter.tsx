@@ -1,3 +1,4 @@
+import { type DetailedHTMLProps, type HTMLAttributes } from "react";
 import { useDebouncedState } from "~/hooks/use-debounced-state";
 import { FormItem } from "./form";
 import { cn } from "~/lib/utils";
@@ -14,18 +15,31 @@ import {
 export const FilterCard = ({
   className,
   children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) => {
+  ...props
+}: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
   return (
-    <div className="relative rounded-md border p-3">
-      <div className="absolute left-3 top-0 -translate-y-1/2 bg-background px-1">
-        <p className="text-xs font-medium">Filters</p>
-      </div>
-      <div className={cn("grid gap-4 md:grid-cols-3", className)}>
-        {children}
-      </div>
+    <div className={cn("relative rounded-md border p-3", className)} {...props}>
+      {children}
+    </div>
+  );
+};
+
+export const FilterCardTitle = () => {
+  return (
+    <div className="absolute left-3 top-0 -translate-y-1/2 bg-background px-1">
+      <p className="text-xs font-medium">Filters</p>
+    </div>
+  );
+};
+
+export const FilterCardContent = ({
+  className,
+  children,
+  ...props
+}: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+  return (
+    <div className={cn("grid gap-4 md:grid-cols-3", className)} {...props}>
+      {children}
     </div>
   );
 };
@@ -82,7 +96,6 @@ export const FilterCardItemSelect = <T extends string>({
   }[];
   onValueChange: (value: T) => void;
 }) => {
-  console.log("FilterCardItemSelect", value, options);
   return (
     <FormItem>
       <Label>{label}</Label>

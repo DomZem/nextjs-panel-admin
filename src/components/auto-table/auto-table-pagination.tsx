@@ -63,7 +63,7 @@ const RowsPerPageSelect = ({
   pageSizeOptions: number[];
 }) => {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="hidden items-center space-x-2 sm:flex">
       <p className="whitespace-nowrap text-sm font-medium">Rows per page</p>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-[4.5rem]">

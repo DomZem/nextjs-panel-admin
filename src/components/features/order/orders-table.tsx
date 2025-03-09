@@ -3,12 +3,23 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
 import { UserCombobox } from "../user/user-combobox";
-import { OrderStatus } from "@prisma/client";
+import { mapDashedFieldName } from "~/utils/mappers";
+import {
+  AutoTableCloseDetailsButton,
+  AutoTableCreateButton,
+  AutoTableDialogFilters,
+  AutoTableHeader,
+  AutoTableHeaderContent,
+  AutoTableHeaderTitle,
+  AutoTableRefreshButton,
+  AutoTableSelectColumns,
+} from "~/components/auto-table/auto-table-header";
+import { type OrderStatus } from "@prisma/client";
+import { OrderFilters } from "./order-filters";
 import { usePage } from "~/hooks/use-page";
 import {
   orderCreateSchema,
@@ -18,10 +29,9 @@ import {
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
-  enumToSelectOptions,
   FilterCard,
-  FilterCardItemSelect,
-  FilterCardItemString,
+  FilterCardContent,
+  FilterCardTitle,
 } from "~/components/ui/filter";
 
 export const OrdersTable = () => {
@@ -115,22 +125,34 @@ export const OrdersTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader title="Orders" />
+        <AutoTableHeader>
+          <AutoTableHeaderTitle>Orders</AutoTableHeaderTitle>
+          <AutoTableHeaderContent>
+            <AutoTableRefreshButton />
+            <AutoTableDialogFilters>
+              <OrderFilters
+                orderId={orderId}
+                setOrderId={setOrderId}
+                orderStatus={orderStatus}
+                setOrderStatus={setOrderStatus}
+              />
+            </AutoTableDialogFilters>
+            <AutoTableSelectColumns mapColumnName={mapDashedFieldName} />
+            <AutoTableCloseDetailsButton />
+            <AutoTableCreateButton />
+          </AutoTableHeaderContent>
+        </AutoTableHeader>
 
-        <FilterCard>
-          <FilterCardItemString
-            label="id"
-            placeholder="Search by order id"
-            value={orderId}
-            onValueChange={setOrderId}
-          />
-          <FilterCardItemSelect
-            label="status"
-            placeholder="Search by order status"
-            value={orderStatus}
-            options={enumToSelectOptions(OrderStatus)}
-            onValueChange={setOrderStatus}
-          />
+        <FilterCard className="hidden lg:grid">
+          <FilterCardTitle />
+          <FilterCardContent>
+            <OrderFilters
+              orderId={orderId}
+              setOrderId={setOrderId}
+              orderStatus={orderStatus}
+              setOrderStatus={setOrderStatus}
+            />
+          </FilterCardContent>
         </FilterCard>
 
         <AutoTableDndTable

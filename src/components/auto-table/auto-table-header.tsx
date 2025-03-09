@@ -1,12 +1,18 @@
 "use client";
 
 import { useAutoTableColumnsSelect } from "~/hooks/auto-table/use-auto-table-columns-select";
-import { CirclePlus, CopyX, RotateCw, Settings2 } from "lucide-react";
+import { type DetailedHTMLProps, type HTMLAttributes, useState } from "react";
+import {
+  CirclePlus,
+  CopyX,
+  ListFilter,
+  RotateCw,
+  Settings2,
+} from "lucide-react";
 import { useAutoTable } from "./providers/auto-table-provider";
 import { mapDashedFieldName } from "~/utils/mappers";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
-import { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -19,6 +25,14 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 export const AutoTableHeader = ({
   className,
@@ -170,16 +184,51 @@ export const AutoTableSelectColumns = ({
   );
 };
 
+export const AutoTableDialogFilters = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger className="lg:hidden" asChild>
+        <Button variant="outline" size="icon">
+          <ListFilter />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-left">Filters</DialogTitle>
+          <DialogDescription className="sr-only">Filters</DialogDescription>
+        </DialogHeader>
+        {children}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export const AutoTableHeaderContent = ({
+  className,
+  children,
+  ...props
+}: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+  return (
+    <div className={cn("inline-flex items-center gap-3", className)} {...props}>
+      {children}
+    </div>
+  );
+};
+
 export const AutoTableToolbarHeader = ({ title }: { title: string }) => {
   return (
     <AutoTableHeader>
       <AutoTableHeaderTitle>{title}</AutoTableHeaderTitle>
-      <div className="inline-flex items-center gap-3">
+      <AutoTableHeaderContent>
         <AutoTableRefreshButton />
         <AutoTableSelectColumns mapColumnName={mapDashedFieldName} />
         <AutoTableCloseDetailsButton />
         <AutoTableCreateButton />
-      </div>
+      </AutoTableHeaderContent>
     </AutoTableHeader>
   );
 };

@@ -3,14 +3,25 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { UserTransactionsTable } from "./user-transactions-table";
 import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { mapDashedFieldName } from "~/utils/mappers";
+import {
+  AutoTableCloseDetailsButton,
+  AutoTableCreateButton,
+  AutoTableDialogFilters,
+  AutoTableHeader,
+  AutoTableHeaderContent,
+  AutoTableHeaderTitle,
+  AutoTableRefreshButton,
+  AutoTableSelectColumns,
+} from "~/components/auto-table/auto-table-header";
+import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
+import { UserFilters } from "./user-filters";
 import { usePage } from "~/hooks/use-page";
-import { UserRole } from "@prisma/client";
 import {
   userCreateSchema,
   userUpdateSchema,
@@ -19,10 +30,9 @@ import {
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
-  enumToSelectOptions,
   FilterCard,
-  FilterCardItemString,
-  FilterCardItemSelect,
+  FilterCardTitle,
+  FilterCardContent,
 } from "~/components/ui/filter";
 import Image from "next/image";
 
@@ -113,28 +123,38 @@ export const UsersTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader title="Users" />
+        <AutoTableHeader>
+          <AutoTableHeaderTitle>Users</AutoTableHeaderTitle>
+          <AutoTableHeaderContent>
+            <AutoTableRefreshButton />
+            <AutoTableDialogFilters>
+              <UserFilters
+                userName={userName}
+                setUserName={setUserName}
+                userEmail={userEmail}
+                setUserEmail={setUserEmail}
+                userRole={userRole}
+                setUserRole={setUserRole}
+              />
+            </AutoTableDialogFilters>
+            <AutoTableSelectColumns mapColumnName={mapDashedFieldName} />
+            <AutoTableCloseDetailsButton />
+            <AutoTableCreateButton />
+          </AutoTableHeaderContent>
+        </AutoTableHeader>
 
-        <FilterCard>
-          <FilterCardItemString
-            label="name"
-            placeholder="Search by user name"
-            value={userName}
-            onValueChange={setUserName}
-          />
-          <FilterCardItemString
-            label="email"
-            placeholder="Search by user email"
-            value={userEmail}
-            onValueChange={setUserEmail}
-          />
-          <FilterCardItemSelect
-            label="role"
-            placeholder="Search by user role"
-            value={userRole}
-            options={enumToSelectOptions(UserRole)}
-            onValueChange={setUserRole}
-          />
+        <FilterCard className="hidden lg:grid">
+          <FilterCardTitle />
+          <FilterCardContent>
+            <UserFilters
+              userName={userName}
+              setUserName={setUserName}
+              userEmail={userEmail}
+              setUserEmail={setUserEmail}
+              userRole={userRole}
+              setUserRole={setUserRole}
+            />
+          </FilterCardContent>
         </FilterCard>
 
         <AutoTableDndTable
