@@ -48,6 +48,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
       omitColumns
         ? fieldNames.filter((fieldName) => !omitColumns[fieldName])
         : fieldNames,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -85,11 +86,13 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
           return <>{cellData}</>;
         },
       })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
   const columns: ColumnDef<ZodObjectInfer<TSchema>>[] = useMemo(
     () => [...basicColumns, ...(extraColumns ?? [])],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 

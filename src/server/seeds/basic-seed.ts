@@ -11,8 +11,8 @@ import {
 
 const db = new PrismaClient();
 
-const USERS_COUNT = 2;
-const PRODUCTS_COUNT = 1;
+const USERS_COUNT = 1_000;
+const PRODUCTS_COUNT = 50;
 
 async function main() {
   // clean up
@@ -256,5 +256,7 @@ main()
 export const getRandomEnum = <T extends object>(enumObj: T): T[keyof T] => {
   const values = Object.values(enumObj) as unknown as T[keyof T][];
   const randomIndex = Math.floor(Math.random() * values.length);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   return values[randomIndex];
 };

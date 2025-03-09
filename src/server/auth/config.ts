@@ -5,6 +5,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type UserRole } from "@prisma/client";
 import { verify } from "@node-rs/argon2";
 import { db } from "~/server/db";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { JWT } from "next-auth/jwt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -13,25 +15,30 @@ import { db } from "~/server/db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  interface Session extends DefaultSession {
+  /**
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
     user: {
       id: string;
-      // ...other properties
       role: UserRole;
-    } & DefaultSession["user"];
-  }
 
-  interface User {
-    // ...other properties
-    role: UserRole;
+      /**
+       * By default, TypeScript merges new interface properties and overwrites existing ones.
+       * In this case, the default session user properties will be overwritten,
+       * with the new ones defined above. To keep the default session user properties,
+       * you need to add them back into the newly declared interface.
+       */
+    } & DefaultSession["user"];
   }
 }
 
-// declare module "next-auth/jwt" {
-//   interface JWT {
-//     id: string;
-//   }
-// }
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    role: UserRole;
+  }
+}
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -40,25 +47,18 @@ declare module "next-auth" {
  */
 export const authConfig = {
   callbacks: {
-    jwt: ({ token, user }) => {
-      if (user) {
-        console.log("user", user);
-
-        token.id = user.id;
-        token.email = user.email;
-        token.role = user.role;
-      }
-
+    jwt({ token, user }) {
+      if (user) token.role = (user as { role: UserRole }).role;
       return token;
     },
-    session: async ({ session, token }) => {
-      if (token) {
-        session.user.id = token.id;
-        session.user.email = token.email;
-        session.user.role = token.role;
-      }
-
-      return Promise.resolve(session);
+    session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          role: token.role,
+        },
+      };
     },
   },
   jwt: {

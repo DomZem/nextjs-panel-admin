@@ -52,6 +52,7 @@ export const useAutoTableColumnsOrder = <TSchema extends ZodObjectSchema>({
         setColumnOrder([...tableSetting.columnOrder, ...missingColumns]);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleColumnOrderChange: OnChangeFn<ColumnOrderState> = (

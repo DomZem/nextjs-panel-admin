@@ -20,7 +20,7 @@ export const ImageUpload = ({
     value ?? null,
   );
 
-  const handleImageUpload = async (image: File) => {
+  const handleImageUpload = async (_image: File) => {
     setLoading(true);
 
     try {
@@ -48,6 +48,7 @@ export const ImageUpload = ({
     const image = acceptedFiles.at(0);
     if (!image) return;
     void handleImageUpload(image);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
