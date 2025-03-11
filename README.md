@@ -10,6 +10,7 @@
 - [x] Fix: `value` prop on `input` should not be null. Consider using an empty string to clear the component or `undefined` for uncontrolled components It appears on update product
 - [x] Feat: add to each input in auto form which can be nullable button that will set the field to null
 - [x] Feat: add filters between header and table
+- [ ] Fix: after refresh selected row disappear
 - [x] Feat: added columns map to auto table. By adding that i will be able to modify the end result of column. Like for example rendering user avatar
 - [x] Feat: add saving columns order in local storage for dnd table
 - [x] Fix: add clear option to filters
