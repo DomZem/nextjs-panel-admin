@@ -3,6 +3,8 @@ import { ModeToggle } from "~/components/ui/mode-toggle";
 import { Separator } from "~/components/ui/separator";
 import { GalleryVerticalEnd } from "lucide-react";
 import { NavUser } from "~/layout/nav-user";
+import { redirect } from "next/navigation";
+import { auth } from "~/server/auth";
 import { Menu } from "~/layout/menu";
 import {
   Sidebar,
@@ -22,6 +24,12 @@ import {
 export default async function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/");
+  }
+
   return (
     <div>
       <SidebarProvider>
@@ -51,8 +59,8 @@ export default async function AdminLayout({
             <NavUser
               user={{
                 avatar: null,
-                email: "anakin.skywalker@gmail.com",
-                name: "Anakin Sywalker",
+                email: session.user.email ?? "admin@gmail.com",
+                name: session.user.name ?? "Admin",
               }}
             />
           </SidebarFooter>
