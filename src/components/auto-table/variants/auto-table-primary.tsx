@@ -3,6 +3,7 @@ import {
   AutoTableDetailsDataProvider,
   type IAutoTableDetailsDataProvider,
 } from "../providers/auto-table-details-data-provider";
+import { mapDashedFieldName } from "~/utils/mappers";
 import { type ZodObjectSchema } from "~/utils/zod";
 import {
   AutoTableCrudProvider,
@@ -57,6 +58,7 @@ export const AutoTablePrimary = <
           data={data}
           omitColumns={omitColumns}
           columnsMap={columnsMap}
+          mapColumnName={mapDashedFieldName}
           extraColumns={[
             {
               id: "actions",

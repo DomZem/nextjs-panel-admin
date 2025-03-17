@@ -1,4 +1,5 @@
 import { AutoTableBasicActionsColumn } from "../auto-table";
+import { mapDashedFieldName } from "~/utils/mappers";
 import { type ZodObjectSchema } from "~/utils/zod";
 import {
   AutoTableCrudProvider,
@@ -45,6 +46,7 @@ export const AutoTableSecondary = <
         data={data}
         omitColumns={omitColumns}
         columnsMap={columnsMap}
+        mapColumnName={mapDashedFieldName}
         extraColumns={[
           {
             id: "actions",

@@ -27,6 +27,7 @@ export interface IAutoTableDataProvider<TSchema extends ZodObjectSchema> {
     ) => React.ReactNode;
   }>;
   extraColumns?: ColumnDef<ZodObjectInfer<TSchema>>[];
+  mapColumnName?: (columnName: string) => string;
 }
 
 export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
@@ -34,6 +35,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
   omitColumns,
   columnsMap,
   extraColumns,
+  mapColumnName,
   children,
 }: IAutoTableDataProvider<TSchema> & {
   children: React.ReactNode;
@@ -55,7 +57,9 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
   const basicColumns: ColumnDef<ZodObjectInfer<TSchema>>[] = useMemo(
     () =>
       filteredFieldNames.map((fieldName) => ({
-        accessorKey: fieldName,
+        accessorKey: mapColumnName
+          ? mapColumnName(fieldName as string)
+          : fieldName,
         id: fieldName.toString(),
         cell: ({ row }) => {
           const cellData = row.original[fieldName];
