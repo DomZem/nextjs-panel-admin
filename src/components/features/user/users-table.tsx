@@ -3,7 +3,6 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { UserTransactionsTable } from "./user-transactions-table";
 import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
@@ -21,6 +20,10 @@ import {
 import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
+import {
+  AutoTableContainer,
+  AutoTableDetailsRow,
+} from "~/components/auto-table/auto-table";
 import { usePage } from "~/hooks/use-page";
 import {
   userCreateSchema,
@@ -59,7 +62,7 @@ export const UsersTable = () => {
   const getUserDetails = api.user.getOne.useMutation();
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTablePrimary
         technicalTableName="users"
         schema={userSchema}
@@ -167,6 +170,6 @@ export const UsersTable = () => {
           totalPagesCount={getAllUsers.data.totalPagesCount}
         />
       )}
-    </div>
+    </AutoTableContainer>
   );
 };

@@ -3,7 +3,6 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { type ProductCategory } from "@prisma/client";
@@ -24,6 +23,10 @@ import {
   productUpdateSchema,
   productSchema,
 } from "~/common/validations/product/product";
+import {
+  AutoTableContainer,
+  AutoTableDetailsRow,
+} from "~/components/auto-table/auto-table";
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
@@ -56,7 +59,7 @@ export const ProductsTable = () => {
   const getProductDetails = api.product.getOne.useMutation();
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTablePrimary
         schema={productSchema}
         rowIdentifierKey="id"
@@ -162,6 +165,6 @@ export const ProductsTable = () => {
           totalPagesCount={getAllProducts.data.totalPagesCount}
         />
       )}
-    </div>
+    </AutoTableContainer>
   );
 };

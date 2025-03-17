@@ -3,13 +3,16 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
-import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
 import { RegionCountriesTable } from "./region-countries-table";
 import {
   regionCreateSchema,
   regionSchema,
   regionUpdateSchema,
 } from "~/common/validations/region/region";
+import {
+  AutoTableContainer,
+  AutoTableDetailsRow,
+} from "~/components/auto-table/auto-table";
 import { api } from "~/trpc/react";
 
 export const RegionsTable = () => {
@@ -20,7 +23,7 @@ export const RegionsTable = () => {
   const getRegionDetails = api.region.getOne.useMutation();
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTablePrimary
         technicalTableName="regions"
         schema={regionSchema}
@@ -60,6 +63,6 @@ export const RegionsTable = () => {
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
         />
       </AutoTablePrimary>
-    </div>
+    </AutoTableContainer>
   );
 };

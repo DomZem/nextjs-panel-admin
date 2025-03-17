@@ -3,6 +3,7 @@
 import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import { ProductCombobox } from "../product/product-combobox";
 import {
   orderItemCreateSchema,
@@ -29,7 +30,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTableSecondary
         schema={orderItemSchema}
         rowIdentifierKey="id"
@@ -94,6 +95,6 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
         <AutoTableToolbarHeader title="Items" />
         <AutoTableDndTable />
       </AutoTableSecondary>
-    </div>
+    </AutoTableContainer>
   );
 };

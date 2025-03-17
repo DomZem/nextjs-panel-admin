@@ -4,6 +4,7 @@ import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import {
   userTransactionCreateSchema,
@@ -41,7 +42,7 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTableSecondary
         schema={userTransactionSchema}
         rowIdentifierKey="id"
@@ -136,6 +137,6 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
         queryByPage={queryByPage}
         queryByRowsPerPage={rowsPerPageKey}
       />
-    </div>
+    </AutoTableContainer>
   );
 };

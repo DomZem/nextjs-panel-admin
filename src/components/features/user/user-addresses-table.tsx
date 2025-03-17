@@ -3,6 +3,7 @@
 import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import {
   userAddressCreateSchema,
   userAddressSchema,
@@ -28,7 +29,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTableSecondary
         technicalTableName="user-addresses"
         schema={userAddressSchema}
@@ -72,6 +73,6 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
 
         <AutoTableDndTable />
       </AutoTableSecondary>
-    </div>
+    </AutoTableContainer>
   );
 };

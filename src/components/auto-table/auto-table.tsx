@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { cn } from "~/lib/utils";
 
 export const AutoTableFullActionsColumn = <TSchema extends ZodObjectSchema>({
   row,
@@ -91,6 +92,27 @@ export const AutoTableBasicActionsColumn = <TSchema extends ZodObjectSchema>({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+};
+
+export const AutoTableContainer = ({
+  className,
+  children,
+  ...props
+}: React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>) => {
+  return (
+    <div
+      className={cn(
+        "flex flex-1 flex-col justify-between gap-4 overflow-hidden",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
   );
 };
 

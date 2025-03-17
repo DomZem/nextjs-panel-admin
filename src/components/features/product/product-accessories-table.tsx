@@ -3,6 +3,7 @@
 import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import {
   productAccessoryCreateSchema,
   productAccessoryUpdateSchema,
@@ -32,7 +33,7 @@ export const ProductAccessoriesTable = ({
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTableSecondary
         schema={productAccessorySchema}
         rowIdentifierKey="id"
@@ -75,6 +76,6 @@ export const ProductAccessoriesTable = ({
         <AutoTableToolbarHeader title="Accessories" />
         <AutoTableDndTable />
       </AutoTableSecondary>
-    </div>
+    </AutoTableContainer>
   );
 };

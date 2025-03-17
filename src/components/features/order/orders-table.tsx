@@ -3,7 +3,10 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableDetailsRow } from "~/components/auto-table/auto-table";
+import {
+  AutoTableContainer,
+  AutoTableDetailsRow,
+} from "~/components/auto-table/auto-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
 import { UserCombobox } from "../user/user-combobox";
@@ -55,7 +58,7 @@ export const OrdersTable = () => {
   const getOrderDetails = api.order.getOne.useMutation();
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-4 overflow-hidden">
+    <AutoTableContainer>
       <AutoTablePrimary
         schema={orderSchema}
         rowIdentifierKey="id"
@@ -165,6 +168,6 @@ export const OrdersTable = () => {
           totalPagesCount={getAllOrders.data.totalPagesCount}
         />
       )}
-    </div>
+    </AutoTableContainer>
   );
 };
