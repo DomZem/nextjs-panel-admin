@@ -160,13 +160,15 @@ model order_item extends standard_cuid_model {
 }
 
 model user_address extends standard_cuid_model {
-    street_address String
-    city           String
-    zip_code       String
-    country        String
+    street_address    String
+    city              String
+    zip_code          String
 
-    user           User   @relation(fields: [user_id], references: [id])
-    user_id        String
+    user              User           @relation(fields: [user_id], references: [id])
+    user_id           String
+
+    region_country    region_country @relation(fields: [region_country_id], references: [id])
+    region_country_id Int
 }
 
 enum TransactionType {
@@ -206,9 +208,11 @@ model region extends standard_numeric_model {
 }
 
 model region_country extends standard_numeric_model {
-    name       String
-    iso_2_code String
+    name           String
+    iso_2_code     String
 
-    region     region @relation(fields: [region_id], references: [id])
-    region_id  Int
+    region         region         @relation(fields: [region_id], references: [id])
+    region_id      Int
+
+    user_addresses user_address[]
 }

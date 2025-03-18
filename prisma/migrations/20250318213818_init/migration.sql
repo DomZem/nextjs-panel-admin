@@ -141,8 +141,8 @@ CREATE TABLE "user_address" (
     "street_address" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "zip_code" TEXT NOT NULL,
-    "country" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
+    "region_country_id" INTEGER NOT NULL,
 
     CONSTRAINT "user_address_pkey" PRIMARY KEY ("id")
 );
@@ -222,6 +222,9 @@ ALTER TABLE "order_item" ADD CONSTRAINT "order_item_product_id_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "user_address" ADD CONSTRAINT "user_address_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_address" ADD CONSTRAINT "user_address_region_country_id_fkey" FOREIGN KEY ("region_country_id") REFERENCES "region_country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_transaction" ADD CONSTRAINT "user_transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
