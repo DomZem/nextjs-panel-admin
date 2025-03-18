@@ -6,6 +6,7 @@ import { TableCell, TableRow } from "../ui/table";
 import { useDataTable } from "../ui/data-table";
 import React, { useMemo } from "react";
 import { Button } from "../ui/button";
+import { cn } from "~/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { cn } from "~/lib/utils";
+import Link from "next/link";
 
 export const AutoTableFullActionsColumn = <TSchema extends ZodObjectSchema>({
   row,
@@ -83,6 +84,47 @@ export const AutoTableBasicActionsColumn = <TSchema extends ZodObjectSchema>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => setAction("UPDATE")}>
+          Update
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => setAction("DELETE")}>
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export const AutoTableBasicActionsWithRedirectDetailsColumn = <
+  TSchema extends ZodObjectSchema,
+>({
+  row,
+  detailsHref,
+}: {
+  row: ZodObjectInfer<TSchema>;
+  detailsHref: (row: ZodObjectInfer<TSchema>) => string;
+}) => {
+  const { setCurrentAction, setSelectedRow } = useAutoTable<TSchema>();
+
+  const setAction = (action: ActionType) => {
+    setSelectedRow(row);
+    setCurrentAction(action);
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem asChild>
+          <Link href={detailsHref(row)}>Details</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setAction("UPDATE")}>
           Update
         </DropdownMenuItem>
