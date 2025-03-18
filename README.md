@@ -20,3 +20,10 @@
 - [x] Fix: on mobile view filters takes a lot of space. We should hide them some where
 - [x] Feat: replace date-fns by dayjs in date time picker
 - [ ] Feat: add some tests for auto table
+
+# Example documentation
+1. How to use combobox as custom input
+2. Example structure of folders
+
+# Common Errors
+1. What to do if my field type for combobox is not string?
