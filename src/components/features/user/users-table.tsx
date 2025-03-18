@@ -1,10 +1,8 @@
 "use client";
 
+import { AutoTableRedirectDetails } from "~/components/auto-table/variants/auto-table-redirect-details";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
-import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { UserTransactionsTable } from "./user-transactions-table";
-import { UserAddressesTable } from "./user-addresses-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
@@ -20,10 +18,7 @@ import {
 import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
-import {
-  AutoTableContainer,
-  AutoTableDetailsRow,
-} from "~/components/auto-table/auto-table";
+import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import { usePage } from "~/hooks/use-page";
 import {
   userCreateSchema,
@@ -59,11 +54,11 @@ export const UsersTable = () => {
   const deleteUser = api.user.deleteOne.useMutation();
   const createUser = api.user.createOne.useMutation();
   const updateUser = api.user.updateOne.useMutation();
-  const getUserDetails = api.user.getOne.useMutation();
 
   return (
     <AutoTableContainer>
-      <AutoTablePrimary
+      <AutoTableRedirectDetails
+        detailsHref={(row) => `users/${row.id}`}
         technicalTableName="users"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -90,20 +85,7 @@ export const UsersTable = () => {
         }}
         data={getAllUsers.data?.users ?? []}
         onRefetchData={getAllUsers.refetch}
-        onDetails={async (row) =>
-          await getUserDetails.mutateAsync({
-            id: row.id,
-          })
-        }
         onDelete={async (row) => await deleteUser.mutateAsync({ id: row.id })}
-        renderDetails={(user) => {
-          return (
-            <div className="space-y-4">
-              <UserAddressesTable userId={user.id} />
-              <UserTransactionsTable userId={user.id} />
-            </div>
-          );
-        }}
         create={{
           formSchema: userCreateSchema,
           onCreate: createUser.mutateAsync,
@@ -160,10 +142,8 @@ export const UsersTable = () => {
           </FilterCardContent>
         </FilterCard>
 
-        <AutoTableDndTable
-          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
-        />
-      </AutoTablePrimary>
+        <AutoTableDndTable />
+      </AutoTableRedirectDetails>
 
       {getAllUsers.data && (
         <AutoTablePagination
