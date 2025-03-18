@@ -11,7 +11,7 @@ import {
 
 const db = new PrismaClient();
 
-const USERS_COUNT = 1_000;
+const USERS_COUNT = 10;
 const PRODUCTS_COUNT = 50;
 
 async function main() {
@@ -27,6 +27,72 @@ async function main() {
   await db.region.deleteMany();
 
   const hashedUserPassword = await hash("Test1234!");
+
+  await db.region.create({
+    data: {
+      name: "Europe",
+      countries: {
+        createMany: {
+          data: [
+            { name: "Germany", iso_2_code: "DE" },
+            { name: "France", iso_2_code: "FR" },
+            { name: "Italy", iso_2_code: "IT" },
+          ],
+        },
+      },
+    },
+  });
+
+  await db.region.create({
+    data: {
+      name: "Asia",
+      countries: {
+        createMany: {
+          data: [
+            { name: "China", iso_2_code: "CN" },
+            { name: "Japan", iso_2_code: "JP" },
+            { name: "India", iso_2_code: "IN" },
+          ],
+        },
+      },
+    },
+  });
+
+  await db.region.create({
+    data: {
+      name: "North America",
+      countries: {
+        createMany: {
+          data: [
+            { name: "United States", iso_2_code: "US" },
+            { name: "Canada", iso_2_code: "CA" },
+            { name: "Mexico", iso_2_code: "MX" },
+          ],
+        },
+      },
+    },
+  });
+
+  await db.region.create({
+    data: {
+      name: "South America",
+      countries: {
+        createMany: {
+          data: [
+            { name: "Brazil", iso_2_code: "BR" },
+            { name: "Argentina", iso_2_code: "AR" },
+            { name: "Colombia", iso_2_code: "CO" },
+          ],
+        },
+      },
+    },
+  });
+
+  const countries = await db.region_country.findMany({
+    select: {
+      id: true,
+    },
+  });
 
   // create users
   await Promise.all(
@@ -49,7 +115,8 @@ async function main() {
           addresses: {
             create: {
               city: faker.location.city(),
-              country: faker.location.country(),
+              region_country_id:
+                countries[Math.floor(Math.random() * countries.length)]!.id,
               street_address: faker.location.street(),
               zip_code: faker.location.zipCode(),
             },
@@ -168,66 +235,6 @@ async function main() {
       });
     }),
   );
-
-  await db.region.create({
-    data: {
-      name: "Europe",
-      countries: {
-        createMany: {
-          data: [
-            { name: "Germany", iso_2_code: "DE" },
-            { name: "France", iso_2_code: "FR" },
-            { name: "Italy", iso_2_code: "IT" },
-          ],
-        },
-      },
-    },
-  });
-
-  await db.region.create({
-    data: {
-      name: "Asia",
-      countries: {
-        createMany: {
-          data: [
-            { name: "China", iso_2_code: "CN" },
-            { name: "Japan", iso_2_code: "JP" },
-            { name: "India", iso_2_code: "IN" },
-          ],
-        },
-      },
-    },
-  });
-
-  await db.region.create({
-    data: {
-      name: "North America",
-      countries: {
-        createMany: {
-          data: [
-            { name: "United States", iso_2_code: "US" },
-            { name: "Canada", iso_2_code: "CA" },
-            { name: "Mexico", iso_2_code: "MX" },
-          ],
-        },
-      },
-    },
-  });
-
-  await db.region.create({
-    data: {
-      name: "South America",
-      countries: {
-        createMany: {
-          data: [
-            { name: "Brazil", iso_2_code: "BR" },
-            { name: "Argentina", iso_2_code: "AR" },
-            { name: "Colombia", iso_2_code: "CO" },
-          ],
-        },
-      },
-    },
-  });
 
   await db.user.create({
     data: {
