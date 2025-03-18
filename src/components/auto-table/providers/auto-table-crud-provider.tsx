@@ -56,12 +56,14 @@ export const AutoTableCrudProvider = <
           onCreate={create.onCreate}
           fieldsConfig={create.fieldsConfig}
           defaultValues={create.defaultValues}
+          isSubmitting={create.isSubmitting}
         />
 
         <AutoTableUpdateFormSheet
           formSchema={update.formSchema}
           onUpdate={update.onUpdate}
           fieldsConfig={update.fieldsConfig}
+          isSubmitting={update.isSubmitting}
         />
       </AutoTableProvider>
     </div>

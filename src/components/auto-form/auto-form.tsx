@@ -98,6 +98,7 @@ export interface AutoFormProps<TSchema extends ZodObjectSchema> {
     [TKey in Path<TypeOf<TSchema>>]?: FieldConfig<TSchema, TKey>;
   };
   defaultValues?: DefaultValues<TypeOf<TSchema>>;
+  isSubmitting?: boolean;
 }
 
 export const AutoForm = <TSchema extends ZodObjectSchema>({
@@ -107,6 +108,7 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
   mapLabel,
   fieldsConfig,
   defaultValues,
+  isSubmitting,
 }: AutoFormProps<TSchema>) => {
   const formFields = useMemo(() => {
     return mapSchemaToFormFields(schema);
@@ -322,8 +324,8 @@ export const AutoForm = <TSchema extends ZodObjectSchema>({
           );
         })}
 
-        <Button className="w-fit" type="submit">
-          Submit
+        <Button className="w-fit" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit"}
         </Button>
       </form>
     </Form>

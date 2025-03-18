@@ -92,7 +92,11 @@ export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
   fieldsConfig,
   formSchema,
   onCreate,
-}: Pick<AutoFormProps<TFormSchema>, "fieldsConfig" | "defaultValues"> &
+  isSubmitting,
+}: Pick<
+  AutoFormProps<TFormSchema>,
+  "fieldsConfig" | "defaultValues" | "isSubmitting"
+> &
   IUseCreateAutoTableData<TFormSchema> & {
     formSchema: TFormSchema;
   }) => {
@@ -114,6 +118,7 @@ export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
         defaultValues={defaultValues}
         mapLabel={mapDashedFieldName}
         onSubmit={handleCreate}
+        isSubmitting={isSubmitting}
       />
     </AutoTableSheet>
   );
@@ -126,7 +131,11 @@ export const AutoTableUpdateFormSheet = <
   fieldsConfig,
   formSchema,
   onUpdate,
-}: Pick<AutoFormProps<TFormSchema>, "fieldsConfig" | "defaultValues"> &
+  isSubmitting,
+}: Pick<
+  AutoFormProps<TFormSchema>,
+  "fieldsConfig" | "defaultValues" | "isSubmitting"
+> &
   IUseUpdateAutoTableData<TFormSchema> & {
     formSchema: TFormSchema;
   }) => {
@@ -156,6 +165,7 @@ export const AutoTableUpdateFormSheet = <
         mapLabel={mapDashedFieldName}
         defaultValues={defaultValues}
         onSubmit={handleUpdate}
+        isSubmitting={isSubmitting}
       />
     </AutoTableSheet>
   );
