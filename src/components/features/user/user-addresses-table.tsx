@@ -4,6 +4,7 @@ import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableContainer } from "~/components/auto-table/auto-table";
+import { RegionCountryCombobox } from "../region/region-country-combobox";
 import {
   userAddressCreateSchema,
   userAddressSchema,
@@ -47,9 +48,21 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
         create={{
           formSchema: userAddressCreateSchema,
           onCreate: createUserAddress.mutateAsync,
+          isSubmitting: createUserAddress.isPending,
           fieldsConfig: {
             user_id: {
               hidden: true,
+            },
+            region_country_id: {
+              type: "custom",
+              render: ({ field }) => {
+                return (
+                  <RegionCountryCombobox
+                    selectedValue={field.value}
+                    onSelect={field.onChange}
+                  />
+                );
+              },
             },
           },
           defaultValues: {
@@ -59,12 +72,24 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
         update={{
           formSchema: userAddressUpdateSchema,
           onUpdate: updateUserAddress.mutateAsync,
+          isSubmitting: updateUserAddress.isPending,
           fieldsConfig: {
             id: {
               hidden: true,
             },
             user_id: {
               hidden: true,
+            },
+            region_country_id: {
+              type: "custom",
+              render: ({ field }) => {
+                return (
+                  <RegionCountryCombobox
+                    selectedValue={field.value}
+                    onSelect={field.onChange}
+                  />
+                );
+              },
             },
           },
         }}

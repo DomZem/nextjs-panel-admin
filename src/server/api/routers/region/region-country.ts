@@ -25,6 +25,45 @@ export const regionCountryRouter = createTRPCRouter({
 
       return regionCountries;
     }),
+  getSearchCountries: adminProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.name) {
+        const countries = await ctx.db.region_country.findMany({
+          take: 5,
+          orderBy: {
+            id: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
+
+        return countries;
+      }
+
+      const filteredCountries = await ctx.db.region_country.findMany({
+        where: {
+          name: {
+            contains: input.name,
+          },
+        },
+        orderBy: {
+          id: "asc",
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      return filteredCountries;
+    }),
   getOne: adminProcedure
     .input(Region_countryScalarSchema.pick({ id: true }))
     .mutation(async ({ ctx, input }) => {

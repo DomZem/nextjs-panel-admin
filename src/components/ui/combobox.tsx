@@ -25,7 +25,7 @@ export const Combobox = ({
   searchPlaceholder = "Search value...",
   emptyPlaceholder = "No value found.",
 }: {
-  selectedValue?: string;
+  selectedValue?: string | number;
   onSelect: (value: string) => void;
   onInputChange: (value: string) => void;
   options: { value: string; label: string }[];
