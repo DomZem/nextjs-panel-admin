@@ -1,4 +1,35 @@
-# Todo List
+## Installation
+Clone project
+```bash
+git clone https://github.com/DomZem/nextjs-panel-admin
+```
+
+Go to the project directory
+```bash
+cd nextjs-panel-admin
+```
+
+Install dependencies
+```bash
+npm install
+```
+
+Create dev db
+```bash
+docker compose up -d
+```
+
+Seed dev db
+```bash
+npm run seed:dev
+```
+
+Run dev app
+```bash
+npm run dev
+```
+
+## Todo List
 
 - [x] Feat: add saving selected columns to display in local storage
 - [x] Feat: add scroll to sheet
@@ -21,10 +52,10 @@
 - [x] Feat: replace date-fns by dayjs in date time picker
 - [ ] Feat: add some tests for auto table
 
-# Example documentation
+## Example documentation
 1. How to use combobox as custom input
 2. Example structure of folders
 3. How can I add custom column when my data row has nested data ?
 
-# Common Errors
+## Common Errors
 1. What to do if my field type for combobox is not string?
