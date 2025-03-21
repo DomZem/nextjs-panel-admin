@@ -56,6 +56,7 @@ npm run dev
 1. How to use combobox as custom input
 2. Example structure of folders
 3. How can I add custom column when my data row has nested data ?
+4. How to add custom validation to some field ?
 
 ## Common Errors
 1. What to do if my field type for combobox is not string?
