@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import dayjs from "dayjs";
 import { z } from "zod";
 
-const enterDate = async ({
+export const enterAutoFormDate = async ({
   label,
   day,
   hour,
@@ -51,9 +51,9 @@ const selectOption = async ({
   await userEvent.click(selectOption);
 };
 
-const getFormattedCurrentMonth = () => dayjs().format("MMM");
+export const getFormattedCurrentMonth = () => dayjs().format("MMM");
 
-const getCurrentMonthNumber = () => dayjs().format("MM");
+export const getCurrentMonthNumber = () => dayjs().format("MM");
 
 describe("AutoForm component", () => {
   it("should render the form fields correctly", () => {
@@ -87,7 +87,7 @@ describe("AutoForm component", () => {
 
     render(<AutoForm schema={userSchema} onSubmit={handleSubmit} />);
 
-    const triggerBtn = await enterDate({
+    const triggerBtn = await enterAutoFormDate({
       label: "birth_date",
       day: 15,
       hour: 10,
@@ -124,7 +124,7 @@ describe("AutoForm component", () => {
     await userEvent.type(screen.getByLabelText("name"), "John Doe");
     await userEvent.type(screen.getByLabelText("age"), "30");
     await userEvent.click(screen.getByLabelText("is_streamer"));
-    await enterDate({
+    await enterAutoFormDate({
       label: "promoted_at",
       day: 15,
       hour: 10,
@@ -177,7 +177,7 @@ describe("AutoForm component", () => {
       optionName: "user",
     });
 
-    await enterDate({
+    await enterAutoFormDate({
       label: "promoted_at",
       day: 15,
       hour: 10,
@@ -308,7 +308,7 @@ describe("AutoForm component", () => {
       screen.getByLabelText("description"),
       "This is a description",
     );
-    await enterDate({
+    await enterAutoFormDate({
       label: "promoted_at",
       day: 15,
       hour: 10,

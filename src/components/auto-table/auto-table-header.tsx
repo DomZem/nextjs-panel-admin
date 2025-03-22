@@ -75,6 +75,7 @@ export const AutoTableCreateButton = () => {
             type="button"
             size="icon"
             onClick={() => setCurrentAction("CREATE")}
+            data-testid="auto-table-create-button"
           >
             <CirclePlus />
           </Button>
@@ -107,6 +108,7 @@ export const AutoTableCloseDetailsButton = () => {
                 ? "bg-accent text-accent-foreground"
                 : ""
             }
+            data-testid="auto-table-close-details-button"
           >
             <CopyX />
           </Button>
@@ -136,6 +138,7 @@ export const AutoTableRefreshButton = () => {
               await refetchData();
               setIsRefreshing(false);
             }}
+            data-testid="auth-table-refresh-button"
           >
             <RotateCw className={cn("", isRefreshing ? "animate-spin" : "")} />
           </Button>
@@ -158,7 +161,11 @@ export const AutoTableSelectColumns = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button
+          variant="outline"
+          size="icon"
+          data-testid="auth-table-select-columns-button"
+        >
           <Settings2 />
         </Button>
       </DropdownMenuTrigger>
