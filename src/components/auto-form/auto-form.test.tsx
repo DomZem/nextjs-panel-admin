@@ -1,59 +1,13 @@
 import { AutoForm } from "~/components/auto-form/auto-form";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import dayjs from "dayjs";
+import {
+  enterAutoFormDate,
+  getCurrentMonthNumber,
+  getFormattedCurrentMonth,
+  selectAutoFormOption,
+} from "~/utils/auto-form-test-helpers";
 import { z } from "zod";
-
-export const enterAutoFormDate = async ({
-  label,
-  day,
-  hour,
-  minute,
-}: {
-  label: string;
-  day: number;
-  hour: number;
-  minute: number;
-}) => {
-  // Open the DateTimePicker
-  const triggerBtn = screen.getByRole("button", { name: label });
-  await userEvent.click(triggerBtn);
-
-  // Select a day
-  const dayBtn = screen.getByRole("gridcell", {
-    name: day.toString(),
-  });
-  await userEvent.click(dayBtn);
-
-  // Select an hour
-  const hourBtn = screen.getByTestId(`calendar-hour-${hour}`);
-  await userEvent.click(hourBtn);
-
-  // Select a minute
-  const minuteBtn = screen.getByTestId(`calendar-minute-${minute}`);
-  await userEvent.click(minuteBtn);
-
-  return triggerBtn;
-};
-
-const selectOption = async ({
-  placeholder,
-  optionName,
-}: {
-  placeholder: string;
-  optionName: string;
-}) => {
-  const selectBtn = screen.getByRole("combobox");
-  expect(selectBtn).toHaveTextContent(placeholder);
-  await userEvent.click(selectBtn);
-
-  const selectOption = screen.getByRole("option", { name: optionName });
-  await userEvent.click(selectOption);
-};
-
-export const getFormattedCurrentMonth = () => dayjs().format("MMM");
-
-export const getCurrentMonthNumber = () => dayjs().format("MM");
 
 describe("AutoForm component", () => {
   it("should render the form fields correctly", () => {
@@ -130,7 +84,7 @@ describe("AutoForm component", () => {
       hour: 10,
       minute: 30,
     });
-    await selectOption({
+    await selectAutoFormOption({
       placeholder: "Select the role",
       optionName: "admin",
     });
@@ -172,7 +126,7 @@ describe("AutoForm component", () => {
       />,
     );
 
-    await selectOption({
+    await selectAutoFormOption({
       placeholder: "admin",
       optionName: "user",
     });
@@ -314,7 +268,7 @@ describe("AutoForm component", () => {
       hour: 10,
       minute: 30,
     });
-    await selectOption({
+    await selectAutoFormOption({
       placeholder: "Select the role",
       optionName: "user",
     });
@@ -402,7 +356,7 @@ describe("AutoForm component", () => {
 
     await userEvent.type(screen.getByLabelText("amount"), "1000");
 
-    await selectOption({
+    await selectAutoFormOption({
       placeholder: "Select the status",
       optionName: "completed",
     });

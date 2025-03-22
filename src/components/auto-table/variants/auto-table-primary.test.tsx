@@ -9,7 +9,7 @@ import {
   enterAutoFormDate,
   getCurrentMonthNumber,
   getFormattedCurrentMonth,
-} from "~/components/auto-form/auto-form.test";
+} from "~/utils/auto-form-test-helpers";
 import { z } from "zod";
 
 const userSchema = z.object({
