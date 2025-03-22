@@ -1,4 +1,3 @@
-import { UserRole } from "@prisma/client";
 import {
   getFormFieldsDefaultValues,
   mapSchemaToFormFields,
@@ -186,6 +185,11 @@ describe("auto-form utilities", () => {
 
   describe("getFormFieldsDefaultValues", () => {
     it("should return default values for form fields", () => {
+      enum UserRole {
+        Admin = "admin",
+        User = "user",
+      }
+
       const userForm = z.object({
         name: z.string(),
         age: z.number(),
