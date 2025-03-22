@@ -15,7 +15,5 @@ jobs:
         uses: actions/setup-node@v4
       - name: Install dependencies
         run: npm ci
-      # - name: Generate prisma client
-      #   run: npm run generate:prisma
       - name: Test code
         run: npm run test:jest
