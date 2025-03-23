@@ -1,30 +1,37 @@
 ## Installation
+
 Clone project
+
 ```bash
 git clone https://github.com/DomZem/nextjs-panel-admin
 ```
 
 Go to the project directory
+
 ```bash
 cd nextjs-panel-admin
 ```
 
 Install dependencies
+
 ```bash
 npm install
 ```
 
 Create dev db
+
 ```bash
 docker compose up -d
 ```
 
 Seed dev db
+
 ```bash
 npm run seed:dev
 ```
 
 Run dev app
+
 ```bash
 npm run dev
 ```
@@ -50,13 +57,15 @@ npm run dev
 - [x] Test: add basic tests for AutoForm in jest
 - [x] Fix: on mobile view filters takes a lot of space. We should hide them some where
 - [x] Feat: replace date-fns by dayjs in date time picker
-- [ ] Feat: add some tests for auto table
+- [x] Test: add some tests for auto table
 
 ## Example documentation
+
 1. How to use combobox as custom input
 2. Example structure of folders
 3. How can I add custom column when my data row has nested data ?
 4. How to add custom validation to some field ?
 
 ## Common Errors
+
 1. What to do if my field type for combobox is not string?
