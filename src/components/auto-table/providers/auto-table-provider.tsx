@@ -49,9 +49,9 @@ export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
         selectedRow,
         refetchData: onRefetchData,
         currentAction,
-        setCurrentAction: (action) => setCurrentAction(action),
+        setCurrentAction,
         rowIdentifierKey,
-        setSelectedRow: (row) => setSelectedRow(row),
+        setSelectedRow,
       }}
     >
       {children}

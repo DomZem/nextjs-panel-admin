@@ -27,6 +27,7 @@ export const AutoTableBasicActions = <
   columnsMap,
   extraColumns,
   omitColumns,
+  mapColumnName,
   children,
 }: IAutoTableCrudProvider<TSchema, TCreateFormSchema, TUpdateFormSchema> &
   IAutoTableDataProvider<TSchema> & {
@@ -46,7 +47,7 @@ export const AutoTableBasicActions = <
         data={data}
         omitColumns={omitColumns}
         columnsMap={columnsMap}
-        mapColumnName={mapDashedFieldName}
+        mapColumnName={mapColumnName ?? mapDashedFieldName}
         extraColumns={[
           {
             id: "actions",

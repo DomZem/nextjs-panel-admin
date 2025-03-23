@@ -27,6 +27,7 @@ export const AutoTableRedirectDetails = <
   columnsMap,
   extraColumns,
   omitColumns,
+  mapColumnName,
   detailsHref,
   children,
 }: IAutoTableCrudProvider<TSchema, TCreateFormSchema, TUpdateFormSchema> &
@@ -48,7 +49,7 @@ export const AutoTableRedirectDetails = <
         data={data}
         omitColumns={omitColumns}
         columnsMap={columnsMap}
-        mapColumnName={mapDashedFieldName}
+        mapColumnName={mapColumnName ?? mapDashedFieldName}
         extraColumns={[
           {
             id: "actions",
