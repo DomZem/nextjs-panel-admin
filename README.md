@@ -66,6 +66,151 @@ npm run dev
 3. How can I add custom column when my data row has nested data ?
 4. How to add custom validation to some field ?
 
+## Common flow with independent model
+### Create validation 
+Create model-name.ts file inside validation folder <br />
+For example let's create region.ts validation file for region model
+```typescript
+import { RegionScalarSchema } from "~/zod-schemas/models";
+
+export const regionSchema = RegionScalarSchema;
+
+export const regionUpdateSchema = regionSchema.omit({
+  created_at: true,
+  updated_at: true,
+});
+
+export const regionCreateSchema = regionUpdateSchema.omit({
+  id: true,
+});
+```
+```bash
+💡 Tip: Whenever you are creating validation for independent model use ScalarSchema
+```
+
+### Create router
+Create model-name.ts file inside server/api/routers folder <br />
+For example let's create region.ts router file for region model
+```typescript
+import { adminProcedure, createTRPCRouter } from "../../trpc";
+import { RegionScalarSchema } from "~/zod-schemas/models";
+import {
+  regionCreateSchema,
+  regionUpdateSchema,
+} from "~/common/validations/region/region";
+
+export const regionRouter = createTRPCRouter({
+  getAll: adminProcedure.query(async ({ ctx }) => {
+    const regions = await ctx.db.region.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
+
+    return regions;
+  }),
+  getOne: adminProcedure
+    .input(RegionScalarSchema.pick({ id: true }))
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.region.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return result;
+    }),
+  createOne: adminProcedure
+    .input(regionCreateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.region.create({
+        data: input,
+      });
+
+      return result;
+    }),
+  updateOne: adminProcedure
+    .input(regionUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.region.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
+
+      return result;
+    }),
+  deleteOne: adminProcedure
+    .input(RegionScalarSchema.pick({ id: true }))
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.region.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return result;
+    }),
+});
+```
+
+### Create table
+Create model-name-table.tsx component file inside /components/features/[module-name] folder <br />
+For example let's create regions-table.tsx component file inside /components/features/region
+```typescript
+export const RegionsTable = () => {
+  const getAllRegions = api.region.getAll.useQuery();
+  const deleteRegion = api.region.deleteOne.useMutation();
+  const createRegion = api.region.createOne.useMutation();
+  const updateRegion = api.region.updateOne.useMutation();
+  const getRegionDetails = api.region.getOne.useMutation();
+
+  return (
+    <AutoTableContainer>
+      <AutoTableFullActions
+        technicalTableName="regions"
+        schema={regionSchema}
+        rowIdentifierKey="id"
+        data={getAllRegions.data ?? []}
+        onRefetchData={getAllRegions.refetch}
+        onDetails={async (row) =>
+          await getRegionDetails.mutateAsync({
+            id: row.id,
+          })
+        }
+        onDelete={async (row) => await deleteRegion.mutateAsync({ id: row.id })}
+        renderDetails={(region) => {
+          return (
+            <div className="space-y-4">
+              <RegionCountriesTable regionId={region.id} />
+            </div>
+          );
+        }}
+        create={{
+          formSchema: regionCreateSchema,
+          onCreate: createRegion.mutateAsync,
+        }}
+        update={{
+          formSchema: regionUpdateSchema,
+          onUpdate: updateRegion.mutateAsync,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+        }}
+      >
+        <AutoTableToolbarHeader title="Regions" />
+
+        <AutoTableDndTable
+          extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
+        />
+      </AutoTableFullActions>
+    </AutoTableContainer>
+  );
+};
+```
 ## Common Errors
 
 1. What to do if my field type for combobox is not string?
