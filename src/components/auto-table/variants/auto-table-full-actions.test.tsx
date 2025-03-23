@@ -1,6 +1,6 @@
 import { AutoTableDndTable } from "../tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "../auto-table-header";
-import { AutoTablePrimary } from "./auto-table-primary";
+import { AutoTableFullActions } from "./auto-table-full-actions";
 import { render, screen } from "@testing-library/react";
 import { AutoTableDetailsRow } from "../auto-table";
 import userEvent from "@testing-library/user-event";
@@ -40,7 +40,7 @@ beforeEach(() => {
   window.localStorage.clear();
 });
 
-describe("AutoTablePrimary component", () => {
+describe("AutoTableFullActions component", () => {
   it("should invoke onDelete with selected row data after click delete button", async () => {
     // DONE
     const deleteUser = jest.fn();
@@ -56,7 +56,7 @@ describe("AutoTablePrimary component", () => {
     };
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -76,7 +76,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const openMenuBtn = screen.getByRole("button", { name: "Open menu" });
@@ -100,7 +100,7 @@ describe("AutoTablePrimary component", () => {
     const createUser = jest.fn();
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -120,7 +120,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     // open create modal
@@ -178,7 +178,7 @@ describe("AutoTablePrimary component", () => {
     };
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -198,7 +198,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     // open update modal
@@ -250,7 +250,7 @@ describe("AutoTablePrimary component", () => {
   it("should render only selected columns after select columns", async () => {
     // DONE
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -270,7 +270,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const openSelectColumnsBtn = screen.getByTestId(
@@ -314,7 +314,7 @@ describe("AutoTablePrimary component", () => {
     const refetchData = jest.fn();
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -334,7 +334,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const refreshBtn = screen.getByTestId("auth-table-refresh-button");
@@ -355,7 +355,7 @@ describe("AutoTablePrimary component", () => {
     };
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -388,7 +388,7 @@ describe("AutoTablePrimary component", () => {
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
         />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const openMenuBtn = screen.getByRole("button", { name: "Open menu" });
@@ -416,7 +416,7 @@ describe("AutoTablePrimary component", () => {
     // DONE
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -437,7 +437,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const idHeader = screen.getByText("ID");
@@ -489,7 +489,7 @@ describe("AutoTablePrimary component", () => {
     ];
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -513,7 +513,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const idHeader = screen.getByText("id");
@@ -562,7 +562,7 @@ describe("AutoTablePrimary component", () => {
     ];
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -590,7 +590,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const fullnameHeader = screen.getByText("fullname");
@@ -627,7 +627,7 @@ describe("AutoTablePrimary component", () => {
     ];
 
     render(
-      <AutoTablePrimary
+      <AutoTableFullActions
         technicalTableName="user"
         schema={userSchema}
         rowIdentifierKey="id"
@@ -652,7 +652,7 @@ describe("AutoTablePrimary component", () => {
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
-      </AutoTablePrimary>,
+      </AutoTableFullActions>,
     );
 
     const johnDoeEmailBtn = screen.getByRole("button", {

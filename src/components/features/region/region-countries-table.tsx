@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableContainer } from "~/components/auto-table/auto-table";
@@ -31,7 +31,7 @@ export const RegionCountriesTable = ({ regionId }: { regionId: number }) => {
 
   return (
     <AutoTableContainer>
-      <AutoTableSecondary
+      <AutoTableBasicActions
         technicalTableName="region-countries"
         schema={regionCountrySchema}
         rowIdentifierKey="id"
@@ -83,7 +83,7 @@ export const RegionCountriesTable = ({ regionId }: { regionId: number }) => {
         <AutoTableToolbarHeader title="Countries" />
 
         <AutoTableDndTable />
-      </AutoTableSecondary>
+      </AutoTableBasicActions>
     </AutoTableContainer>
   );
 };

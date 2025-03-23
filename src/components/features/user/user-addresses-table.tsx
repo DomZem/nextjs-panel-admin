@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableContainer } from "~/components/auto-table/auto-table";
@@ -31,7 +31,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
 
   return (
     <AutoTableContainer>
-      <AutoTableSecondary
+      <AutoTableBasicActions
         technicalTableName="user-addresses"
         schema={userAddressSchema}
         rowIdentifierKey="id"
@@ -97,7 +97,7 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
         <AutoTableToolbarHeader title="Addresses" />
 
         <AutoTableDndTable />
-      </AutoTableSecondary>
+      </AutoTableBasicActions>
     </AutoTableContainer>
   );
 };

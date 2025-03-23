@@ -1,7 +1,7 @@
 "use client";
 
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
-import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
+import { AutoTableFullActions } from "~/components/auto-table/variants/auto-table-full-actions";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import {
   AutoTableContainer,
@@ -59,7 +59,7 @@ export const OrdersTable = () => {
 
   return (
     <AutoTableContainer>
-      <AutoTablePrimary
+      <AutoTableFullActions
         schema={orderSchema}
         rowIdentifierKey="id"
         technicalTableName="orders"
@@ -161,7 +161,7 @@ export const OrdersTable = () => {
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
         />
-      </AutoTablePrimary>
+      </AutoTableFullActions>
 
       {getAllOrders.data && (
         <AutoTablePagination

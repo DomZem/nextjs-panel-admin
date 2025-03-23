@@ -15,7 +15,7 @@ import {
 } from "../providers/auto-table-data-provider";
 import React from "react";
 
-export const AutoTablePrimary = <
+export const AutoTableFullActions = <
   TSchema extends ZodObjectSchema,
   TCreateFormSchema extends ZodObjectSchema,
   TUpdateFormSchema extends ZodObjectSchema,

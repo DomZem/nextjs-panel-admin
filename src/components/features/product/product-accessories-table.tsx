@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableContainer } from "~/components/auto-table/auto-table";
@@ -34,7 +34,7 @@ export const ProductAccessoriesTable = ({
 
   return (
     <AutoTableContainer>
-      <AutoTableSecondary
+      <AutoTableBasicActions
         schema={productAccessorySchema}
         rowIdentifierKey="id"
         technicalTableName="product-accessories"
@@ -75,7 +75,7 @@ export const ProductAccessoriesTable = ({
       >
         <AutoTableToolbarHeader title="Accessories" />
         <AutoTableDndTable />
-      </AutoTableSecondary>
+      </AutoTableBasicActions>
     </AutoTableContainer>
   );
 };

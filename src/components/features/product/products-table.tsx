@@ -1,7 +1,7 @@
 "use client";
 
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
-import { AutoTablePrimary } from "~/components/auto-table/variants/auto-table-primary";
+import { AutoTableFullActions } from "~/components/auto-table/variants/auto-table-full-actions";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
@@ -60,7 +60,7 @@ export const ProductsTable = () => {
 
   return (
     <AutoTableContainer>
-      <AutoTablePrimary
+      <AutoTableFullActions
         schema={productSchema}
         rowIdentifierKey="id"
         technicalTableName="products"
@@ -158,7 +158,7 @@ export const ProductsTable = () => {
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
         />
-      </AutoTablePrimary>
+      </AutoTableFullActions>
 
       {getAllProducts.data && (
         <AutoTablePagination

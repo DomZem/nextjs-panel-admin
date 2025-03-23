@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
 import { AutoTableContainer } from "~/components/auto-table/auto-table";
@@ -31,7 +31,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
 
   return (
     <AutoTableContainer>
-      <AutoTableSecondary
+      <AutoTableBasicActions
         schema={orderItemSchema}
         rowIdentifierKey="id"
         technicalTableName="order-items"
@@ -94,7 +94,7 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
       >
         <AutoTableToolbarHeader title="Items" />
         <AutoTableDndTable />
-      </AutoTableSecondary>
+      </AutoTableBasicActions>
     </AutoTableContainer>
   );
 };

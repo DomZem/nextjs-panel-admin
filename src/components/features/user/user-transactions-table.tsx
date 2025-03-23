@@ -1,6 +1,6 @@
 "use client";
 
-import { AutoTableSecondary } from "~/components/auto-table/variants/auto-table-secondary";
+import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
@@ -43,7 +43,7 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
 
   return (
     <AutoTableContainer>
-      <AutoTableSecondary
+      <AutoTableBasicActions
         schema={userTransactionSchema}
         rowIdentifierKey="id"
         technicalTableName="user-transactions"
@@ -130,7 +130,7 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
       >
         <AutoTableToolbarHeader title="Transactions" />
         <AutoTableDndTable />
-      </AutoTableSecondary>
+      </AutoTableBasicActions>
 
       <AutoTablePagination
         totalPagesCount={getAllUserTransactions.data.totalPagesCount}
