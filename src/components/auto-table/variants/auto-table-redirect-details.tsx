@@ -1,4 +1,4 @@
-import { AutoTableBasicActionsWithRedirectDetailsColumn } from "../auto-table";
+import { AutoTableBasicActionsWithRedirectDetailsColumn } from "../auto-table-row";
 import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {

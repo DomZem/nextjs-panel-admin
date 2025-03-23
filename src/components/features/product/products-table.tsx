@@ -3,12 +3,14 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableFullActions } from "~/components/auto-table/variants/auto-table-full-actions";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
 import { ProductAccessoriesTable } from "./product-accessories-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { type ProductCategory } from "@prisma/client";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCloseDetailsButton,
+  AutoTableContainer,
   AutoTableCreateButton,
   AutoTableDialogFilters,
   AutoTableHeader,
@@ -23,10 +25,6 @@ import {
   productUpdateSchema,
   productSchema,
 } from "~/common/validations/product/product";
-import {
-  AutoTableContainer,
-  AutoTableDetailsRow,
-} from "~/components/auto-table/auto-table";
 import { usePage } from "~/hooks/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";

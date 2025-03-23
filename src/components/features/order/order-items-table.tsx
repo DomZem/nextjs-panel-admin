@@ -3,7 +3,7 @@
 import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
-import { AutoTableContainer } from "~/components/auto-table/auto-table";
+import { AutoTableContainer } from "~/components/auto-table/auto-table-header";
 import { ProductCombobox } from "../product/product-combobox";
 import {
   orderItemCreateSchema,

@@ -2,17 +2,17 @@
 
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableFullActions } from "~/components/auto-table/variants/auto-table-full-actions";
-import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
+import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
 import { RegionCountriesTable } from "./region-countries-table";
+import {
+  AutoTableContainer,
+  AutoTableToolbarHeader,
+} from "~/components/auto-table/auto-table-header";
 import {
   regionCreateSchema,
   regionSchema,
   regionUpdateSchema,
 } from "~/common/validations/region/region";
-import {
-  AutoTableContainer,
-  AutoTableDetailsRow,
-} from "~/components/auto-table/auto-table";
 import { api } from "~/trpc/react";
 
 export const RegionsTable = () => {

@@ -7,6 +7,7 @@ import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCloseDetailsButton,
+  AutoTableContainer,
   AutoTableCreateButton,
   AutoTableDialogFilters,
   AutoTableHeader,
@@ -18,7 +19,6 @@ import {
 import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
-import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import { usePage } from "~/hooks/use-page";
 import {
   userCreateSchema,

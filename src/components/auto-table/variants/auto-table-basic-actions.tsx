@@ -1,4 +1,4 @@
-import { AutoTableBasicActionsColumn } from "../auto-table";
+import { AutoTableBasicActionsColumn } from "../auto-table-row";
 import { mapDashedFieldName } from "~/utils/mappers";
 import { type ZodObjectSchema } from "~/utils/zod";
 import {

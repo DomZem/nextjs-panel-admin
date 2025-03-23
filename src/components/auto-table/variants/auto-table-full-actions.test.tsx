@@ -2,7 +2,7 @@ import { AutoTableDndTable } from "../tables/auto-table-dnd-table";
 import { AutoTableToolbarHeader } from "../auto-table-header";
 import { AutoTableFullActions } from "./auto-table-full-actions";
 import { render, screen } from "@testing-library/react";
-import { AutoTableDetailsRow } from "../auto-table";
+import { AutoTableDetailsRow } from "../auto-table-row";
 import userEvent from "@testing-library/user-event";
 import { Button } from "~/components/ui/button";
 import {

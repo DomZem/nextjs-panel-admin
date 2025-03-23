@@ -1,4 +1,4 @@
-import { AutoTableFullActionsColumn } from "../auto-table";
+import { AutoTableFullActionsColumn } from "../auto-table-row";
 import {
   AutoTableDetailsDataProvider,
   type IAutoTableDetailsDataProvider,

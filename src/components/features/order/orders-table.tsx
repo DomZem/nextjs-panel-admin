@@ -3,16 +3,14 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableFullActions } from "~/components/auto-table/variants/auto-table-full-actions";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import {
-  AutoTableContainer,
-  AutoTableDetailsRow,
-} from "~/components/auto-table/auto-table";
+import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
 import { UserCombobox } from "../user/user-combobox";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCloseDetailsButton,
+  AutoTableContainer,
   AutoTableCreateButton,
   AutoTableDialogFilters,
   AutoTableHeader,

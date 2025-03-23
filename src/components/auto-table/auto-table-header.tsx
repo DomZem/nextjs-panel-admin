@@ -34,6 +34,27 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
+export const AutoTableContainer = ({
+  className,
+  children,
+  ...props
+}: React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>) => {
+  return (
+    <div
+      className={cn(
+        "flex flex-1 flex-col justify-between gap-4 overflow-hidden",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
+
 export const AutoTableHeader = ({
   className,
   children,

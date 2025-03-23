@@ -2,13 +2,15 @@
 
 import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
-import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
-import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import {
   productAccessoryCreateSchema,
   productAccessoryUpdateSchema,
   productAccessorySchema,
 } from "~/common/validations/product/product-accessory";
+import {
+  AutoTableContainer,
+  AutoTableToolbarHeader,
+} from "~/components/auto-table/auto-table-header";
 import { LoaderCircle } from "lucide-react";
 import { api } from "~/trpc/react";
 

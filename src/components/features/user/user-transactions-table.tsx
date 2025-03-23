@@ -3,14 +3,16 @@
 import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
-import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-header";
-import { AutoTableContainer } from "~/components/auto-table/auto-table";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import {
   userTransactionCreateSchema,
   userTransactionSchema,
   userTransactionUpdateSchema,
 } from "~/common/validations/user/user-transaction";
+import {
+  AutoTableContainer,
+  AutoTableToolbarHeader,
+} from "~/components/auto-table/auto-table-header";
 import { Badge } from "~/components/ui/badge";
 import { LoaderCircle } from "lucide-react";
 import { usePage } from "~/hooks/use-page";

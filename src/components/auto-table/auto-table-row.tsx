@@ -6,7 +6,6 @@ import { TableCell, TableRow } from "../ui/table";
 import { useDataTable } from "../ui/data-table";
 import React, { useMemo } from "react";
 import { Button } from "../ui/button";
-import { cn } from "~/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -134,27 +133,6 @@ export const AutoTableBasicActionsWithRedirectDetailsColumn = <
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
-
-export const AutoTableContainer = ({
-  className,
-  children,
-  ...props
-}: React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->) => {
-  return (
-    <div
-      className={cn(
-        "flex flex-1 flex-col justify-between gap-4 overflow-hidden",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </div>
   );
 };
 
