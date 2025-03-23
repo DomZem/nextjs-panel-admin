@@ -59,12 +59,7 @@ npm run dev
 - [x] Feat: replace date-fns by dayjs in date time picker
 - [x] Test: add some tests for auto table
 
-## Example documentation
-
-1. How to use combobox as custom input
-2. Example structure of folders
-3. How can I add custom column when my data row has nested data ?
-4. How to add custom validation to some field ?
+## Recommendation
 
 ## Common flow with independent model
 ### Create validation 
@@ -211,6 +206,21 @@ export const RegionsTable = () => {
   );
 };
 ```
-## Common Errors
 
-1. What to do if my field type for combobox is not string?
+## FAQ
+
+#### How to use combobox as custom input?
+
+Answer 1
+
+#### How to display nested object for row?
+
+Answer 2
+
+### How to add custom validation for input field?
+
+Answer 3
+
+### What to do if field type for combobox is not string?
+
+Answer 4
