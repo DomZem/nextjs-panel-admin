@@ -63,8 +63,8 @@ npm run dev
 
 ## Common flow with independent model
 ### Create validation 
-Create model-name.ts file inside validation folder <br />
-For example let's create region.ts validation file for region model
+Create model-name.ts file inside validation folder. <br />
+For example let's create region.ts validation file for region model.
 ```typescript
 import { RegionScalarSchema } from "~/zod-schemas/models";
 
@@ -84,8 +84,8 @@ export const regionCreateSchema = regionUpdateSchema.omit({
 ```
 
 ### Create router
-Create model-name.ts file inside server/api/routers folder <br />
-For example let's create region.ts router file for region model
+Create model-name.ts file inside server/api/routers folder. <br />
+For example let's create region.ts router file for region model.
 ```typescript
 import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { RegionScalarSchema } from "~/zod-schemas/models";
@@ -151,8 +151,8 @@ export const regionRouter = createTRPCRouter({
 ```
 
 ### Create table
-Create model-name-table.tsx component file inside /components/features/[module-name] folder <br />
-For example let's create regions-table.tsx component file inside /components/features/region
+Create model-name-table.tsx component file inside /components/features/[module-name] folder. <br />
+For example let's create regions-table.tsx component file inside /components/features/region.
 ```typescript
 export const RegionsTable = () => {
   const getAllRegions = api.region.getAll.useQuery();
@@ -210,17 +210,177 @@ export const RegionsTable = () => {
 ## FAQ
 
 #### How to use combobox as custom input?
+First create model-name-combobox.tsx component file inside /components/features/[model-name]. <br />
+Example: 
+```typescript
+import { FormItem, FormLabel } from "~/components/ui/form";
+import { Combobox } from "~/components/ui/combobox";
+import { api } from "~/trpc/react";
+import { useState } from "react";
 
-Answer 1
+export const UserCombobox = ({
+  selectedValue,
+  onSelect,
+}: {
+  selectedValue?: string;
+  onSelect: (value: string) => void;
+}) => {
+  const [searchValue, setSearchValue] = useState("");
 
-#### How to display nested object for row?
+  const getSearchUsers = api.user.getSearchUsers.useQuery({
+    name: searchValue,
+  });
 
-Answer 2
+  const userOptions =
+    getSearchUsers.data?.map((user) => ({
+      value: user.id,
+      label: user.name ?? "",
+    })) ?? [];
 
-### How to add custom validation for input field?
+  return (
+    <FormItem>
+      <FormLabel>user</FormLabel>
+      <Combobox
+        options={userOptions}
+        onInputChange={setSearchValue}
+        onSelect={onSelect}
+        selectedValue={selectedValue}
+        emptyPlaceholder="No user found."
+        searchPlaceholder="Search user..."
+        selectPlaceholder="Select user..."
+      />
+    </FormItem>
+  );
+};
+```
+```typescript
+getSearchUsers: adminProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.name) {
+        const users = await ctx.db.user.findMany({
+          take: 5,
+          orderBy: {
+            id: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
 
-Answer 3
+        return users;
+      }
 
-### What to do if field type for combobox is not string?
+      const filteredUsers = await ctx.db.user.findMany({
+        where: {
+          name: {
+            contains: input.name,
+          },
+        },
+        orderBy: {
+          id: "asc",
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
-Answer 4
+      return filteredUsers;
+    }),
+```
+Then use that component as custom field type in AutoForm
+```typescript
+user_id: {
+  type: "custom",
+  render: ({ field }) => {
+    return (
+      <UserCombobox
+        selectedValue={field.value}
+        onSelect={field.onChange}
+      />
+    );
+  },
+},
+```
+
+#### How to display value from nested object?
+In order to display value from nested object you have to merge field to schema and then map getAll method in router. <br />
+For example, let's say for order model you want to display which user created order.
+```typescript
+const orderSchema = orderRawSchema.merge(
+  z.object({
+    username: z.string(),
+  }),
+);
+```
+```typescript
+const orders = await ctx.db.order.findMany({
+        where,
+        skip: (input.page - 1) * input.pageSize,
+        take: input.pageSize,
+        orderBy: {
+          id: "asc",
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+ const mappedOrders = orders.map(({ user, ...rest }) => ({
+        ...rest,
+        username: user.name!,
+      }));
+```
+
+#### How to add custom validation for input field?
+In order to add custom validation for input field you have to omit that field and then merge with validation.
+```typescript
+export const regionUpdateSchema = regionSchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .omit({
+    name: true,
+  })
+  .merge(
+    z.object({
+      name: z.string().min(3).max(255),
+    }),
+  );
+```
+
+#### What to do if field type for combobox is not string?
+When the field type for comobobox is not a string, but for example the number. All you have to do is: 
+1. Allow `selectedValue` prop inside model-name-combobox.tsx file to be that type.
+   ```typescript
+   export const RegionCountryCombobox = ({
+    selectedValue,
+    onSelect,
+   }: {
+    selectedValue?: string | number;
+    onSelect: (value: string) => void;
+   }) => {
+   };
+   ```
+2. Add `coerce` to field that is using combobox as component.
+   ```typescript
+   const userAddressFormSchema = userAddressSchema
+     .omit({
+       region_country_id: true,
+     })
+     .merge(
+       z.object({
+         region_country_id: z.coerce.number(),
+       }),
+     );
+   ```
