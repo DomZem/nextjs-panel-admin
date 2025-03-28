@@ -58,7 +58,7 @@ npm run dev
 - [x] Fix: on mobile view filters takes a lot of space. We should hide them some where
 - [x] Feat: replace date-fns by dayjs in date time picker
 - [x] Test: add some tests for auto table
-- [ ] Feat: add example with extend models
+- [ ] Fix: fix issue with no handle discriminated unions in auto form
 
 ## Recommendation
 
