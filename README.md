@@ -59,6 +59,7 @@ npm run dev
 - [x] Feat: replace date-fns by dayjs in date time picker
 - [x] Test: add some tests for auto table
 - [ ] Fix: fix issue with no handle discriminated unions in auto form
+- [ ] Fix: clear value in auto form for textarea not working
 
 ## Recommendation
 
