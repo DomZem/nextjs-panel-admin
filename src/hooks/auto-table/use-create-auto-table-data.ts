@@ -1,13 +1,19 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
-import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/utils/zod";
+import { type z } from "zod";
 
-export interface IUseCreateAutoTableData<TFormSchema extends ZodObjectSchema> {
-  onCreate: (data: ZodObjectInfer<TFormSchema>) => Promise<unknown>;
+export interface IUseCreateAutoTableData<
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+> {
+  onCreate: (data: z.infer<TFormSchema>) => Promise<unknown>;
 }
 
 export const useCreateAutoTableData = <
-  TFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
   TSchema extends ZodObjectSchema,
 >({
   onCreate,
@@ -19,7 +25,7 @@ export const useCreateAutoTableData = <
     setCurrentAction(null);
   };
 
-  const handleCreate = async (data: ZodObjectInfer<TFormSchema>) => {
+  const handleCreate = async (data: z.infer<TFormSchema>) => {
     await handleSubmitData(async () => {
       await onCreate(data);
     });

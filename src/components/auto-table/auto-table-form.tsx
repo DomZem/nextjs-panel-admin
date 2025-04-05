@@ -1,8 +1,9 @@
 "use client";
 
-import { AutoForm, type AutoFormProps } from "../auto-form/auto-form";
+import { AutoFormDiscriminatedUnion } from "../auto-form/auto-form-discriminated-union";
 import { useAutoTable } from "./providers/auto-table-provider";
 import { sanitizeSchemaObject } from "~/utils/auto-form";
+import { type IAutoForm } from "../auto-form/interface";
 import {
   type IUseUpdateAutoTableData,
   useUpdateAutoTableData,
@@ -13,9 +14,13 @@ import {
 } from "~/hooks/auto-table/use-create-auto-table-data";
 import { mapDashedFieldName } from "~/utils/mappers";
 import { type DefaultValues } from "react-hook-form";
-import { type ZodObjectSchema } from "~/utils/zod";
+import { AutoForm } from "../auto-form/auto-form";
 import { ScrollArea } from "../ui/scroll-area";
 import { type TypeOf } from "zod";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/utils/zod";
 import {
   Dialog,
   DialogContent,
@@ -87,19 +92,23 @@ export const AutoTableSheet = ({
   );
 };
 
-export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
-  defaultValues,
-  fieldsConfig,
+export const AutoTableCreateFormSheet = <
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+>({
   formSchema,
+  defaultValues,
   onCreate,
   isSubmitting,
+  fieldsConfig,
 }: Pick<
-  AutoFormProps<TFormSchema>,
-  "fieldsConfig" | "defaultValues" | "isSubmitting"
+  IAutoForm<TFormSchema>,
+  "defaultValues" | "isSubmitting" | "fieldsConfig"
 > &
   IUseCreateAutoTableData<TFormSchema> & {
     formSchema: TFormSchema;
   }) => {
+  const isDiscriminatedObjectSchema = "discriminator" in formSchema;
+
   const { isCreateActionActive, handleCreate, handleClose } =
     useCreateAutoTableData({
       onCreate,
@@ -112,33 +121,43 @@ export const AutoTableCreateFormSheet = <TFormSchema extends ZodObjectSchema>({
       description="Create a new row"
       onClose={handleClose}
     >
-      <AutoForm
-        schema={formSchema}
-        fieldsConfig={fieldsConfig}
-        defaultValues={defaultValues}
-        mapLabel={mapDashedFieldName}
-        onSubmit={handleCreate}
-        isSubmitting={isSubmitting}
-      />
+      {isDiscriminatedObjectSchema ? (
+        <AutoFormDiscriminatedUnion
+          schema={formSchema}
+          onSubmit={handleCreate}
+          fieldsConfig={fieldsConfig}
+          mapLabel={mapDashedFieldName}
+          isSubmitting={isSubmitting}
+          defaultValues={defaultValues}
+        />
+      ) : (
+        <AutoForm
+          schema={formSchema}
+          onSubmit={handleCreate}
+          fieldsConfig={fieldsConfig}
+          defaultValues={defaultValues}
+          mapLabel={mapDashedFieldName}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </AutoTableSheet>
   );
 };
 
+// WARNING: I decided to pass TSchema to IUseUpdateAutoTableData to,
 export const AutoTableUpdateFormSheet = <
-  TFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
   TSchema extends ZodObjectSchema,
 >({
   fieldsConfig,
   formSchema,
   onUpdate,
   isSubmitting,
-}: Pick<
-  AutoFormProps<TFormSchema>,
-  "fieldsConfig" | "defaultValues" | "isSubmitting"
-> &
-  IUseUpdateAutoTableData<TFormSchema> & {
+}: Pick<IAutoForm<TFormSchema>, "fieldsConfig" | "isSubmitting"> &
+  IUseUpdateAutoTableData<TSchema> & {
     formSchema: TFormSchema;
   }) => {
+  const isDiscriminatedObjectSchema = "discriminator" in formSchema;
   const { selectedRow } = useAutoTable<TSchema>();
 
   const { isUpdateActionAcitve, handleUpdate, handleClose } =
@@ -159,14 +178,25 @@ export const AutoTableUpdateFormSheet = <
       description="Update the row"
       onClose={handleClose}
     >
-      <AutoForm
-        schema={formSchema}
-        fieldsConfig={fieldsConfig}
-        mapLabel={mapDashedFieldName}
-        defaultValues={defaultValues}
-        onSubmit={handleUpdate}
-        isSubmitting={isSubmitting}
-      />
+      {isDiscriminatedObjectSchema ? (
+        <AutoFormDiscriminatedUnion
+          schema={formSchema}
+          onSubmit={handleUpdate}
+          fieldsConfig={fieldsConfig}
+          mapLabel={mapDashedFieldName}
+          isSubmitting={isSubmitting}
+          defaultValues={defaultValues}
+        />
+      ) : (
+        <AutoForm
+          schema={formSchema}
+          onSubmit={handleUpdate}
+          fieldsConfig={fieldsConfig}
+          defaultValues={defaultValues}
+          mapLabel={mapDashedFieldName}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </AutoTableSheet>
   );
 };

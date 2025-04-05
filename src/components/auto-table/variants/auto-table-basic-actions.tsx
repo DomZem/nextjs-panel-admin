@@ -1,6 +1,5 @@
 import { AutoTableBasicActionsColumn } from "../auto-table-row";
 import { mapDashedFieldName } from "~/utils/mappers";
-import { type ZodObjectSchema } from "~/utils/zod";
 import {
   AutoTableCrudProvider,
   type IAutoTableCrudProvider,
@@ -10,17 +9,19 @@ import {
   type IAutoTableDataProvider,
 } from "../providers/auto-table-data-provider";
 import React from "react";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/utils/zod";
 
 export const AutoTableBasicActions = <
   TSchema extends ZodObjectSchema,
-  TCreateFormSchema extends ZodObjectSchema,
-  TUpdateFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
 >({
   schema,
   technicalTableName,
   rowIdentifierKey,
-  update,
-  create,
+  autoForm,
   onDelete,
   onRefetchData,
   data,
@@ -29,7 +30,7 @@ export const AutoTableBasicActions = <
   omitColumns,
   mapColumnName,
   children,
-}: IAutoTableCrudProvider<TSchema, TCreateFormSchema, TUpdateFormSchema> &
+}: IAutoTableCrudProvider<TSchema, TFormSchema> &
   IAutoTableDataProvider<TSchema> & {
     children: React.ReactNode;
   }) => {
@@ -40,8 +41,7 @@ export const AutoTableBasicActions = <
       rowIdentifierKey={rowIdentifierKey}
       onRefetchData={onRefetchData}
       onDelete={onDelete}
-      create={create}
-      update={update}
+      autoForm={autoForm}
     >
       <AutoTableDataProvider
         data={data}

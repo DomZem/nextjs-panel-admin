@@ -1,9 +1,15 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
-import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
+import { type z } from "zod";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/utils/zod";
 
-export interface IUseUpdateAutoTableData<TFormSchema extends ZodObjectSchema> {
-  onUpdate: (data: ZodObjectInfer<TFormSchema>) => Promise<unknown>;
+export interface IUseUpdateAutoTableData<
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+> {
+  onUpdate: (data: z.infer<TFormSchema>) => Promise<unknown>;
 }
 
 export const useUpdateAutoTableData = <
@@ -21,7 +27,7 @@ export const useUpdateAutoTableData = <
     setCurrentAction(null);
   };
 
-  const handleUpdate = async (data: ZodObjectInfer<TFormSchema>) => {
+  const handleUpdate = async (data: z.infer<TFormSchema>) => {
     if (!selectedRow) {
       throw new Error("no selected row to update");
     }

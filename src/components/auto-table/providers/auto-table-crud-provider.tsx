@@ -1,7 +1,7 @@
 import { type IUseDeleteAutoTableData } from "~/hooks/auto-table/use-delete-auto-table";
 import { AutoTableDeleteDialog } from "../auto-table-delete-dialog";
+import { type IAutoForm } from "~/components/auto-form/interface";
 import React, { type ComponentProps } from "react";
-import { type ZodObjectSchema } from "~/utils/zod";
 import {
   AutoTableProvider,
   type AutoTableImplementationProps,
@@ -10,33 +10,41 @@ import {
   AutoTableCreateFormSheet,
   AutoTableUpdateFormSheet,
 } from "../auto-table-form";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/utils/zod";
 
 export interface IAutoTableCrudProvider<
   TSchema extends ZodObjectSchema,
-  TCreateFormSchema extends ZodObjectSchema,
-  TUpdateFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
 > extends AutoTableImplementationProps<TSchema>,
     IUseDeleteAutoTableData<TSchema> {
-  create: ComponentProps<typeof AutoTableCreateFormSheet<TCreateFormSchema>>;
-  update: ComponentProps<
-    typeof AutoTableUpdateFormSheet<TUpdateFormSchema, TSchema>
-  >;
+  autoForm: {
+    formSchema: TFormSchema;
+    create: Omit<
+      ComponentProps<typeof AutoTableCreateFormSheet<TFormSchema>>,
+      "formSchema" | "fieldsConfig"
+    >;
+    update: Omit<
+      ComponentProps<typeof AutoTableUpdateFormSheet<TFormSchema, TSchema>>,
+      "formSchema" | "fieldsConfig"
+    >;
+  } & Pick<IAutoForm<TFormSchema>, "fieldsConfig">;
 }
 
 export const AutoTableCrudProvider = <
   TSchema extends ZodObjectSchema,
-  TCreateFormSchema extends ZodObjectSchema,
-  TUpdateFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
 >({
   schema,
   technicalTableName,
   rowIdentifierKey,
   onRefetchData,
   onDelete,
-  create,
-  update,
+  autoForm,
   children,
-}: IAutoTableCrudProvider<TSchema, TCreateFormSchema, TUpdateFormSchema> & {
+}: IAutoTableCrudProvider<TSchema, TFormSchema> & {
   children: React.ReactNode;
 }) => {
   return (
@@ -50,20 +58,18 @@ export const AutoTableCrudProvider = <
         {children}
 
         <AutoTableDeleteDialog onDelete={onDelete} />
-
         <AutoTableCreateFormSheet
-          formSchema={create.formSchema}
-          onCreate={create.onCreate}
-          fieldsConfig={create.fieldsConfig}
-          defaultValues={create.defaultValues}
-          isSubmitting={create.isSubmitting}
+          formSchema={autoForm.formSchema}
+          fieldsConfig={autoForm.fieldsConfig}
+          onCreate={autoForm.create.onCreate}
+          isSubmitting={autoForm.create.isSubmitting}
+          defaultValues={autoForm.create.defaultValues}
         />
-
         <AutoTableUpdateFormSheet
-          formSchema={update.formSchema}
-          onUpdate={update.onUpdate}
-          fieldsConfig={update.fieldsConfig}
-          isSubmitting={update.isSubmitting}
+          formSchema={autoForm.formSchema}
+          onUpdate={autoForm.update.onUpdate}
+          isSubmitting={autoForm.update.isSubmitting}
+          fieldsConfig={autoForm.fieldsConfig}
         />
       </AutoTableProvider>
     </div>

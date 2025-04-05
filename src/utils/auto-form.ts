@@ -1,10 +1,12 @@
 import {
   type EnumLike,
+  type z,
   ZodBoolean,
   ZodDate,
   ZodDefault,
   ZodEffects,
   ZodEnum,
+  ZodLiteral,
   ZodNativeEnum,
   ZodNullable,
   ZodNumber,
@@ -15,7 +17,7 @@ import {
 } from "zod";
 import {
   extractFieldNamesFromSchema,
-  type ZodObjectInfer,
+  type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
 } from "./zod";
 
@@ -64,6 +66,7 @@ export const getFieldType = (field: ZodTypeAny): FormInputFieldType => {
   if (baseField instanceof ZodString) return "string";
   if (baseField instanceof ZodNativeEnum || baseField instanceof ZodEnum)
     return "select";
+  if (baseField instanceof ZodLiteral) return "string";
 
   throw new Error("Unsupported field type");
 };
@@ -87,6 +90,35 @@ const getEnumOptions = (
   });
 
   return options;
+};
+
+export const mapDiscriminatedUnionToFormFields = (
+  schema: ZodDiscriminatedObjectSchema,
+): {
+  discriminator: string;
+  variants: {
+    key: string;
+    fields: Record<string, FormInputField>;
+  }[];
+} => {
+  const variants: {
+    key: string;
+    fields: Record<string, FormInputField>;
+  }[] = [];
+
+  schema.optionsMap.forEach((schema, key) => {
+    const fields = mapSchemaToFormFields(schema);
+
+    variants.push({
+      key: key!.toString(),
+      fields,
+    });
+  });
+
+  return {
+    discriminator: schema._def.discriminator,
+    variants,
+  };
 };
 
 export const mapSchemaToFormFields = (
@@ -141,8 +173,8 @@ export const getFormFieldsDefaultValues = (
 };
 
 export const sanitizeSchemaObject = (
-  schemaObject: ZodObjectInfer<ZodObjectSchema>,
-  destinySchema: ZodObjectSchema,
+  schemaObject: z.infer<ZodObjectSchema>,
+  destinySchema: ZodObjectSchema | ZodDiscriminatedObjectSchema,
 ) => {
   const schemaKeys = Object.keys(schemaObject);
   const destinySchemaKeys = extractFieldNamesFromSchema(destinySchema);

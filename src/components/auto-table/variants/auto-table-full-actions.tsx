@@ -4,7 +4,6 @@ import {
   type IAutoTableDetailsDataProvider,
 } from "../providers/auto-table-details-data-provider";
 import { mapDashedFieldName } from "~/utils/mappers";
-import { type ZodObjectSchema } from "~/utils/zod";
 import {
   AutoTableCrudProvider,
   type IAutoTableCrudProvider,
@@ -14,18 +13,20 @@ import {
   type IAutoTableDataProvider,
 } from "../providers/auto-table-data-provider";
 import React from "react";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/utils/zod";
 
 export const AutoTableFullActions = <
   TSchema extends ZodObjectSchema,
-  TCreateFormSchema extends ZodObjectSchema,
-  TUpdateFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
   TDetailsData extends Record<string, unknown>,
 >({
   schema,
   technicalTableName,
   rowIdentifierKey,
-  update,
-  create,
+  autoForm,
   onDelete,
   onRefetchData,
   onDetails,
@@ -36,7 +37,7 @@ export const AutoTableFullActions = <
   omitColumns,
   mapColumnName,
   children,
-}: IAutoTableCrudProvider<TSchema, TCreateFormSchema, TUpdateFormSchema> &
+}: IAutoTableCrudProvider<TSchema, TFormSchema> &
   IAutoTableDataProvider<TSchema> &
   IAutoTableDetailsDataProvider<TSchema, TDetailsData> & {
     children: React.ReactNode;
@@ -48,8 +49,7 @@ export const AutoTableFullActions = <
       rowIdentifierKey={rowIdentifierKey}
       onRefetchData={onRefetchData}
       onDelete={onDelete}
-      create={create}
-      update={update}
+      autoForm={autoForm}
     >
       <AutoTableDetailsDataProvider
         onDetails={onDetails}
