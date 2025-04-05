@@ -184,6 +184,55 @@ CREATE TABLE "region_country" (
     CONSTRAINT "region_country_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "car" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL,
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "image_src" TEXT NOT NULL,
+    "variant" TEXT NOT NULL,
+
+    CONSTRAINT "car_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "electric_car_variant" (
+    "id" TEXT NOT NULL,
+    "battery_capacity_kWh" INTEGER NOT NULL,
+    "range_km" INTEGER NOT NULL,
+
+    CONSTRAINT "electric_car_variant_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "sport_car_variant" (
+    "id" TEXT NOT NULL,
+    "max_speed_kmh" INTEGER NOT NULL,
+    "horsepower" INTEGER NOT NULL,
+
+    CONSTRAINT "sport_car_variant_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "suv_car_variant" (
+    "id" TEXT NOT NULL,
+    "seating_capacity" INTEGER NOT NULL,
+    "cargo_space_liters" INTEGER NOT NULL,
+
+    CONSTRAINT "suv_car_variant_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "classic_car_variant" (
+    "id" TEXT NOT NULL,
+    "year_of_manufacture" INTEGER NOT NULL,
+    "is_vintage" BOOLEAN NOT NULL,
+
+    CONSTRAINT "classic_car_variant_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -231,3 +280,15 @@ ALTER TABLE "user_transaction" ADD CONSTRAINT "user_transaction_user_id_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "region_country" ADD CONSTRAINT "region_country_region_id_fkey" FOREIGN KEY ("region_id") REFERENCES "region"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "electric_car_variant" ADD CONSTRAINT "electric_car_variant_id_fkey" FOREIGN KEY ("id") REFERENCES "car"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "sport_car_variant" ADD CONSTRAINT "sport_car_variant_id_fkey" FOREIGN KEY ("id") REFERENCES "car"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "suv_car_variant" ADD CONSTRAINT "suv_car_variant_id_fkey" FOREIGN KEY ("id") REFERENCES "car"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "classic_car_variant" ADD CONSTRAINT "classic_car_variant_id_fkey" FOREIGN KEY ("id") REFERENCES "car"("id") ON DELETE CASCADE ON UPDATE CASCADE;

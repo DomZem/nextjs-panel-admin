@@ -216,3 +216,32 @@ model region_country extends standard_numeric_model {
 
     user_addresses user_address[]
 }
+
+model car extends standard_cuid_model {
+    name        String
+    description String
+    image_src   String
+
+    variant     String
+    @@delegate(variant)
+}
+
+model electric_car_variant extends car {
+    battery_capacity_kWh Int
+    range_km             Int
+}
+
+model sport_car_variant extends car {
+    max_speed_kmh Int
+    horsepower    Int
+}
+
+model suv_car_variant extends car {
+    seating_capacity   Int
+    cargo_space_liters Int
+}
+
+model classic_car_variant extends car {
+    year_of_manufacture Int
+    is_vintage          Boolean
+}
