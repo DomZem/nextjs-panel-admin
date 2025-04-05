@@ -1,11 +1,8 @@
+import { productFormSchema } from "~/common/validations/product/product";
 import { paginationSchema } from "~/common/validations/pagination";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { ProductScalarSchema } from "~/zod-schemas/models";
 import { ProductCategory } from "@prisma/client";
-import {
-  productCreateSchema,
-  productUpdateSchema,
-} from "~/common/validations/product/product";
 import { z } from "zod";
 
 export const productRouter = createTRPCRouter({
@@ -117,7 +114,7 @@ export const productRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(productCreateSchema)
+    .input(productFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.product.create({
         data: input,
@@ -126,7 +123,7 @@ export const productRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(productUpdateSchema)
+    .input(productFormSchema.required({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.product.update({
         where: {

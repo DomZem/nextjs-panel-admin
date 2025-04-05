@@ -6,11 +6,11 @@ export const regionCountrySchema = Region_countryCreateSchema.required({
   updated_at: true,
 });
 
-export const regionCountryUpdateSchema = regionCountrySchema.omit({
-  created_at: true,
-  updated_at: true,
-});
-
-export const regionCountryCreateSchema = regionCountryUpdateSchema.omit({
-  id: true,
-});
+export const regionCountryFormSchema = regionCountrySchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });

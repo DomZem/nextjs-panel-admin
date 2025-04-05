@@ -3,6 +3,7 @@
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTableFullActions } from "~/components/auto-table/variants/auto-table-full-actions";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { orderFormSchema, orderSchema } from "~/common/validations/order/order";
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
@@ -22,11 +23,6 @@ import {
 import { type OrderStatus } from "@prisma/client";
 import { OrderFilters } from "./order-filters";
 import { usePage } from "~/hooks/use-page";
-import {
-  orderCreateSchema,
-  orderUpdateSchema,
-  orderSchema,
-} from "~/common/validations/order/order";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
@@ -88,26 +84,8 @@ export const OrdersTable = () => {
             </div>
           );
         }}
-        create={{
-          formSchema: orderCreateSchema,
-          onCreate: createOrder.mutateAsync,
-          fieldsConfig: {
-            user_id: {
-              type: "custom",
-              render: ({ field }) => {
-                return (
-                  <UserCombobox
-                    selectedValue={field.value}
-                    onSelect={field.onChange}
-                  />
-                );
-              },
-            },
-          },
-        }}
-        update={{
-          formSchema: orderUpdateSchema,
-          onUpdate: updateOrder.mutateAsync,
+        autoForm={{
+          formSchema: orderFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -123,6 +101,14 @@ export const OrdersTable = () => {
                 );
               },
             },
+          },
+          create: {
+            onCreate: createOrder.mutateAsync,
+            isSubmitting: createOrder.isPending,
+          },
+          update: {
+            onUpdate: updateOrder.mutateAsync,
+            isSubmitting: updateOrder.isPending,
           },
         }}
       >

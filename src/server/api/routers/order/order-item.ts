@@ -1,9 +1,6 @@
+import { orderItemFormSchema } from "~/common/validations/order/order-item";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { Order_itemScalarSchema } from "~/zod-schemas/models";
-import {
-  orderItemCreateSchema,
-  orderItemUpdateSchema,
-} from "~/common/validations/order/order-item";
 import { z } from "zod";
 
 export const orderItemRouter = createTRPCRouter({
@@ -37,7 +34,7 @@ export const orderItemRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(orderItemCreateSchema)
+    .input(orderItemFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.order_item.create({
         data: input,
@@ -46,7 +43,7 @@ export const orderItemRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(orderItemUpdateSchema)
+    .input(orderItemFormSchema.required({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.order_item.update({
         where: {

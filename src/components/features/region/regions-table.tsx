@@ -9,9 +9,8 @@ import {
   AutoTableToolbarHeader,
 } from "~/components/auto-table/auto-table-header";
 import {
-  regionCreateSchema,
+  regionFormSchema,
   regionSchema,
-  regionUpdateSchema,
 } from "~/common/validations/region/region";
 import { api } from "~/trpc/react";
 
@@ -43,17 +42,20 @@ export const RegionsTable = () => {
             </div>
           );
         }}
-        create={{
-          formSchema: regionCreateSchema,
-          onCreate: createRegion.mutateAsync,
-        }}
-        update={{
-          formSchema: regionUpdateSchema,
-          onUpdate: updateRegion.mutateAsync,
+        autoForm={{
+          formSchema: regionFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
             },
+          },
+          create: {
+            onCreate: createRegion.mutateAsync,
+            isSubmitting: createRegion.isPending,
+          },
+          update: {
+            onUpdate: updateRegion.mutateAsync,
+            isSubmitting: updateRegion.isPending,
           },
         }}
       >

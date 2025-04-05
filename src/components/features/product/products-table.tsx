@@ -21,8 +21,7 @@ import {
 } from "~/components/auto-table/auto-table-header";
 import { ProductFilters } from "./product-filters";
 import {
-  productCreateSchema,
-  productUpdateSchema,
+  productFormSchema,
   productSchema,
 } from "~/common/validations/product/product";
 import { usePage } from "~/hooks/use-page";
@@ -89,24 +88,8 @@ export const ProductsTable = () => {
             </div>
           );
         }}
-        create={{
-          formSchema: productCreateSchema,
-          onCreate: createProduct.mutateAsync,
-          fieldsConfig: {
-            description: {
-              type: "textarea",
-            },
-            card_image_url: {
-              type: "image",
-            },
-            features_content: {
-              type: "wysiwyg",
-            },
-          },
-        }}
-        update={{
-          formSchema: productUpdateSchema,
-          onUpdate: updateProduct.mutateAsync,
+        autoForm={{
+          formSchema: productFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -120,6 +103,14 @@ export const ProductsTable = () => {
             features_content: {
               type: "wysiwyg",
             },
+          },
+          create: {
+            onCreate: createProduct.mutateAsync,
+            isSubmitting: createProduct.isPending,
+          },
+          update: {
+            onUpdate: updateProduct.mutateAsync,
+            isSubmitting: updateProduct.isPending,
           },
         }}
       >

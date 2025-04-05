@@ -6,9 +6,8 @@ import { AutoTableToolbarHeader } from "~/components/auto-table/auto-table-heade
 import { AutoTableContainer } from "~/components/auto-table/auto-table-header";
 import { ProductCombobox } from "../product/product-combobox";
 import {
-  orderItemCreateSchema,
   orderItemSchema,
-  orderItemUpdateSchema,
+  orderItemFormSchema,
 } from "~/common/validations/order/order-item";
 import { LoaderCircle } from "lucide-react";
 import { api } from "~/trpc/react";
@@ -45,32 +44,8 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
             id: selectedRow.id,
           })
         }
-        create={{
-          formSchema: orderItemCreateSchema,
-          onCreate: createOrderItem.mutateAsync,
-          fieldsConfig: {
-            order_id: {
-              hidden: true,
-            },
-            product_id: {
-              type: "custom",
-              render: ({ field }) => {
-                return (
-                  <ProductCombobox
-                    selectedValue={field.value}
-                    onSelect={field.onChange}
-                  />
-                );
-              },
-            },
-          },
-          defaultValues: {
-            order_id: orderId,
-          },
-        }}
-        update={{
-          formSchema: orderItemUpdateSchema,
-          onUpdate: updateOrderItem.mutateAsync,
+        autoForm={{
+          formSchema: orderItemFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -89,6 +64,17 @@ export const OrderItemsTable = ({ orderId }: { orderId: string }) => {
                 );
               },
             },
+          },
+          create: {
+            onCreate: createOrderItem.mutateAsync,
+            isSubmitting: createOrderItem.isPending,
+            defaultValues: {
+              order_id: orderId,
+            },
+          },
+          update: {
+            onUpdate: updateOrderItem.mutateAsync,
+            isSubmitting: updateOrderItem.isPending,
           },
         }}
       >

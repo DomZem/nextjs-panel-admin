@@ -4,8 +4,7 @@ import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-tab
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import {
   regionCountrySchema,
-  regionCountryCreateSchema,
-  regionCountryUpdateSchema,
+  regionCountryFormSchema,
 } from "~/common/validations/region/region-country";
 import {
   AutoTableContainer,
@@ -57,21 +56,8 @@ export const RegionCountriesTable = ({ regionId }: { regionId: number }) => {
             id: selectedRow.id,
           })
         }
-        create={{
-          formSchema: regionCountryCreateSchema,
-          onCreate: createRegionCountry.mutateAsync,
-          fieldsConfig: {
-            region_id: {
-              hidden: true,
-            },
-          },
-          defaultValues: {
-            region_id: regionId,
-          },
-        }}
-        update={{
-          formSchema: regionCountryUpdateSchema,
-          onUpdate: updateRegionCountry.mutateAsync,
+        autoForm={{
+          formSchema: regionCountryFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -79,6 +65,17 @@ export const RegionCountriesTable = ({ regionId }: { regionId: number }) => {
             region_id: {
               hidden: true,
             },
+          },
+          create: {
+            onCreate: createRegionCountry.mutateAsync,
+            isSubmitting: createRegionCountry.isPending,
+            defaultValues: {
+              region_id: regionId,
+            },
+          },
+          update: {
+            onUpdate: updateRegionCountry.mutateAsync,
+            isSubmitting: updateRegionCountry.isPending,
           },
         }}
       >

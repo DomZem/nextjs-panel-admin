@@ -6,11 +6,11 @@ export const productAccessorySchema = Product_accessoryCreateSchema.required({
   updated_at: true,
 });
 
-export const productAccessoryUpdateSchema = productAccessorySchema.omit({
-  created_at: true,
-  updated_at: true,
-});
-
-export const productAccessoryCreateSchema = productAccessoryUpdateSchema.omit({
-  id: true,
-});
+export const productAccessoryFormSchema = productAccessorySchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });

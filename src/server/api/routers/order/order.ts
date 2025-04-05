@@ -1,11 +1,8 @@
 import { paginationSchema } from "~/common/validations/pagination";
+import { orderFormSchema } from "~/common/validations/order/order";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { OrderScalarSchema } from "~/zod-schemas/models";
 import { OrderStatus } from "@prisma/client";
-import {
-  orderUpdateSchema,
-  orderCreateSchema,
-} from "~/common/validations/order/order";
 import { z } from "zod";
 
 export const orderRouter = createTRPCRouter({
@@ -75,7 +72,7 @@ export const orderRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(orderCreateSchema)
+    .input(orderFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.order.create({
         data: input,
@@ -84,7 +81,7 @@ export const orderRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(orderUpdateSchema)
+    .input(orderFormSchema.required({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.order.update({
         where: {

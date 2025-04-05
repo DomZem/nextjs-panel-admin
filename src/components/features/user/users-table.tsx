@@ -3,6 +3,7 @@
 import { AutoTableRedirectDetails } from "~/components/auto-table/variants/auto-table-redirect-details";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { userFormSchema, userSchema } from "~/common/validations/user/user";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
@@ -20,11 +21,6 @@ import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
 import { usePage } from "~/hooks/use-page";
-import {
-  userCreateSchema,
-  userUpdateSchema,
-  userSchema,
-} from "~/common/validations/user/user";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
@@ -86,18 +82,8 @@ export const UsersTable = () => {
         data={getAllUsers.data?.users ?? []}
         onRefetchData={getAllUsers.refetch}
         onDelete={async (row) => await deleteUser.mutateAsync({ id: row.id })}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: createUser.mutateAsync,
-          fieldsConfig: {
-            image: {
-              type: "image",
-            },
-          },
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: updateUser.mutateAsync,
+        autoForm={{
+          formSchema: userFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -105,6 +91,14 @@ export const UsersTable = () => {
             image: {
               type: "image",
             },
+          },
+          create: {
+            onCreate: createUser.mutateAsync,
+            isSubmitting: createUser.isPending,
+          },
+          update: {
+            onUpdate: updateUser.mutateAsync,
+            isSubmitting: updateUser.isPending,
           },
         }}
       >

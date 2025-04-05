@@ -6,11 +6,11 @@ export const orderItemSchema = Order_itemCreateSchema.required({
   updated_at: true,
 });
 
-export const orderItemUpdateSchema = orderItemSchema.omit({
-  created_at: true,
-  updated_at: true,
-});
-
-export const orderItemCreateSchema = orderItemUpdateSchema.omit({
-  id: true,
-});
+export const orderItemFormSchema = orderItemSchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });

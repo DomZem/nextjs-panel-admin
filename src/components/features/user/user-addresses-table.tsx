@@ -8,9 +8,8 @@ import {
   AutoTableToolbarHeader,
 } from "~/components/auto-table/auto-table-header";
 import {
-  userAddressCreateSchema,
+  userAddressFormSchema,
   userAddressSchema,
-  userAddressUpdateSchema,
 } from "~/common/validations/user/user-address";
 import { LoaderCircle } from "lucide-react";
 import { api } from "~/trpc/react";
@@ -47,34 +46,8 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
             id: selectedRow.id,
           })
         }
-        create={{
-          formSchema: userAddressCreateSchema,
-          onCreate: createUserAddress.mutateAsync,
-          isSubmitting: createUserAddress.isPending,
-          fieldsConfig: {
-            user_id: {
-              hidden: true,
-            },
-            region_country_id: {
-              type: "custom",
-              render: ({ field }) => {
-                return (
-                  <RegionCountryCombobox
-                    selectedValue={field.value}
-                    onSelect={field.onChange}
-                  />
-                );
-              },
-            },
-          },
-          defaultValues: {
-            user_id: userId,
-          },
-        }}
-        update={{
-          formSchema: userAddressUpdateSchema,
-          onUpdate: updateUserAddress.mutateAsync,
-          isSubmitting: updateUserAddress.isPending,
+        autoForm={{
+          formSchema: userAddressFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -93,6 +66,17 @@ export const UserAddressesTable = ({ userId }: { userId: string }) => {
                 );
               },
             },
+          },
+          create: {
+            onCreate: createUserAddress.mutateAsync,
+            isSubmitting: createUserAddress.isPending,
+            defaultValues: {
+              user_id: userId,
+            },
+          },
+          update: {
+            onUpdate: updateUserAddress.mutateAsync,
+            isSubmitting: updateUserAddress.isPending,
           },
         }}
       >

@@ -1,9 +1,6 @@
+import { productAccessoryFormSchema } from "~/common/validations/product/product-accessory";
 import { Product_accessoryScalarSchema } from "~/zod-schemas/models";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
-import {
-  productAccessoryCreateSchema,
-  productAccessoryUpdateSchema,
-} from "~/common/validations/product/product-accessory";
 import { z } from "zod";
 
 export const productAccessoryRouter = createTRPCRouter({
@@ -37,7 +34,7 @@ export const productAccessoryRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(productAccessoryCreateSchema)
+    .input(productAccessoryFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.product_accessory.create({
         data: input,
@@ -46,7 +43,11 @@ export const productAccessoryRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(productAccessoryUpdateSchema)
+    .input(
+      productAccessoryFormSchema.required({
+        id: true,
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.product_accessory.update({
         where: {

@@ -14,11 +14,11 @@ export const orderSchema = orderRawSchema.merge(
   }),
 );
 
-export const orderUpdateSchema = orderRawSchema.omit({
-  created_at: true,
-  updated_at: true,
-});
-
-export const orderCreateSchema = orderUpdateSchema.omit({
-  id: true,
-});
+export const orderFormSchema = orderRawSchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });

@@ -1,9 +1,6 @@
+import { userAddressFormSchema } from "~/common/validations/user/user-address";
 import { User_addressScalarSchema } from "~/zod-schemas/models";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
-import {
-  userAddressCreateSchema,
-  userAddressUpdateSchema,
-} from "~/common/validations/user/user-address";
 import { z } from "zod";
 
 export const userAddressRouter = createTRPCRouter({
@@ -37,7 +34,7 @@ export const userAddressRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(userAddressCreateSchema)
+    .input(userAddressFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.user_address.create({
         data: input,
@@ -46,7 +43,7 @@ export const userAddressRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(userAddressUpdateSchema)
+    .input(userAddressFormSchema.required({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.user_address.update({
         where: {

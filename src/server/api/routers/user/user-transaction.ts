@@ -1,10 +1,7 @@
+import { userTransactionFormSchema } from "~/common/validations/user/user-transaction";
 import { User_transactionScalarSchema } from "~/zod-schemas/models";
 import { paginationSchema } from "~/common/validations/pagination";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
-import {
-  userTransactionCreateSchema,
-  userTransactionUpdateSchema,
-} from "~/common/validations/user/user-transaction";
 import { z } from "zod";
 
 export const userTransactionRouter = createTRPCRouter({
@@ -45,7 +42,7 @@ export const userTransactionRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(userTransactionCreateSchema)
+    .input(userTransactionFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.user_transaction.create({
         data: input,
@@ -54,7 +51,11 @@ export const userTransactionRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(userTransactionUpdateSchema)
+    .input(
+      userTransactionFormSchema.required({
+        id: true,
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.user_transaction.update({
         where: {

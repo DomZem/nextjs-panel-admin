@@ -7,11 +7,11 @@ export const userTransactionSchema = User_transactionCreateSchema.required({
   status: true,
 });
 
-export const userTransactionUpdateSchema = userTransactionSchema.omit({
-  created_at: true,
-  updated_at: true,
-});
-
-export const userTransactionCreateSchema = userTransactionUpdateSchema.omit({
-  id: true,
-});
+export const userTransactionFormSchema = userTransactionSchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });

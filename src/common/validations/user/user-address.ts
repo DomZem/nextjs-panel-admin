@@ -7,23 +7,17 @@ export const userAddressSchema = User_addressCreateSchema.required({
   updated_at: true,
 });
 
-const userAddressFormSchema = userAddressSchema
+export const userAddressFormSchema = userAddressSchema
   .omit({
     region_country_id: true,
+    created_at: true,
+    updated_at: true,
   })
   .merge(
     z.object({
       region_country_id: z.coerce.number(),
     }),
-  );
-
-export const userAddressCreateSchema = userAddressFormSchema.omit({
-  id: true,
-  created_at: true,
-  updated_at: true,
-});
-
-export const userAddressUpdateSchema = userAddressFormSchema.omit({
-  created_at: true,
-  updated_at: true,
-});
+  )
+  .partial({
+    id: true,
+  });

@@ -1,9 +1,6 @@
+import { regionCountryFormSchema } from "~/common/validations/region/region-country";
 import { Region_countryScalarSchema } from "~/zod-schemas/models";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
-import {
-  regionCountryCreateSchema,
-  regionCountryUpdateSchema,
-} from "~/common/validations/region/region-country";
 import { z } from "zod";
 
 export const regionCountryRouter = createTRPCRouter({
@@ -76,7 +73,7 @@ export const regionCountryRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(regionCountryCreateSchema)
+    .input(regionCountryFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.region_country.create({
         data: input,
@@ -85,7 +82,11 @@ export const regionCountryRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(regionCountryUpdateSchema)
+    .input(
+      regionCountryFormSchema.required({
+        id: true,
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.region_country.update({
         where: {

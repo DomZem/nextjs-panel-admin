@@ -3,12 +3,8 @@
 import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
+import { userTransactionSchema } from "~/common/validations/user/user-transaction";
 import { useRowsPerPage } from "~/hooks/use-rows-per-page";
-import {
-  userTransactionCreateSchema,
-  userTransactionSchema,
-  userTransactionUpdateSchema,
-} from "~/common/validations/user/user-transaction";
 import {
   AutoTableContainer,
   AutoTableToolbarHeader,
@@ -105,21 +101,8 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
         onDelete={async (row) =>
           await deleteUserTransaction.mutateAsync({ id: row.id })
         }
-        create={{
-          formSchema: userTransactionCreateSchema,
-          onCreate: createUserTransaction.mutateAsync,
-          fieldsConfig: {
-            user_id: {
-              hidden: true,
-            },
-          },
-          defaultValues: {
-            user_id: userId,
-          },
-        }}
-        update={{
-          formSchema: userTransactionUpdateSchema,
-          onUpdate: updateUserTransaction.mutateAsync,
+        autoForm={{
+          formSchema: userTransactionSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -127,6 +110,17 @@ export const UserTransactionsTable = ({ userId }: { userId: string }) => {
             user_id: {
               hidden: true,
             },
+          },
+          create: {
+            onCreate: createUserTransaction.mutateAsync,
+            isSubmitting: createUserTransaction.isPending,
+            defaultValues: {
+              user_id: userId,
+            },
+          },
+          update: {
+            onUpdate: updateUserTransaction.mutateAsync,
+            isSubmitting: updateUserTransaction.isPending,
           },
         }}
       >

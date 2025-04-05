@@ -3,8 +3,7 @@
 import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-table-basic-actions";
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import {
-  productAccessoryCreateSchema,
-  productAccessoryUpdateSchema,
+  productAccessoryFormSchema,
   productAccessorySchema,
 } from "~/common/validations/product/product-accessory";
 import {
@@ -50,21 +49,8 @@ export const ProductAccessoriesTable = ({
             id: selectedRow.id,
           });
         }}
-        create={{
-          formSchema: productAccessoryCreateSchema,
-          onCreate: createProductAccessory.mutateAsync,
-          defaultValues: {
-            product_id: productId,
-          },
-          fieldsConfig: {
-            product_id: {
-              hidden: true,
-            },
-          },
-        }}
-        update={{
-          formSchema: productAccessoryUpdateSchema,
-          onUpdate: updateProductAccessory.mutateAsync,
+        autoForm={{
+          formSchema: productAccessoryFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
@@ -72,6 +58,17 @@ export const ProductAccessoriesTable = ({
             product_id: {
               hidden: true,
             },
+          },
+          create: {
+            onCreate: createProductAccessory.mutateAsync,
+            isSubmitting: createProductAccessory.isPending,
+            defaultValues: {
+              product_id: productId,
+            },
+          },
+          update: {
+            onUpdate: updateProductAccessory.mutateAsync,
+            isSubmitting: updateProductAccessory.isPending,
           },
         }}
       >
