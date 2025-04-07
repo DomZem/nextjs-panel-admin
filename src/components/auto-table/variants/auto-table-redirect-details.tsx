@@ -1,7 +1,6 @@
 import { AutoTableBasicActionsWithRedirectDetailsColumn } from "../auto-table-row";
 import {
   type ZodDiscriminatedObjectSchema,
-  type ZodObjectInfer,
   type ZodObjectSchema,
 } from "~/utils/zod";
 import { mapDashedFieldName } from "~/utils/mappers";
@@ -13,6 +12,7 @@ import {
   AutoTableDataProvider,
   type IAutoTableDataProvider,
 } from "../providers/auto-table-data-provider";
+import { type z } from "zod";
 import React from "react";
 
 export const AutoTableRedirectDetails = <
@@ -35,7 +35,7 @@ export const AutoTableRedirectDetails = <
 }: IAutoTableCrudProvider<TSchema, TFormSchema> &
   IAutoTableDataProvider<TSchema> & {
     children: React.ReactNode;
-    detailsHref: (row: ZodObjectInfer<TSchema>) => string;
+    detailsHref: (row: z.infer<TSchema>) => string;
   }) => {
   return (
     <AutoTableCrudProvider

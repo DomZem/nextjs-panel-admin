@@ -15,8 +15,6 @@ export type ZodDiscriminatedObjectSchema = ZodDiscriminatedUnion<
   ZodObject<ZodRawShape>[]
 >;
 
-export type ZodObjectInfer<TSchema extends ZodObjectSchema> = z.infer<TSchema>;
-
 type StringOrNumberKeyOnly<T> = {
   [K in keyof T]: T[K] extends string | number
     ? T[K] extends boolean | Date | undefined
@@ -26,7 +24,7 @@ type StringOrNumberKeyOnly<T> = {
 }[keyof T];
 
 export type ZodObjectSchemaIdentifierKey<TSchema extends ZodObjectSchema> =
-  Extract<StringOrNumberKeyOnly<ZodObjectInfer<TSchema>>, string>;
+  Extract<StringOrNumberKeyOnly<z.infer<TSchema>>, string>;
 
 export const extractFieldNamesFromSchema = <
   TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,

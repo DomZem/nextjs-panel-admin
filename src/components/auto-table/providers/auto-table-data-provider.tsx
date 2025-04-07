@@ -1,4 +1,5 @@
 import { useAutoTableColumnsOrder } from "~/hooks/auto-table/use-auto-table-columns-order";
+import { extractFieldNamesFromSchema, type ZodObjectSchema } from "~/utils/zod";
 import { DataTableProvider } from "../../ui/data-table";
 import { useAutoTable } from "./auto-table-provider";
 import { Badge } from "~/components/ui/badge";
@@ -9,24 +10,20 @@ import {
   getSortedRowModel,
   type SortingState,
 } from "@tanstack/react-table";
+import { type z } from "zod";
 import dayjs from "dayjs";
-import {
-  extractFieldNamesFromSchema,
-  type ZodObjectInfer,
-  type ZodObjectSchema,
-} from "~/utils/zod";
 
 export interface IAutoTableDataProvider<TSchema extends ZodObjectSchema> {
-  data: ZodObjectInfer<TSchema>[];
+  data: z.infer<TSchema>[];
   omitColumns?: Partial<{
-    [K in keyof ZodObjectInfer<TSchema>]: true;
+    [K in keyof z.infer<TSchema>]: true;
   }>;
   columnsMap?: Partial<{
-    [K in keyof ZodObjectInfer<TSchema>]: (
-      data: ZodObjectInfer<TSchema>[K],
+    [K in keyof z.infer<TSchema>]: (
+      data: z.infer<TSchema>[K],
     ) => React.ReactNode;
   }>;
-  extraColumns?: ColumnDef<ZodObjectInfer<TSchema>>[];
+  extraColumns?: ColumnDef<z.infer<TSchema>>[];
   mapColumnName?: (columnName: string) => string;
 }
 
@@ -54,7 +51,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
     [],
   );
 
-  const basicColumns: ColumnDef<ZodObjectInfer<TSchema>>[] = useMemo(
+  const basicColumns: ColumnDef<z.infer<TSchema>>[] = useMemo(
     () =>
       filteredFieldNames.map((fieldName) => ({
         accessorKey: mapColumnName
@@ -94,7 +91,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
     [],
   );
 
-  const columns: ColumnDef<ZodObjectInfer<TSchema>>[] = useMemo(
+  const columns: ColumnDef<z.infer<TSchema>>[] = useMemo(
     () => [...basicColumns, ...(extraColumns ?? [])],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],

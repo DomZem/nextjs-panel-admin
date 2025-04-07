@@ -1,7 +1,7 @@
 import { useAutoTableDetailsData } from "./providers/auto-table-details-data-provider";
 import { type ActionType, useAutoTable } from "./providers/auto-table-provider";
-import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
 import { LoaderCircle, MoreHorizontal } from "lucide-react";
+import { type ZodObjectSchema } from "~/utils/zod";
 import { TableCell, TableRow } from "../ui/table";
 import { useDataTable } from "../ui/data-table";
 import React, { useMemo } from "react";
@@ -15,11 +15,12 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Link from "next/link";
+import { type z } from "zod";
 
 export const AutoTableFullActionsColumn = <TSchema extends ZodObjectSchema>({
   row,
 }: {
-  row: ZodObjectInfer<TSchema>;
+  row: z.infer<TSchema>;
 }) => {
   const { getDetailsData } = useAutoTableDetailsData();
 
@@ -64,7 +65,7 @@ export const AutoTableFullActionsColumn = <TSchema extends ZodObjectSchema>({
 export const AutoTableBasicActionsColumn = <TSchema extends ZodObjectSchema>({
   row,
 }: {
-  row: ZodObjectInfer<TSchema>;
+  row: z.infer<TSchema>;
 }) => {
   const { setCurrentAction, setSelectedRow } = useAutoTable<TSchema>();
 
@@ -101,8 +102,8 @@ export const AutoTableBasicActionsWithRedirectDetailsColumn = <
   row,
   detailsHref,
 }: {
-  row: ZodObjectInfer<TSchema>;
-  detailsHref: (row: ZodObjectInfer<TSchema>) => string;
+  row: z.infer<TSchema>;
+  detailsHref: (row: z.infer<TSchema>) => string;
 }) => {
   const { setCurrentAction, setSelectedRow } = useAutoTable<TSchema>();
 

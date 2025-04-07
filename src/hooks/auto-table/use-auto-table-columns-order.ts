@@ -1,11 +1,12 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
-import { type ZodObjectInfer, type ZodObjectSchema } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/utils/zod";
 import { useEffect, useState } from "react";
 import {
   type ColumnOrderState,
   type OnChangeFn,
   type ColumnDef,
 } from "@tanstack/react-table";
+import { type z } from "zod";
 
 export interface AutoTableSetting {
   tableName: string;
@@ -16,7 +17,7 @@ export interface AutoTableSetting {
 export const useAutoTableColumnsOrder = <TSchema extends ZodObjectSchema>({
   columns,
 }: {
-  columns: ColumnDef<ZodObjectInfer<TSchema>>[];
+  columns: ColumnDef<z.infer<TSchema>>[];
 }) => {
   const { technicalTableName } = useAutoTable<TSchema>();
 

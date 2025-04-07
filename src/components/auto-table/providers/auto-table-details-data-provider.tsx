@@ -1,5 +1,6 @@
-import { type ZodObjectSchema, type ZodObjectInfer } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/utils/zod";
 import React, { useState } from "react";
+import { type z } from "zod";
 
 interface IAutoTableDetailsDataContext<
   TSchema extends ZodObjectSchema,
@@ -7,7 +8,7 @@ interface IAutoTableDetailsDataContext<
 > {
   detailsData: TDetailsData | null;
   renderDetails: (data: TDetailsData) => React.ReactNode;
-  getDetailsData: (row: ZodObjectInfer<TSchema>) => Promise<void>;
+  getDetailsData: (row: z.infer<TSchema>) => Promise<void>;
 }
 
 const AutoTableDetailsDataContext =
@@ -19,7 +20,7 @@ export interface IAutoTableDetailsDataProvider<
   TDetailsData extends Record<string, unknown>,
 > {
   renderDetails: (data: TDetailsData) => React.ReactNode;
-  onDetails: (selectedRow: ZodObjectInfer<TSchema>) => Promise<TDetailsData>;
+  onDetails: (selectedRow: z.infer<TSchema>) => Promise<TDetailsData>;
 }
 
 export const AutoTableDetailsDataProvider = <
@@ -39,7 +40,7 @@ export const AutoTableDetailsDataProvider = <
       value={{
         detailsData,
         renderDetails,
-        getDetailsData: async (row: ZodObjectInfer<TSchema>) => {
+        getDetailsData: async (row: z.infer<TSchema>) => {
           const data = await onDetails(row);
           setDetailsData(data);
         },

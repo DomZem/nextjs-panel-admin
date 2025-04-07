@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { type z } from "zod";
 import {
   type ZodObjectSchemaIdentifierKey,
-  type ZodObjectInfer,
   type ZodObjectSchema,
 } from "~/utils/zod";
 
@@ -11,8 +11,8 @@ interface IAutoTableContext<TSchema extends ZodObjectSchema> {
   schema: TSchema;
   technicalTableName: string;
   rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
-  selectedRow: ZodObjectInfer<TSchema> | null;
-  setSelectedRow: (row: ZodObjectInfer<TSchema> | null) => void;
+  selectedRow: z.infer<TSchema> | null;
+  setSelectedRow: (row: z.infer<TSchema> | null) => void;
   currentAction: ActionType;
   setCurrentAction: (action: ActionType) => void;
   refetchData: () => Promise<unknown>;
@@ -37,8 +37,7 @@ export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
 }: AutoTableImplementationProps<TSchema> & {
   children: React.ReactNode;
 }) => {
-  const [selectedRow, setSelectedRow] =
-    useState<ZodObjectInfer<TSchema> | null>(null);
+  const [selectedRow, setSelectedRow] = useState<z.infer<TSchema> | null>(null);
   const [currentAction, setCurrentAction] = useState<ActionType>(null);
 
   return (

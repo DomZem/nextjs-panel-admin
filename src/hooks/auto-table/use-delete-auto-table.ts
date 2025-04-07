@@ -1,9 +1,10 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
-import { type ZodObjectSchema, type ZodObjectInfer } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/utils/zod";
 import { toast } from "../use-toast";
+import { type z } from "zod";
 
 export interface IUseDeleteAutoTableData<TSchema extends ZodObjectSchema> {
-  onDelete: (selectedRow: ZodObjectInfer<TSchema>) => Promise<unknown>;
+  onDelete: (selectedRow: z.infer<TSchema>) => Promise<unknown>;
 }
 
 export const useDeleteAutoTableData = <TSchema extends ZodObjectSchema>({
