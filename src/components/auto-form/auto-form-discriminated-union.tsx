@@ -5,7 +5,11 @@ import { type ZodDiscriminatedObjectSchema } from "~/utils/zod";
 import { AutoFormInputField } from "./auto-form-input-field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Path, useForm } from "react-hook-form";
-import { type IAutoForm } from "./interface";
+import {
+  type BaseConfig,
+  type CommonFieldKeys,
+  type IAutoForm,
+} from "./interface";
 import { type TypeOf, type z } from "zod";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
@@ -101,19 +105,31 @@ export const AutoFormDiscriminatedUnion = <
           Object.entries(mappedFormVariant.fields)
             .filter(([fieldName]) => fieldName !== schema.discriminator)
             .map(([fieldName, formField]) => {
-              const key = fieldName as Path<TypeOf<TSchema>>;
+              const key = fieldName as CommonFieldKeys<TSchema>;
 
-              const overallConfig =
-                fieldsConfig && selectedVariant
-                  ? fieldsConfig[selectedVariant]
-                  : null;
+              const commonFieldConfig = (
+                fieldsConfig?.base as BaseConfig<TSchema>
+              )?.[key];
 
-              const label: string =
-                overallConfig?.[key]?.label ?? mapLabel?.(key) ?? key;
+              // const specificFieldConfig = fieldsConfig?.variants?.[
+              //   mappedFormVariant.key as keyof typeof fieldsConfig.variants
+              // ]?.[key] as FieldConfig<
+              //   Extract<DisUnionToRecord<TSchema>[V], ZodObjectSchema>,
+              //   K
+              // >;
 
-              if (overallConfig && overallConfig[key]?.hidden) {
+              const specificFieldConfig =
+                fieldsConfig?.variants?.[mappedFormVariant.key]?.[fieldName];
+
+              if (commonFieldConfig?.hidden || specificFieldConfig?.hidden) {
                 return null;
               }
+
+              const label =
+                specificFieldConfig?.label ??
+                commonFieldConfig?.label ??
+                mapLabel?.(key) ??
+                key;
 
               return (
                 <FormField
@@ -121,11 +137,16 @@ export const AutoFormDiscriminatedUnion = <
                   name={key}
                   key={key}
                   render={({ field, fieldState, formState }) => {
-                    if (
-                      overallConfig &&
-                      overallConfig[key]?.type === "custom"
-                    ) {
-                      return overallConfig[key].render({
+                    if (commonFieldConfig?.type === "custom") {
+                      return commonFieldConfig.render({
+                        field,
+                        fieldState,
+                        formState,
+                      });
+                    }
+
+                    if (specificFieldConfig?.type === "custom") {
+                      return specificFieldConfig.render({
                         field,
                         fieldState,
                         formState,
@@ -135,9 +156,9 @@ export const AutoFormDiscriminatedUnion = <
                     return (
                       <AutoFormInputField
                         defaultField={formField}
-                        fieldConfig={overallConfig?.[key]}
                         field={field}
                         label={label}
+                        fieldConfig={specificFieldConfig ?? commonFieldConfig}
                         onClear={() => clearField(key)}
                       />
                     );

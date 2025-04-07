@@ -14,7 +14,6 @@ type InputType =
   | "checkbox"
   | "textarea"
   | "select"
-  | "password"
   | "image"
   | "custom"
   | "datetime"
@@ -55,12 +54,52 @@ export type FieldConfig<
   TKey extends Path<TypeOf<TSchema>>,
 > = StandardFieldConfig | SelectFieldConfig | CustomFieldConfig<TSchema, TKey>;
 
+// Given a union U, this returns the keys that are common to every member of U.
+type IntersectionKeys<U> = (
+  U extends unknown ? (k: keyof U) => void : never
+) extends (k: infer I) => void
+  ? I
+  : never;
+
+// Convert a discriminated union schema into a record mapping discriminant values to their object shapes.
 export type DisUnionToRecord<T extends ZodDiscriminatedObjectSchema> = {
   [O in T["options"][number] as O["shape"][T["discriminator"]] extends z.ZodLiteral<
     infer L extends string | number | symbol
   >
     ? L
     : never]: O["shape"];
+};
+
+// Compute common keys to every variant (excluding the discriminator)
+export type CommonFieldKeys<TSchema extends ZodDiscriminatedObjectSchema> =
+  Extract<
+    Exclude<
+      IntersectionKeys<
+        DisUnionToRecord<TSchema>[keyof DisUnionToRecord<TSchema>]
+      >,
+      TSchema["discriminator"]
+    >,
+    Path<TypeOf<TSchema>>
+  >;
+
+// Base config: configuration for keys that are common to every variant.
+export type BaseConfig<TSchema extends ZodDiscriminatedObjectSchema> = {
+  [K in CommonFieldKeys<TSchema>]?: FieldConfig<
+    Extract<
+      DisUnionToRecord<TSchema>[keyof DisUnionToRecord<TSchema>],
+      ZodObjectSchema
+    >,
+    K
+  >;
+};
+
+export type VariantConfig<TSchema extends ZodDiscriminatedObjectSchema> = {
+  [V in keyof DisUnionToRecord<TSchema>]?: {
+    [K in Extract<
+      Exclude<keyof DisUnionToRecord<TSchema>[V], TSchema["discriminator"]>,
+      Path<TypeOf<TSchema>>
+    >]?: FieldConfig<Extract<DisUnionToRecord<TSchema>[V], ZodObjectSchema>, K>;
+  };
 };
 
 export interface IAutoForm<
@@ -74,16 +113,8 @@ export interface IAutoForm<
   defaultValues?: DefaultValues<TypeOf<TSchema>>;
   fieldsConfig?: TSchema extends ZodDiscriminatedObjectSchema
     ? {
-        // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-        [K in keyof DisUnionToRecord<TSchema>]?: {
-          [Field in Exclude<
-            keyof DisUnionToRecord<TSchema>[K],
-            TSchema["discriminator"]
-          >]?: FieldConfig<
-            Extract<DisUnionToRecord<TSchema>[K], ZodObjectSchema>,
-            Path<TypeOf<TSchema>>
-          >;
-        };
+        base?: BaseConfig<TSchema>;
+        variants?: VariantConfig<TSchema>;
       }
     : TSchema extends ZodObjectSchema
       ? { [TKey in Path<TypeOf<TSchema>>]?: FieldConfig<TSchema, TKey> }
