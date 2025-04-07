@@ -144,7 +144,6 @@ export const AutoTableCreateFormSheet = <
   );
 };
 
-// WARNING: I decided to pass TSchema to IUseUpdateAutoTableData to,
 export const AutoTableUpdateFormSheet = <
   TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
   TSchema extends ZodObjectSchema,
@@ -154,7 +153,7 @@ export const AutoTableUpdateFormSheet = <
   onUpdate,
   isSubmitting,
 }: Pick<IAutoForm<TFormSchema>, "fieldsConfig" | "isSubmitting"> &
-  IUseUpdateAutoTableData<TSchema> & {
+  IUseUpdateAutoTableData<TSchema, TFormSchema> & {
     formSchema: TFormSchema;
   }) => {
   const isDiscriminatedObjectSchema = "discriminator" in formSchema;

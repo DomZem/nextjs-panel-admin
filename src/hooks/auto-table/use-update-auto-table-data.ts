@@ -7,17 +7,18 @@ import {
 } from "~/utils/zod";
 
 export interface IUseUpdateAutoTableData<
+  TSchema extends ZodObjectSchema,
   TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
 > {
-  onUpdate: (data: z.infer<TFormSchema>) => Promise<unknown>;
+  onUpdate: (data: z.infer<TFormSchema> & z.infer<TSchema>) => Promise<unknown>;
 }
 
 export const useUpdateAutoTableData = <
-  TFormSchema extends ZodObjectSchema,
+  TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
   TSchema extends ZodObjectSchema,
 >({
   onUpdate,
-}: IUseUpdateAutoTableData<TFormSchema>) => {
+}: IUseUpdateAutoTableData<TSchema, TFormSchema>) => {
   const { selectedRow, currentAction, setCurrentAction } =
     useAutoTable<TSchema>();
 
@@ -27,13 +28,18 @@ export const useUpdateAutoTableData = <
     setCurrentAction(null);
   };
 
-  const handleUpdate = async (data: z.infer<TFormSchema>) => {
+  const handleUpdate = async (
+    data: z.infer<TFormSchema> & z.infer<TSchema>,
+  ) => {
     if (!selectedRow) {
       throw new Error("no selected row to update");
     }
 
     await handleSubmitData(async () => {
-      await onUpdate(data);
+      await onUpdate({
+        ...selectedRow,
+        ...data,
+      });
     });
   };
 
