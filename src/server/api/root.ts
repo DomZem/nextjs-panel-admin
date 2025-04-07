@@ -9,6 +9,7 @@ import { regionRouter } from "./routers/region/region";
 import { orderRouter } from "./routers/order/order";
 import { userRouter } from "./routers/user/user";
 import { authRouter } from "./routers/auth";
+import { carRouter } from "./routers/car/car";
 
 /**
  * This is the primary router for your server.
@@ -26,6 +27,7 @@ export const appRouter = createTRPCRouter({
   orderItem: orderItemRouter,
   region: regionRouter,
   regionCountry: regionCountryRouter,
+  car: carRouter,
 });
 
 // export type definition of API

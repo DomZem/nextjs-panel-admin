@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, ShoppingCart, Speaker, User, Flag } from "lucide-react";
+import { Home, ShoppingCart, Speaker, User, Flag, Car } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   SidebarMenu,
@@ -44,6 +44,12 @@ const items: {
     url: "/admin/regions",
     icon: Flag,
     isActive: (pathname: string) => pathname.startsWith("/admin/regions"),
+  },
+  {
+    title: "Cars",
+    url: "/admin/cars",
+    icon: Car,
+    isActive: (pathname: string) => pathname.startsWith("/admin/cars"),
   },
 ];
 
