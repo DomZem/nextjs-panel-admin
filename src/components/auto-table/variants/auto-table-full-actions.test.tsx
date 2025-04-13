@@ -23,16 +23,14 @@ const userSchema = z.object({
   account_disabled_at: z.date().nullish(),
 });
 
-const userCreateSchema = userSchema.omit({
-  id: true,
-  created_at: true,
-  updated_at: true,
-});
-
-const userUpdateSchema = userSchema.omit({
-  created_at: true,
-  updated_at: true,
-});
+const userFormSchema = userSchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });
 
 type User = z.infer<typeof userSchema>;
 
@@ -63,13 +61,19 @@ describe("AutoTableFullActions component", () => {
         data={[user]}
         onRefetchData={jest.fn()}
         onDelete={deleteUser}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -107,13 +111,19 @@ describe("AutoTableFullActions component", () => {
         data={[]}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: createUser,
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: createUser,
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -185,13 +195,19 @@ describe("AutoTableFullActions component", () => {
         data={[user]}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: updateUser,
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: updateUser,
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -239,7 +255,7 @@ describe("AutoTableFullActions component", () => {
     await userEvent.click(screen.getByRole("button", { name: /Submit/i }));
 
     expect(updateUser).toHaveBeenCalledWith({
-      id: "1",
+      ...user,
       first_name: "Alice",
       last_name: "Trump",
       email: "alice.trump@gmail.com",
@@ -257,13 +273,19 @@ describe("AutoTableFullActions component", () => {
         data={[]}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -321,13 +343,19 @@ describe("AutoTableFullActions component", () => {
         data={[]}
         onRefetchData={refetchData}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -362,13 +390,19 @@ describe("AutoTableFullActions component", () => {
         data={[user]}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         onDetails={() => {
           return new Promise<User>((resolve) => {
@@ -423,13 +457,19 @@ describe("AutoTableFullActions component", () => {
         data={[]}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -500,13 +540,19 @@ describe("AutoTableFullActions component", () => {
         }}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -577,13 +623,19 @@ describe("AutoTableFullActions component", () => {
         ]}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
@@ -639,13 +691,19 @@ describe("AutoTableFullActions component", () => {
         data={users}
         onRefetchData={jest.fn()}
         onDelete={jest.fn()}
-        create={{
-          formSchema: userCreateSchema,
-          onCreate: jest.fn(),
-        }}
-        update={{
-          formSchema: userUpdateSchema,
-          onUpdate: jest.fn(),
+        autoForm={{
+          formSchema: userFormSchema,
+          fieldsConfig: {
+            id: {
+              hidden: true,
+            },
+          },
+          create: {
+            onCreate: jest.fn(),
+          },
+          update: {
+            onUpdate: jest.fn(),
+          },
         }}
         renderDetails={jest.fn()}
         onDetails={jest.fn()}
