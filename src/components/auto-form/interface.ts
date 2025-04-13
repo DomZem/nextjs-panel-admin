@@ -42,11 +42,14 @@ type SelectFieldConfig = BaseFieldConfig & {
 
 type CustomFieldConfig<
   TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
-  FKey extends Path<z.infer<TSchema>>,
+  FKey extends keyof z.infer<TSchema>,
 > = BaseFieldConfig & {
   type: "custom";
   render: ({}: {
-    field: ControllerRenderProps<z.infer<TSchema>, FKey>;
+    field: ControllerRenderProps<
+      z.infer<TSchema>,
+      FKey extends Path<z.infer<TSchema>> ? FKey : never
+    >;
     fieldState: ControllerFieldState;
     formState: UseFormStateReturn<z.infer<TSchema>>;
   }) => React.ReactElement;
@@ -54,7 +57,7 @@ type CustomFieldConfig<
 
 export type FieldConfig<
   TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
-  FKey extends Path<z.infer<TSchema>>,
+  FKey extends keyof z.infer<TSchema>,
 > = StandardFieldConfig | SelectFieldConfig | CustomFieldConfig<TSchema, FKey>;
 
 export type ZodDiscriminatorKeys<TSchema extends ZodDiscriminatedObjectSchema> =
@@ -80,22 +83,20 @@ export interface IAutoForm<
   fieldsConfig?: TSchema extends ZodDiscriminatedObjectSchema
     ? {
         base?: Partial<{
-          [FKey in Path<z.infer<TSchema>>]: FieldConfig<TSchema, FKey>;
+          [FKey in keyof z.infer<TSchema>]: FieldConfig<TSchema, FKey>;
         }>;
         variants?: Partial<{
           [DisKey in ZodDiscriminatorKeys<TSchema>]: {
-            [FKey in Path<
-              Omit<
-                DiscriminatorVariantEntry<TSchema, DisKey>,
-                TSchema["discriminator"]
-              >
+            [FKey in keyof Omit<
+              DiscriminatorVariantEntry<TSchema, DisKey>,
+              TSchema["discriminator"]
             >]?: FieldConfig<TSchema, FKey>;
           };
         }>;
       }
     : TSchema extends ZodObjectSchema
       ? Partial<{
-          [FKey in Path<z.infer<TSchema>>]: FieldConfig<TSchema, FKey>;
+          [FKey in keyof z.infer<TSchema>]: FieldConfig<TSchema, FKey>;
         }>
       : never;
 }

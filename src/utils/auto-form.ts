@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/consistent-indexed-object-style */
+import { type ZodDiscriminatorKeys } from "~/components/auto-form/interface";
 import {
   type EnumLike,
   type z,
@@ -92,33 +94,27 @@ const getEnumOptions = (
   return options;
 };
 
-export const mapDiscriminatedUnionToFormFields = (
-  schema: ZodDiscriminatedObjectSchema,
+export const mapDiscriminatedUnionToFormFields = <
+  TSchema extends ZodDiscriminatedObjectSchema,
+>(
+  schema: TSchema,
 ): {
-  discriminator: string;
-  variants: {
-    key: string;
-    fields: Record<string, FormInputField>;
-  }[];
+  [DisKey in ZodDiscriminatorKeys<TSchema>]: Record<string, FormInputField>;
 } => {
-  const variants: {
-    key: string;
-    fields: Record<string, FormInputField>;
-  }[] = [];
-
-  schema.optionsMap.forEach((schema, key) => {
-    const fields = mapSchemaToFormFields(schema);
-
-    variants.push({
-      key: key!.toString(),
-      fields,
-    });
-  });
-
-  return {
-    discriminator: schema._def.discriminator,
-    variants,
+  const result = {} as {
+    [DisKey in ZodDiscriminatorKeys<typeof schema>]: Record<
+      string,
+      FormInputField
+    >;
   };
+
+  for (const [variant, variantSchema] of schema.optionsMap) {
+    const disKey = variant as ZodDiscriminatorKeys<typeof schema>;
+    const fields = mapSchemaToFormFields(variantSchema);
+    result[disKey] = fields;
+  }
+
+  return result;
 };
 
 export const mapSchemaToFormFields = (
