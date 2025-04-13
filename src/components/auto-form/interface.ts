@@ -71,6 +71,28 @@ export type DiscriminatorVariantEntry<
   { [D in TSchema["discriminator"]]: DiscriminatorKey }
 >;
 
+type AutoFormFieldsConfig<
+  TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+> = TSchema extends ZodDiscriminatedObjectSchema
+  ? {
+      base?: {
+        [FKey in keyof z.infer<TSchema>]?: FieldConfig<TSchema, FKey>;
+      };
+      variants?: {
+        [DisKey in ZodDiscriminatorKeys<TSchema>]?: {
+          [FKey in keyof Omit<
+            DiscriminatorVariantEntry<TSchema, DisKey>,
+            TSchema["discriminator"]
+          >]?: FieldConfig<TSchema, FKey>;
+        };
+      };
+    }
+  : TSchema extends ZodObjectSchema
+    ? {
+        [FKey in keyof z.infer<TSchema>]?: FieldConfig<TSchema, FKey>;
+      }
+    : never;
+
 export interface IAutoForm<
   TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
 > {
@@ -80,23 +102,5 @@ export interface IAutoForm<
   className?: string;
   isSubmitting?: boolean;
   defaultValues?: DefaultValues<TypeOf<TSchema>>;
-  fieldsConfig?: TSchema extends ZodDiscriminatedObjectSchema
-    ? {
-        base?: Partial<{
-          [FKey in keyof z.infer<TSchema>]: FieldConfig<TSchema, FKey>;
-        }>;
-        variants?: Partial<{
-          [DisKey in ZodDiscriminatorKeys<TSchema>]: {
-            [FKey in keyof Omit<
-              DiscriminatorVariantEntry<TSchema, DisKey>,
-              TSchema["discriminator"]
-            >]?: FieldConfig<TSchema, FKey>;
-          };
-        }>;
-      }
-    : TSchema extends ZodObjectSchema
-      ? Partial<{
-          [FKey in keyof z.infer<TSchema>]: FieldConfig<TSchema, FKey>;
-        }>
-      : never;
+  fieldsConfig?: AutoFormFieldsConfig<TSchema>;
 }
