@@ -73,14 +73,14 @@ import { RegionScalarSchema } from "~/zod-schemas/models";
 
 export const regionSchema = RegionScalarSchema;
 
-export const regionUpdateSchema = regionSchema.omit({
-  created_at: true,
-  updated_at: true,
-});
-
-export const regionCreateSchema = regionUpdateSchema.omit({
-  id: true,
-});
+export const regionFormSchema = regionSchema
+  .omit({
+    created_at: true,
+    updated_at: true,
+  })
+  .partial({
+    id: true,
+  });
 ```
 ```bash
 💡 Tip: Whenever you are creating validation for independent model use ScalarSchema
@@ -90,12 +90,9 @@ export const regionCreateSchema = regionUpdateSchema.omit({
 Create model-name.ts file inside server/api/routers folder. <br />
 For example let's create region.ts router file for region model.
 ```typescript
+import { regionFormSchema } from "~/common/validations/region/region";
 import { adminProcedure, createTRPCRouter } from "../../trpc";
 import { RegionScalarSchema } from "~/zod-schemas/models";
-import {
-  regionCreateSchema,
-  regionUpdateSchema,
-} from "~/common/validations/region/region";
 
 export const regionRouter = createTRPCRouter({
   getAll: adminProcedure.query(async ({ ctx }) => {
@@ -119,7 +116,7 @@ export const regionRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(regionCreateSchema)
+    .input(regionFormSchema.omit({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.region.create({
         data: input,
@@ -128,7 +125,7 @@ export const regionRouter = createTRPCRouter({
       return result;
     }),
   updateOne: adminProcedure
-    .input(regionUpdateSchema)
+    .input(regionFormSchema.required({ id: true }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.region.update({
         where: {
@@ -185,17 +182,20 @@ export const RegionsTable = () => {
             </div>
           );
         }}
-        create={{
-          formSchema: regionCreateSchema,
-          onCreate: createRegion.mutateAsync,
-        }}
-        update={{
-          formSchema: regionUpdateSchema,
-          onUpdate: updateRegion.mutateAsync,
+        autoForm={{
+          formSchema: regionFormSchema,
           fieldsConfig: {
             id: {
               hidden: true,
             },
+          },
+          create: {
+            onCreate: createRegion.mutateAsync,
+            isSubmitting: createRegion.isPending,
+          },
+          update: {
+            onUpdate: updateRegion.mutateAsync,
+            isSubmitting: updateRegion.isPending,
           },
         }}
       >
@@ -347,10 +347,13 @@ const orders = await ctx.db.order.findMany({
 #### How to add custom validation for input field?
 In order to add custom validation for input field you have to omit that field and then merge with validation.
 ```typescript
-export const regionUpdateSchema = regionSchema
+export const regionFormSchema = regionSchema
   .omit({
     created_at: true,
     updated_at: true,
+  })
+  .partial({
+    id: true,
   })
   .omit({
     name: true,
@@ -377,13 +380,18 @@ When the field type for comobobox is not a string, but for example the number. A
    ```
 2. Add `coerce` to field that is using combobox as component.
    ```typescript
-   const userAddressFormSchema = userAddressSchema
-     .omit({
-       region_country_id: true,
-     })
-     .merge(
-       z.object({
-         region_country_id: z.coerce.number(),
-       }),
-     );
+   export const userAddressFormSchema = userAddressSchema
+    .omit({
+      region_country_id: true,
+      created_at: true,
+      updated_at: true,
+    })
+    .merge(
+      z.object({
+        region_country_id: z.coerce.number(),
+      }),
+    )
+    .partial({
+      id: true,
+    });
    ```
