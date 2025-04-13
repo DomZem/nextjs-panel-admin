@@ -106,7 +106,12 @@ export const AutoFormInputField = <TSchema extends ZodObjectSchema>({
             </Select>
           ) : fieldConfig?.type === "textarea" ? (
             <FormControl>
-              <Textarea className="resize-none" {...field} />
+              <Textarea
+                className="resize-none"
+                {...field}
+                placeholder={fieldConfig?.placeholder}
+                value={field.value ?? ""}
+              />
             </FormControl>
           ) : fieldConfig?.type === "wysiwyg" ? (
             <FormControl>

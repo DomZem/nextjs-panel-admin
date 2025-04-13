@@ -156,7 +156,7 @@ export const AutoFormDiscriminatedUnion = <
                         defaultField={formField}
                         field={field}
                         label={label}
-                        fieldConfig={commonFieldConfig}
+                        fieldConfig={specificFieldConfig ?? commonFieldConfig}
                         onClear={() => clearField(key)}
                       />
                     );
