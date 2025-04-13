@@ -5,11 +5,6 @@ import { type ZodDiscriminatedObjectSchema } from "~/utils/zod";
 import { AutoFormInputField } from "./auto-form-input-field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Path, useForm } from "react-hook-form";
-import {
-  type BaseConfig,
-  type CommonFieldKeys,
-  type IAutoForm,
-} from "./interface";
 import { type TypeOf, type z } from "zod";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
@@ -21,6 +16,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import {
+  type FieldConfig,
+  type ZodDiscriminatorKeys,
+  type IAutoForm,
+} from "./interface";
 import {
   Form,
   FormControl,
@@ -42,7 +42,7 @@ export const AutoFormDiscriminatedUnion = <
   fieldsConfig,
   defaultValues,
 }: IAutoForm<TSchema>) => {
-  const mappedSchema = useMemo(() => {
+  const discriminatedFields = useMemo(() => {
     return mapDiscriminatedUnionToFormFields(schema);
   }, [schema]);
 
@@ -51,13 +51,11 @@ export const AutoFormDiscriminatedUnion = <
     defaultValues,
   });
 
-  const selectedVariant = form.watch(
-    mappedSchema.discriminator as Path<TypeOf<TSchema>>,
+  const selectedDiscriminator = form.watch(
+    schema.discriminator as Path<TypeOf<TSchema>>,
   );
 
-  const mappedFormVariant = mappedSchema.variants.find(
-    (v) => v.key === selectedVariant,
-  );
+  const selectedFormConfig = discriminatedFields[selectedDiscriminator];
 
   const clearField = (fieldName: Path<TypeOf<TSchema>>) => {
     form.setValue(
@@ -77,59 +75,59 @@ export const AutoFormDiscriminatedUnion = <
           name={schema.discriminator as Path<TypeOf<TSchema>>}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{mappedSchema.discriminator}</FormLabel>
+              <FormLabel>{schema.discriminator}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={mappedSchema.discriminator} />
+                    <SelectValue placeholder={schema.discriminator} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {mappedSchema.variants.map(({ key }) => (
-                    <SelectItem value={key} key={key}>
-                      {key}
+                  {Object.entries(discriminatedFields).map(([disKey]) => (
+                    <SelectItem value={disKey} key={disKey}>
+                      {disKey}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <FormDescription>
-                Select the type of {mappedSchema.discriminator} to display
-                specific input fields
+                Select the type of {schema.discriminator} to display specific
+                input fields
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {mappedFormVariant &&
-          Object.entries(mappedFormVariant.fields)
+        {selectedFormConfig &&
+          Object.entries(selectedFormConfig)
             .filter(([fieldName]) => fieldName !== schema.discriminator)
             .map(([fieldName, formField]) => {
-              const key = fieldName as CommonFieldKeys<TSchema>;
+              const key = fieldName as Path<TypeOf<TSchema>>;
+              const selectedDiscriminatorKey =
+                selectedDiscriminator as ZodDiscriminatorKeys<TSchema>;
 
-              const commonFieldConfig = (
-                fieldsConfig?.base as BaseConfig<TSchema>
-              )?.[key];
+              const commonFieldConfig = fieldsConfig?.base?.[key];
 
-              // const specificFieldConfig = fieldsConfig?.variants?.[
-              //   mappedFormVariant.key as keyof typeof fieldsConfig.variants
-              // ]?.[key] as FieldConfig<
-              //   Extract<DisUnionToRecord<TSchema>[V], ZodObjectSchema>,
-              //   K
-              // >;
+              const variantFields =
+                fieldsConfig?.variants?.[selectedDiscriminatorKey] ?? {};
 
-              const specificFieldConfig =
-                fieldsConfig?.variants?.[mappedFormVariant.key]?.[fieldName];
-
-              if (commonFieldConfig?.hidden || specificFieldConfig?.hidden) {
-                return null;
-              }
+              const specificFieldConfig = (
+                variantFields as Record<
+                  string,
+                  FieldConfig<TSchema, Path<z.infer<TSchema>>>
+                >
+              )[fieldName];
 
               const label =
                 specificFieldConfig?.label ??
                 commonFieldConfig?.label ??
-                mapLabel?.(key) ??
-                key;
+                mapLabel?.(fieldName) ??
+                fieldName;
+
+              if (specificFieldConfig?.hidden || commonFieldConfig?.hidden) {
+                return null;
+              }
 
               return (
                 <FormField
@@ -158,7 +156,7 @@ export const AutoFormDiscriminatedUnion = <
                         defaultField={formField}
                         field={field}
                         label={label}
-                        fieldConfig={specificFieldConfig ?? commonFieldConfig}
+                        fieldConfig={commonFieldConfig}
                         onClear={() => clearField(key)}
                       />
                     );

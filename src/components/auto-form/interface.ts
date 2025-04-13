@@ -1,8 +1,13 @@
-import { type DefaultValues, type Path } from "react-hook-form";
-import { type ComponentPropsWithoutRef } from "react";
+/* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import { type SelectOption } from "~/utils/auto-form";
-import { type FormField } from "../ui/form";
 import { type z, type TypeOf } from "zod";
+import {
+  type ControllerFieldState,
+  type ControllerRenderProps,
+  type UseFormStateReturn,
+  type DefaultValues,
+  type Path,
+} from "react-hook-form";
 import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
@@ -36,71 +41,32 @@ type SelectFieldConfig = BaseFieldConfig & {
 };
 
 type CustomFieldConfig<
-  TSchema extends ZodObjectSchema,
-  TKey extends Path<TypeOf<TSchema>>,
+  TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+  FKey extends Path<z.infer<TSchema>>,
 > = BaseFieldConfig & {
   type: "custom";
-  render: (
-    props: Parameters<
-      ComponentPropsWithoutRef<
-        typeof FormField<TypeOf<TSchema>, TKey>
-      >["render"]
-    >[0],
-  ) => JSX.Element;
+  render: ({}: {
+    field: ControllerRenderProps<z.infer<TSchema>, FKey>;
+    fieldState: ControllerFieldState;
+    formState: UseFormStateReturn<z.infer<TSchema>>;
+  }) => React.ReactElement;
 };
 
 export type FieldConfig<
-  TSchema extends ZodObjectSchema,
-  TKey extends Path<TypeOf<TSchema>>,
-> = StandardFieldConfig | SelectFieldConfig | CustomFieldConfig<TSchema, TKey>;
+  TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+  FKey extends Path<z.infer<TSchema>>,
+> = StandardFieldConfig | SelectFieldConfig | CustomFieldConfig<TSchema, FKey>;
 
-// Given a union U, this returns the keys that are common to every member of U.
-type IntersectionKeys<U> = (
-  U extends unknown ? (k: keyof U) => void : never
-) extends (k: infer I) => void
-  ? I
-  : never;
+export type ZodDiscriminatorKeys<TSchema extends ZodDiscriminatedObjectSchema> =
+  z.infer<TSchema>[TSchema["discriminator"]];
 
-// Convert a discriminated union schema into a record mapping discriminant values to their object shapes.
-export type DisUnionToRecord<T extends ZodDiscriminatedObjectSchema> = {
-  [O in T["options"][number] as O["shape"][T["discriminator"]] extends z.ZodLiteral<
-    infer L extends string | number | symbol
-  >
-    ? L
-    : never]: O["shape"];
-};
-
-// Compute common keys to every variant (excluding the discriminator)
-export type CommonFieldKeys<TSchema extends ZodDiscriminatedObjectSchema> =
-  Extract<
-    Exclude<
-      IntersectionKeys<
-        DisUnionToRecord<TSchema>[keyof DisUnionToRecord<TSchema>]
-      >,
-      TSchema["discriminator"]
-    >,
-    Path<TypeOf<TSchema>>
-  >;
-
-// Base config: configuration for keys that are common to every variant.
-export type BaseConfig<TSchema extends ZodDiscriminatedObjectSchema> = {
-  [K in CommonFieldKeys<TSchema>]?: FieldConfig<
-    Extract<
-      DisUnionToRecord<TSchema>[keyof DisUnionToRecord<TSchema>],
-      ZodObjectSchema
-    >,
-    K
-  >;
-};
-
-export type VariantConfig<TSchema extends ZodDiscriminatedObjectSchema> = {
-  [V in keyof DisUnionToRecord<TSchema>]?: {
-    [K in Extract<
-      Exclude<keyof DisUnionToRecord<TSchema>[V], TSchema["discriminator"]>,
-      Path<TypeOf<TSchema>>
-    >]?: FieldConfig<Extract<DisUnionToRecord<TSchema>[V], ZodObjectSchema>, K>;
-  };
-};
+export type DiscriminatorVariantEntry<
+  TSchema extends ZodDiscriminatedObjectSchema,
+  DiscriminatorKey extends ZodDiscriminatorKeys<TSchema>,
+> = Extract<
+  z.infer<TSchema>,
+  { [D in TSchema["discriminator"]]: DiscriminatorKey }
+>;
 
 export interface IAutoForm<
   TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
@@ -113,10 +79,23 @@ export interface IAutoForm<
   defaultValues?: DefaultValues<TypeOf<TSchema>>;
   fieldsConfig?: TSchema extends ZodDiscriminatedObjectSchema
     ? {
-        base?: BaseConfig<TSchema>;
-        variants?: VariantConfig<TSchema>;
+        base?: Partial<{
+          [FKey in Path<z.infer<TSchema>>]: FieldConfig<TSchema, FKey>;
+        }>;
+        variants?: Partial<{
+          [DisKey in ZodDiscriminatorKeys<TSchema>]: {
+            [FKey in Path<
+              Omit<
+                DiscriminatorVariantEntry<TSchema, DisKey>,
+                TSchema["discriminator"]
+              >
+            >]?: FieldConfig<TSchema, FKey>;
+          };
+        }>;
       }
     : TSchema extends ZodObjectSchema
-      ? { [TKey in Path<TypeOf<TSchema>>]?: FieldConfig<TSchema, TKey> }
+      ? Partial<{
+          [FKey in Path<z.infer<TSchema>>]: FieldConfig<TSchema, FKey>;
+        }>
       : never;
 }

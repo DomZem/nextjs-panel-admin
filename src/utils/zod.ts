@@ -15,12 +15,8 @@ export type ZodDiscriminatedObjectSchema = ZodDiscriminatedUnion<
   ZodObject<ZodRawShape>[]
 >;
 
-type StringOrNumberKeyOnly<T> = {
-  [K in keyof T]: T[K] extends string | number
-    ? T[K] extends boolean | Date | undefined
-      ? never
-      : K
-    : never;
+type StringOrNumberKeyOnly<T extends object> = {
+  [K in keyof T]: T[K] extends string | number ? K : never;
 }[keyof T];
 
 export type ZodObjectSchemaIdentifierKey<TSchema extends ZodObjectSchema> =
