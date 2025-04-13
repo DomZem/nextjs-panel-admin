@@ -53,7 +53,6 @@ export const ProductsTable = () => {
   const deleteProduct = api.product.deleteOne.useMutation();
   const createProduct = api.product.createOne.useMutation();
   const updateProduct = api.product.updateOne.useMutation();
-  const getProductDetails = api.product.getOne.useMutation();
 
   return (
     <AutoTableContainer>
@@ -71,22 +70,20 @@ export const ProductsTable = () => {
         }}
         data={getAllProducts.data?.products ?? []}
         onRefetchData={getAllProducts.refetch}
-        onDetails={async (selectedRow) =>
-          await getProductDetails.mutateAsync({
-            id: selectedRow.id,
-          })
-        }
         onDelete={async (selectedRow) =>
           await deleteProduct.mutateAsync({
             id: selectedRow.id,
           })
         }
-        renderDetails={(product) => {
-          return (
-            <div>
-              <ProductAccessoriesTable productId={product.id} />
-            </div>
-          );
+        details={{
+          variant: "eager",
+          renderDetails: (product) => {
+            return (
+              <div>
+                <ProductAccessoriesTable productId={product.id} />
+              </div>
+            );
+          },
         }}
         autoForm={{
           formSchema: productFormSchema,

@@ -60,7 +60,7 @@ npm run dev
 - [x] Test: add some tests for auto table
 - [x] Fix: fix issue with no handle discriminated unions in auto form
 - [x] Fix: clear value in auto form for textarea not working
-- [ ] Feat: add lazy and eager loading for renderDetails
+- [x] Feat: add lazy and eager loading for renderDetails
 
 ## Recommendation
 

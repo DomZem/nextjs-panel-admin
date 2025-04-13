@@ -19,7 +19,6 @@ export const CarsTable = () => {
   const deleteCar = api.car.deleteOne.useMutation();
   const createCar = api.car.createOne.useMutation();
   const updateCar = api.car.updateOne.useMutation();
-  const getCarDetails = api.car.getOne.useMutation();
 
   return (
     <AutoTableContainer>
@@ -47,15 +46,13 @@ export const CarsTable = () => {
         }}
         data={getAllCars.data ?? []}
         onRefetchData={getAllCars.refetch}
-        onDetails={async (row) =>
-          await getCarDetails.mutateAsync({
-            id: row.id,
-          })
-        }
-        onDelete={async (row) => await deleteCar.mutateAsync({ id: row.id })}
-        renderDetails={(car) => {
-          return <div className="space-y-4">car details here</div>;
+        details={{
+          variant: "eager",
+          renderDetails: (car) => {
+            return <div className="space-y-4">{JSON.stringify(car)}</div>;
+          },
         }}
+        onDelete={async (row) => await deleteCar.mutateAsync({ id: row.id })}
         autoForm={{
           formSchema: carFormSchema,
           fieldsConfig: {

@@ -19,7 +19,6 @@ export const RegionsTable = () => {
   const deleteRegion = api.region.deleteOne.useMutation();
   const createRegion = api.region.createOne.useMutation();
   const updateRegion = api.region.updateOne.useMutation();
-  const getRegionDetails = api.region.getOne.useMutation();
 
   return (
     <AutoTableContainer>
@@ -29,19 +28,17 @@ export const RegionsTable = () => {
         rowIdentifierKey="id"
         data={getAllRegions.data ?? []}
         onRefetchData={getAllRegions.refetch}
-        onDetails={async (row) =>
-          await getRegionDetails.mutateAsync({
-            id: row.id,
-          })
-        }
-        onDelete={async (row) => await deleteRegion.mutateAsync({ id: row.id })}
-        renderDetails={(region) => {
-          return (
-            <div className="space-y-4">
-              <RegionCountriesTable regionId={region.id} />
-            </div>
-          );
+        details={{
+          variant: "eager",
+          renderDetails: (region) => {
+            return (
+              <div className="space-y-4">
+                <RegionCountriesTable regionId={region.id} />
+              </div>
+            );
+          },
         }}
+        onDelete={async (row) => await deleteRegion.mutateAsync({ id: row.id })}
         autoForm={{
           formSchema: regionFormSchema,
           fieldsConfig: {

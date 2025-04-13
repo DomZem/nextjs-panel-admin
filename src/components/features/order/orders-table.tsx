@@ -49,7 +49,6 @@ export const OrdersTable = () => {
   const createOrder = api.order.createOne.useMutation();
   const deleteOrder = api.order.deleteOne.useMutation();
   const updateOrder = api.order.updateOne.useMutation();
-  const getOrderDetails = api.order.getOne.useMutation();
 
   return (
     <AutoTableContainer>
@@ -67,22 +66,20 @@ export const OrdersTable = () => {
         }}
         data={getAllOrders.data?.orders ?? []}
         onRefetchData={getAllOrders.refetch}
-        onDetails={async (selectedRow) =>
-          await getOrderDetails.mutateAsync({
-            id: selectedRow.id,
-          })
-        }
         onDelete={async (selectedRow) =>
           await deleteOrder.mutateAsync({
             id: selectedRow.id,
           })
         }
-        renderDetails={(order) => {
-          return (
-            <div>
-              <OrderItemsTable orderId={order.id} />
-            </div>
-          );
+        details={{
+          variant: "eager",
+          renderDetails: (order) => {
+            return (
+              <div>
+                <OrderItemsTable orderId={order.id} />
+              </div>
+            );
+          },
         }}
         autoForm={{
           formSchema: orderFormSchema,

@@ -1,5 +1,6 @@
 import { type ZodObjectSchema } from "~/utils/zod";
 import React, { useState } from "react";
+import { type Awaitable } from "~/types";
 import { type z } from "zod";
 
 interface IAutoTableDetailsDataContext<
@@ -8,45 +9,65 @@ interface IAutoTableDetailsDataContext<
 > {
   detailsData: TDetailsData | null;
   renderDetails: (data: TDetailsData) => React.ReactNode;
-  getDetailsData: (row: z.infer<TSchema>) => Promise<void>;
+  getDetailsData: (row: z.infer<TSchema>) => Awaitable<void>;
 }
 
 const AutoTableDetailsDataContext =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   React.createContext<IAutoTableDetailsDataContext<any, any> | null>(null);
 
-export interface IAutoTableDetailsDataProvider<
+export type IAutoTableDetailsDataProvider<
   TSchema extends ZodObjectSchema,
   TDetailsData extends Record<string, unknown>,
-> {
-  renderDetails: (data: TDetailsData) => React.ReactNode;
-  onDetails: (selectedRow: z.infer<TSchema>) => Promise<TDetailsData>;
-}
+> =
+  | {
+      variant: "lazy";
+      renderDetails: (data: TDetailsData) => React.ReactNode;
+      onDetails: (selectedRow: z.infer<TSchema>) => Promise<TDetailsData>;
+    }
+  | {
+      variant: "eager";
+      renderDetails: (selectedRow: z.infer<TSchema>) => React.ReactNode;
+    };
 
 export const AutoTableDetailsDataProvider = <
   TSchema extends ZodObjectSchema,
   TDetailsData extends Record<string, unknown>,
->({
-  renderDetails,
-  onDetails,
-  children,
-}: IAutoTableDetailsDataProvider<TSchema, TDetailsData> & {
-  children: React.ReactNode;
-}) => {
-  const [detailsData, setDetailsData] = useState<TDetailsData | null>(null);
+>(
+  props: IAutoTableDetailsDataProvider<TSchema, TDetailsData> & {
+    children: React.ReactNode;
+  },
+) => {
+  const [detailsData, setDetailsData] = useState<
+    TDetailsData | z.infer<TSchema> | null
+  >(null);
 
   return (
     <AutoTableDetailsDataContext.Provider
       value={{
         detailsData,
-        renderDetails,
-        getDetailsData: async (row: z.infer<TSchema>) => {
-          const data = await onDetails(row);
-          setDetailsData(data);
-        },
+        renderDetails: props.renderDetails,
+        getDetailsData:
+          props.variant === "eager"
+            ? (row: z.infer<TSchema>) => {
+                setDetailsData(row);
+              }
+            : props.variant === "lazy"
+              ? async (row: z.infer<TSchema>) => {
+                  const data = await props.onDetails(row);
+                  setDetailsData(data);
+                }
+              : () => {
+                  throw new Error(
+                    "Invalid variant provided to AutoTableDetailsDataProvider",
+                  );
+
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unused-vars
+                  const check: never = props.variant;
+                },
       }}
     >
-      {children}
+      {props.children}
     </AutoTableDetailsDataContext.Provider>
   );
 };

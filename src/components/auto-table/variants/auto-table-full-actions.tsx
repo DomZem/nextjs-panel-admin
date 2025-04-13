@@ -29,8 +29,7 @@ export const AutoTableFullActions = <
   autoForm,
   onDelete,
   onRefetchData,
-  onDetails,
-  renderDetails,
+  details,
   data,
   columnsMap,
   extraColumns,
@@ -38,8 +37,8 @@ export const AutoTableFullActions = <
   mapColumnName,
   children,
 }: IAutoTableCrudProvider<TSchema, TFormSchema> &
-  IAutoTableDataProvider<TSchema> &
-  IAutoTableDetailsDataProvider<TSchema, TDetailsData> & {
+  IAutoTableDataProvider<TSchema> & {
+    details: IAutoTableDetailsDataProvider<TSchema, TDetailsData>;
     children: React.ReactNode;
   }) => {
   return (
@@ -51,10 +50,7 @@ export const AutoTableFullActions = <
       onDelete={onDelete}
       autoForm={autoForm}
     >
-      <AutoTableDetailsDataProvider
-        onDetails={onDetails}
-        renderDetails={renderDetails}
-      >
+      <AutoTableDetailsDataProvider {...details}>
         <AutoTableDataProvider
           data={data}
           omitColumns={omitColumns}
