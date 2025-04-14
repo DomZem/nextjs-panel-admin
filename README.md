@@ -64,6 +64,29 @@ npm run dev
 
 ## Recommendation
 
+## 🗂 Folder Structure
+
+```bash
+src/
+├── common/
+│   └── validations/
+│       └── [module]/
+│           └── model-name.ts                          # Zod schemas shared between tRPC procedures and components
+│
+├── components/
+│   └── features/
+│       └── [module]/
+│           ├── model-name-[table | filters].tsx       # Feature components like CRUD tables, filters, etc.
+│           ├── users-table.tsx                        # (example) CRUD table for users
+│           └── user-filters.tsx                       # (example) Filter UI for user module
+│
+├── server/
+│   └── api/
+│       └── routers/
+│           └── [module]/
+│               └── model-name.ts                      # tRPC router definition for the module
+
+```
 ## Common flow with independent model
 
 ### Create validation
