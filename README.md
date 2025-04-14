@@ -64,7 +64,7 @@ npm run dev
 
 ## Recommendation
 
-## 🗂 Folder Structure
+### 🗂 Folder Structure
 
 ```bash
 src/
