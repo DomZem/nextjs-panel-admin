@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  ignore:
+    paths:
+      - README.md
 jobs:
   test:
     runs-on: ubuntu-latest
