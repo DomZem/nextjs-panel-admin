@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   type z,
   ZodDiscriminatedUnion,
@@ -48,4 +49,5 @@ export const extractFieldNamesFromSchema = <
   }
 
   throw new Error("Unsupported schema type");
+  const check: never = schema;
 };

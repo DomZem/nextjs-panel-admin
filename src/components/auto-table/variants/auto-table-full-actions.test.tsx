@@ -75,8 +75,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -125,8 +127,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -209,8 +213,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: updateUser,
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -287,8 +293,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -357,8 +365,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -404,18 +414,16 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        onDetails={() => {
-          return new Promise<User>((resolve) => {
-            resolve(user);
-          });
-        }}
-        renderDetails={(user) => {
-          return (
-            <div className="flex">
-              <p>FullName: </p>
-              <p>{`${user.first_name} ${user.last_name}`}</p>
-            </div>
-          );
+        details={{
+          variant: "eager",
+          renderDetails: (user) => {
+            return (
+              <div className="flex">
+                <p>FullName: </p>
+                <p>{`${user.first_name} ${user.last_name}`}</p>
+              </div>
+            );
+          },
         }}
       >
         <AutoTableToolbarHeader title="Users" />
@@ -471,8 +479,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
         mapColumnName={(column) => column.toUpperCase()}
       >
         <AutoTableToolbarHeader title="Users" />
@@ -554,8 +564,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -637,8 +649,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />
@@ -705,8 +719,10 @@ describe("AutoTableFullActions component", () => {
             onUpdate: jest.fn(),
           },
         }}
-        renderDetails={jest.fn()}
-        onDetails={jest.fn()}
+        details={{
+          variant: "eager",
+          renderDetails: jest.fn(),
+        }}
       >
         <AutoTableToolbarHeader title="Users" />
         <AutoTableDndTable />

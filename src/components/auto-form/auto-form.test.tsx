@@ -85,7 +85,7 @@ describe("AutoForm component", () => {
       minute: 30,
     });
     await selectAutoFormOption({
-      placeholder: "Select the role",
+      placeholder: "role",
       optionName: "admin",
     });
 
@@ -127,7 +127,7 @@ describe("AutoForm component", () => {
     );
 
     await selectAutoFormOption({
-      placeholder: "admin",
+      placeholder: "role",
       optionName: "user",
     });
 
@@ -269,7 +269,7 @@ describe("AutoForm component", () => {
       minute: 30,
     });
     await selectAutoFormOption({
-      placeholder: "Select the role",
+      placeholder: "role",
       optionName: "user",
     });
 
@@ -357,7 +357,7 @@ describe("AutoForm component", () => {
     await userEvent.type(screen.getByLabelText("amount"), "1000");
 
     await selectAutoFormOption({
-      placeholder: "Select the status",
+      placeholder: "status",
       optionName: "completed",
     });
 

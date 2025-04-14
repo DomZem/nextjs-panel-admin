@@ -78,7 +78,7 @@ export const AutoFormDiscriminatedUnion = <
               <FormLabel>{schema.discriminator}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger aria-label={schema.discriminator}>
                     <SelectValue placeholder={schema.discriminator} />
                   </SelectTrigger>
                 </FormControl>

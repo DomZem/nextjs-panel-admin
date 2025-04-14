@@ -77,7 +77,7 @@ export const AutoFormInputField = <TSchema extends ZodObjectSchema>({
           {defaultField.type === "select" ? (
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger aria-label={label}>
                   <SelectValue placeholder={"Select the " + label} />
                 </SelectTrigger>
               </FormControl>

@@ -41,8 +41,7 @@ export const selectAutoFormOption = async ({
   placeholder: string;
   optionName: string;
 }) => {
-  const selectBtn = screen.getByRole("combobox");
-  expect(selectBtn).toHaveTextContent(placeholder);
+  const selectBtn = screen.getByRole("combobox", { name: placeholder });
   await userEvent.click(selectBtn);
 
   const selectOption = screen.getByRole("option", { name: optionName });
