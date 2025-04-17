@@ -61,6 +61,7 @@ npm run dev
 - [x] Fix: fix issue with no handle discriminated unions in auto form
 - [x] Fix: clear value in auto form for textarea not working
 - [x] Feat: add lazy and eager loading for renderDetails
+- [ ] Feat: add mapping labels for discriminator and description
 
 ## Recommendation
 
