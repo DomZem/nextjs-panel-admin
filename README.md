@@ -61,7 +61,7 @@ npm run dev
 - [x] Fix: fix issue with no handle discriminated unions in auto form
 - [x] Fix: clear value in auto form for textarea not working
 - [x] Feat: add lazy and eager loading for renderDetails
-- [ ] Feat: add mapping labels for discriminator and description
+- [x] Feat: add mapping labels for discriminator and description
 
 ## Recommendation
 
@@ -88,6 +88,7 @@ src/
 │               └── model-name.ts                      # tRPC router definition for the module
 
 ```
+
 ## Common flow with independent model
 
 ### Create validation

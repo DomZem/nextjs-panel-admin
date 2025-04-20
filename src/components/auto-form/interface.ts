@@ -78,6 +78,12 @@ type AutoFormFieldsConfig<
       base?: {
         [FKey in keyof z.infer<TSchema>]?: FieldConfig<TSchema, FKey>;
       };
+      discriminator?: {
+        [DisKey in ZodDiscriminatorKeys<TSchema>]?: {
+          label?: string;
+          description?: string;
+        };
+      };
       variants?: {
         [DisKey in ZodDiscriminatorKeys<TSchema>]?: {
           [FKey in keyof Omit<

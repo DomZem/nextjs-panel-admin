@@ -85,14 +85,16 @@ export const AutoFormDiscriminatedUnion = <
                 <SelectContent>
                   {Object.entries(discriminatedFields).map(([disKey]) => (
                     <SelectItem value={disKey} key={disKey}>
-                      {disKey}
+                      {fieldsConfig?.discriminator?.[disKey]?.label ?? disKey}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <FormDescription>
-                Select the type of {schema.discriminator} to display specific
-                input fields
+                {fieldsConfig?.discriminator?.[selectedDiscriminator]
+                  ?.description ??
+                  `Select the type of ${schema.discriminator} to display specific
+                input fields`}
               </FormDescription>
               <FormMessage />
             </FormItem>
