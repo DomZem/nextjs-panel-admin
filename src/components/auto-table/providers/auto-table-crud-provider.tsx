@@ -1,6 +1,6 @@
 import { type IUseDeleteAutoTableData } from "~/hooks/auto-table/use-delete-auto-table";
 import { AutoTableDeleteDialog } from "../auto-table-delete-dialog";
-import { type IAutoForm } from "~/components/auto-form/interface";
+import { type IAutoForm } from "~/types/auto-form";
 import React, { type ComponentProps } from "react";
 import {
   AutoTableProvider,

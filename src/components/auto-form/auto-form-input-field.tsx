@@ -1,10 +1,10 @@
 import { type ControllerRenderProps, type Path } from "react-hook-form";
+import { type FieldConfig } from "../../types/auto-form";
 import { type FormInputField } from "~/utils/auto-form";
 import { ImageUpload } from "../ui/image-upload-input";
 import { DateTimePicker } from "../ui/datetime-picker";
 import { WysiwygInput } from "../ui/wysiwyg-input";
 import { type ZodObjectSchema } from "~/utils/zod";
-import { type FieldConfig } from "./interface";
 import { badgeVariants } from "../ui/badge";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";

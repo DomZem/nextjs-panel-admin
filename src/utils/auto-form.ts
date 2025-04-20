@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
-import { type ZodDiscriminatorKeys } from "~/components/auto-form/interface";
+import { type ZodDiscriminatorKeys } from "~/types/auto-form";
 import {
   type EnumLike,
   type z,

@@ -3,7 +3,7 @@
 import { AutoFormDiscriminatedUnion } from "../auto-form/auto-form-discriminated-union";
 import { useAutoTable } from "./providers/auto-table-provider";
 import { sanitizeSchemaObject } from "~/utils/auto-form";
-import { type IAutoForm } from "../auto-form/interface";
+import { type IAutoForm } from "../../types/auto-form";
 import {
   type IUseUpdateAutoTableData,
   useUpdateAutoTableData,

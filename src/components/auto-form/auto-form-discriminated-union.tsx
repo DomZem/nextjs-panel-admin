@@ -10,17 +10,17 @@ import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
 import { useMemo } from "react";
 import {
+  type FieldConfig,
+  type ZodDiscriminatorKeys,
+  type IAutoForm,
+} from "../../types/auto-form";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  type FieldConfig,
-  type ZodDiscriminatorKeys,
-  type IAutoForm,
-} from "./interface";
 import {
   Form,
   FormControl,
