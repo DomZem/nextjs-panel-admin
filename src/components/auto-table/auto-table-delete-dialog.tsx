@@ -1,6 +1,6 @@
 "use client";
 
-import { type ZodObjectSchema } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/types/zod";
 import {
   type IUseDeleteAutoTableData,
   useDeleteAutoTableData,

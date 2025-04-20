@@ -1,6 +1,6 @@
-import { type ZodObjectSchema } from "~/utils/zod";
-import React, { useState } from "react";
+import { type ZodObjectSchema } from "~/types/zod";
 import { type Awaitable } from "~/types";
+import React, { useState } from "react";
 import { type z } from "zod";
 
 interface IAutoTableDetailsDataContext<

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
+import { type ZodDiscriminatedObjectSchema, type ZodObjectSchema } from "./zod";
 import { type SelectOption } from "~/utils/auto-form";
 import { type z, type TypeOf } from "zod";
 import {
@@ -8,10 +9,6 @@ import {
   type DefaultValues,
   type Path,
 } from "react-hook-form";
-import {
-  type ZodDiscriminatedObjectSchema,
-  type ZodObjectSchema,
-} from "~/utils/zod";
 
 type InputType =
   | "text"

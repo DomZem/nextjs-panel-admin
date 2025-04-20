@@ -1,7 +1,8 @@
 import { useAutoTableColumnsOrder } from "~/hooks/auto-table/use-auto-table-columns-order";
-import { extractFieldNamesFromSchema, type ZodObjectSchema } from "~/utils/zod";
+import { extractFieldNamesFromSchema } from "~/utils/auto-form";
 import { DataTableProvider } from "../../ui/data-table";
 import { useAutoTable } from "./auto-table-provider";
+import { type ZodObjectSchema } from "~/types/zod";
 import { Badge } from "~/components/ui/badge";
 import { useMemo, useState } from "react";
 import {

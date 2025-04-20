@@ -4,7 +4,7 @@ import { type DefaultValues, type Path, useForm } from "react-hook-form";
 import { AutoFormInputField } from "./auto-form-input-field";
 import { type IAutoForm } from "../../types/auto-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type ZodObjectSchema } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/types/zod";
 import { Form, FormField } from "../ui/form";
 import { type TypeOf, type z } from "zod";
 import { Button } from "../ui/button";

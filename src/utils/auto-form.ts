@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import { type ZodDiscriminatorKeys } from "~/types/auto-form";
 import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/types/zod";
+import {
   type EnumLike,
   type z,
   ZodBoolean,
   ZodDate,
   ZodDefault,
+  ZodDiscriminatedUnion,
   ZodEffects,
   ZodEnum,
   ZodLiteral,
@@ -17,11 +22,6 @@ import {
   ZodString,
   type ZodTypeAny,
 } from "zod";
-import {
-  extractFieldNamesFromSchema,
-  type ZodDiscriminatedObjectSchema,
-  type ZodObjectSchema,
-} from "./zod";
 
 export type SelectOption = { label: string; value: string };
 
@@ -166,6 +166,35 @@ export const getFormFieldsDefaultValues = (
   }, {});
 
   return result;
+};
+
+export const extractFieldNamesFromSchema = <
+  TSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,
+>(
+  schema: TSchema,
+): (keyof z.infer<TSchema>)[] => {
+  const baseSchema = schema instanceof ZodEffects ? schema._def.schema : schema;
+
+  if (baseSchema instanceof ZodDiscriminatedUnion) {
+    const schemas = baseSchema._def.options;
+    const fieldNames = schemas.map((s) => {
+      if (s instanceof ZodObject) {
+        return Object.keys(s.shape);
+      }
+      return [];
+    });
+
+    return fieldNames.flat();
+  }
+
+  if (baseSchema instanceof ZodObject) {
+    const shape = baseSchema.shape;
+    const fieldNames = Object.keys(shape);
+    return fieldNames;
+  }
+
+  throw new Error("Unsupported schema type");
+  const check: never = schema;
 };
 
 export const sanitizeSchemaObject = (

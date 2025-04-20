@@ -1,7 +1,7 @@
 import { useAutoTableDetailsData } from "./providers/auto-table-details-data-provider";
 import { type ActionType, useAutoTable } from "./providers/auto-table-provider";
 import { LoaderCircle, MoreHorizontal } from "lucide-react";
-import { type ZodObjectSchema } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/types/zod";
 import { TableCell, TableRow } from "../ui/table";
 import { useDataTable } from "../ui/data-table";
 import React, { useMemo } from "react";

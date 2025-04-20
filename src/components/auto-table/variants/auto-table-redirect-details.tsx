@@ -1,8 +1,4 @@
 import { AutoTableBasicActionsWithRedirectDetailsColumn } from "../auto-table-row";
-import {
-  type ZodDiscriminatedObjectSchema,
-  type ZodObjectSchema,
-} from "~/utils/zod";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCrudProvider,
@@ -14,6 +10,10 @@ import {
 } from "../providers/auto-table-data-provider";
 import { type z } from "zod";
 import React from "react";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/types/zod";
 
 export const AutoTableRedirectDetails = <
   TSchema extends ZodObjectSchema,

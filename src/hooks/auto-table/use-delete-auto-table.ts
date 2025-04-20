@@ -1,5 +1,5 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
-import { type ZodObjectSchema } from "~/utils/zod";
+import { type ZodObjectSchema } from "~/types/zod";
 import { toast } from "../use-toast";
 import { type z } from "zod";
 

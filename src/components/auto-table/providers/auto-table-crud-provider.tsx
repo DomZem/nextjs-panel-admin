@@ -13,7 +13,7 @@ import {
 import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
-} from "~/utils/zod";
+} from "~/types/zod";
 
 export interface IAutoTableCrudProvider<
   TSchema extends ZodObjectSchema,

@@ -12,7 +12,7 @@ import React from "react";
 import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
-} from "~/utils/zod";
+} from "~/types/zod";
 
 export const AutoTableBasicActions = <
   TSchema extends ZodObjectSchema,

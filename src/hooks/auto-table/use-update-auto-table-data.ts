@@ -2,9 +2,9 @@ import { useAutoTable } from "~/components/auto-table/providers/auto-table-provi
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
 import { type z } from "zod";
 import {
-  type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
-} from "~/utils/zod";
+  type ZodDiscriminatedObjectSchema,
+} from "~/types/zod";
 
 export interface IUseUpdateAutoTableData<
   TSchema extends ZodObjectSchema,

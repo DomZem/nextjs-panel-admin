@@ -1,10 +1,10 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
 import { useSubmitAutoTableData } from "./use-submit-auto-table-data";
+import { type z } from "zod";
 import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
-} from "~/utils/zod";
-import { type z } from "zod";
+} from "~/types/zod";
 
 export interface IUseCreateAutoTableData<
   TFormSchema extends ZodObjectSchema | ZodDiscriminatedObjectSchema,

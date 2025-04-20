@@ -1,7 +1,7 @@
 "use client";
 
 import { mapDiscriminatedUnionToFormFields } from "~/utils/auto-form";
-import { type ZodDiscriminatedObjectSchema } from "~/utils/zod";
+import { type ZodDiscriminatedObjectSchema } from "~/types/zod";
 import { AutoFormInputField } from "./auto-form-input-field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Path, useForm } from "react-hook-form";

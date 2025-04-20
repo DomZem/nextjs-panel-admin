@@ -18,10 +18,6 @@ import { AutoForm } from "../auto-form/auto-form";
 import { ScrollArea } from "../ui/scroll-area";
 import { type TypeOf } from "zod";
 import {
-  type ZodDiscriminatedObjectSchema,
-  type ZodObjectSchema,
-} from "~/utils/zod";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -35,6 +31,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "../ui/sheet";
+import {
+  type ZodDiscriminatedObjectSchema,
+  type ZodObjectSchema,
+} from "~/types/zod";
 
 export const AutoTableDialog = ({
   isOpen,

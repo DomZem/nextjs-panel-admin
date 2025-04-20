@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { type z } from "zod";
 import {
-  type ZodObjectSchemaIdentifierKey,
   type ZodObjectSchema,
-} from "~/utils/zod";
+  type ZodObjectSchemaIdentifierKey,
+} from "~/types/zod";
 
 export type ActionType = "CREATE" | "UPDATE" | "DELETE" | "DETAILS" | null;
 
