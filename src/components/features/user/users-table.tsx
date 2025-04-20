@@ -4,7 +4,7 @@ import { AutoTableRedirectDetails } from "~/components/auto-table/variants/auto-
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { userFormSchema, userSchema } from "~/common/validations/user/user";
-import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { useRowsPerPage } from "~/hooks/pagination/use-rows-per-page";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCloseDetailsButton,
@@ -20,7 +20,7 @@ import {
 import { type UserRole } from "@prisma/client";
 import { Badge } from "~/components/ui/badge";
 import { UserFilters } from "./user-filters";
-import { usePage } from "~/hooks/use-page";
+import { usePage } from "~/hooks/pagination/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {

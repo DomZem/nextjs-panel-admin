@@ -1,4 +1,4 @@
-import { usePage } from "~/hooks/use-page";
+import { usePage } from "~/hooks/pagination/use-page";
 import { Button } from "./button";
 import {
   ChevronLeft,

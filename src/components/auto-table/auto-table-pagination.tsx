@@ -1,7 +1,7 @@
-import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { useRowsPerPage } from "~/hooks/pagination/use-rows-per-page";
 import { Pagination } from "../ui/pagination";
 import { type ComponentProps } from "react";
-import { usePage } from "~/hooks/use-page";
+import { usePage } from "~/hooks/pagination/use-page";
 import { cn } from "~/lib/utils";
 import {
   Select,

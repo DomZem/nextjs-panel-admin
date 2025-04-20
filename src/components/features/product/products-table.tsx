@@ -5,7 +5,7 @@ import { AutoTableFullActions } from "~/components/auto-table/variants/auto-tabl
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
 import { ProductAccessoriesTable } from "./product-accessories-table";
-import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { useRowsPerPage } from "~/hooks/pagination/use-rows-per-page";
 import { type ProductCategory } from "@prisma/client";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
@@ -24,7 +24,7 @@ import {
   productFormSchema,
   productSchema,
 } from "~/common/validations/product/product";
-import { usePage } from "~/hooks/use-page";
+import { usePage } from "~/hooks/pagination/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {

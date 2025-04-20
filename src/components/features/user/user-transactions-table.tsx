@@ -4,14 +4,14 @@ import { AutoTableBasicActions } from "~/components/auto-table/variants/auto-tab
 import { AutoTableDndTable } from "~/components/auto-table/tables/auto-table-dnd-table";
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { userTransactionSchema } from "~/common/validations/user/user-transaction";
-import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { useRowsPerPage } from "~/hooks/pagination/use-rows-per-page";
 import {
   AutoTableContainer,
   AutoTableToolbarHeader,
 } from "~/components/auto-table/auto-table-header";
 import { Badge } from "~/components/ui/badge";
 import { LoaderCircle } from "lucide-react";
-import { usePage } from "~/hooks/use-page";
+import { usePage } from "~/hooks/pagination/use-page";
 import { api } from "~/trpc/react";
 import Image from "next/image";
 

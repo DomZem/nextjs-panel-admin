@@ -5,7 +5,7 @@ import { AutoTableFullActions } from "~/components/auto-table/variants/auto-tabl
 import { AutoTablePagination } from "~/components/auto-table/auto-table-pagination";
 import { orderFormSchema, orderSchema } from "~/common/validations/order/order";
 import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
-import { useRowsPerPage } from "~/hooks/use-rows-per-page";
+import { useRowsPerPage } from "~/hooks/pagination/use-rows-per-page";
 import { OrderItemsTable } from "./order-items-table";
 import { UserCombobox } from "../user/user-combobox";
 import { mapDashedFieldName } from "~/utils/mappers";
@@ -22,7 +22,7 @@ import {
 } from "~/components/auto-table/auto-table-header";
 import { type OrderStatus } from "@prisma/client";
 import { OrderFilters } from "./order-filters";
-import { usePage } from "~/hooks/use-page";
+import { usePage } from "~/hooks/pagination/use-page";
 import { api } from "~/trpc/react";
 import { useState } from "react";
 import {
