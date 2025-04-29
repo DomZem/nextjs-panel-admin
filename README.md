@@ -62,6 +62,7 @@ npm run dev
 - [x] Fix: clear value in auto form for textarea not working
 - [x] Feat: add lazy and eager loading for renderDetails
 - [x] Feat: add mapping labels for discriminator and description
+- [ ] Feat: add clearing field for combobox
 
 ## Recommendation
 
