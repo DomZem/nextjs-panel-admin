@@ -1,4 +1,3 @@
-import { AutoTableBasicActionsColumn } from "../auto-table-row";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCrudProvider,
@@ -13,6 +12,7 @@ import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
 } from "~/types/zod";
+import { AutoTableBasicActionsColumn } from "../auto-table-column";
 
 export const AutoTableBasicActions = <
   TSchema extends ZodObjectSchema,

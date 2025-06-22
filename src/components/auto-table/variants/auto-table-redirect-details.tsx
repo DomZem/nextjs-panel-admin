@@ -1,4 +1,4 @@
-import { AutoTableBasicActionsWithRedirectDetailsColumn } from "../auto-table-row";
+import { AutoTableBasicActionsWithRedirectDetailsColumn } from "../auto-table-column";
 import { mapDashedFieldName } from "~/utils/mappers";
 import {
   AutoTableCrudProvider,

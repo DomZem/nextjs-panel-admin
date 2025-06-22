@@ -1,4 +1,3 @@
-import { AutoTableFullActionsColumn } from "../auto-table-row";
 import {
   AutoTableDetailsDataProvider,
   type IAutoTableDetailsDataProvider,
@@ -17,6 +16,7 @@ import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
 } from "~/types/zod";
+import { AutoTableFullActionsColumn } from "../auto-table-column";
 
 export const AutoTableFullActions = <
   TSchema extends ZodObjectSchema,
