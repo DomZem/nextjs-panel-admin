@@ -64,6 +64,7 @@ npm run dev
 - [x] Feat: add mapping labels for discriminator and description
 - [ ] Feat: add clearing field for combobox
 - [ ] Feat: add multiple delete
+- [ ] Feat: add default selected columns
 
 ## Recommendation
 
