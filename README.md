@@ -63,6 +63,7 @@ npm run dev
 - [x] Feat: add lazy and eager loading for renderDetails
 - [x] Feat: add mapping labels for discriminator and description
 - [ ] Feat: add clearing field for combobox
+- [ ] Feat: add multiple delete
 
 ## Recommendation
 
