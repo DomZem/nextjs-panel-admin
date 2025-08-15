@@ -24,12 +24,20 @@ export const useAutoTableColumnsOrder = <TSchema extends ZodObjectSchema>({
   const [columnOrder, setColumnOrder] = useState<string[]>(() => {
     const defaultOrder = columns.map((c) => c.id!);
 
+    const selectIndex = defaultOrder.indexOf("select");
     const idIndex = defaultOrder.indexOf("id");
 
-    if (idIndex > 0) {
-      // we want to move the id column to the first position
-      defaultOrder.splice(idIndex, 1);
-      defaultOrder.unshift("id");
+    // First, ensure select column is always first
+    if (selectIndex > 0) {
+      defaultOrder.splice(selectIndex, 1);
+      defaultOrder.unshift("select");
+    }
+
+    // Then, if id column exists and is not already second, move it to second position
+    if (idIndex > 1) {
+      const currentIdIndex = defaultOrder.indexOf("id");
+      defaultOrder.splice(currentIdIndex, 1);
+      defaultOrder.splice(1, 0, "id");
     }
 
     return defaultOrder;

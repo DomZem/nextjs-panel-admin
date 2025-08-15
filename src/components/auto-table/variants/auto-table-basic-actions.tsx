@@ -52,9 +52,7 @@ export const AutoTableBasicActions = <
           {
             id: "actions",
             header: "actions",
-            cell: ({ row }) => (
-              <AutoTableBasicActionsColumn row={row.original} />
-            ),
+            cell: ({ row }) => <AutoTableBasicActionsColumn row={row} />,
           },
           ...(extraColumns ?? []),
         ]}

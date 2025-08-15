@@ -5,6 +5,7 @@ import {
   carUpdateSchema,
   carVariants,
 } from "~/common/validations/car/car";
+import { z } from "zod";
 
 export const carRouter = createTRPCRouter({
   getAll: adminProcedure.query(async ({ ctx }) => {
@@ -169,6 +170,23 @@ export const carRouter = createTRPCRouter({
       const result = await ctx.db.car.delete({
         where: {
           id: input.id,
+        },
+      });
+
+      return result;
+    }),
+  deleteMany: adminProcedure
+    .input(
+      z.object({
+        ids: z.string().array(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.car.deleteMany({
+        where: {
+          id: {
+            in: input.ids,
+          },
         },
       });
 

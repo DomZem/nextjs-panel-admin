@@ -16,7 +16,7 @@ import {
   type ZodDiscriminatedObjectSchema,
   type ZodObjectSchema,
 } from "~/types/zod";
-import { AutoTableFullActionsColumn } from "../auto-table-column";
+import { AutoTableFullActionsCell } from "../auto-table-cell";
 
 export const AutoTableFullActions = <
   TSchema extends ZodObjectSchema,
@@ -60,9 +60,7 @@ export const AutoTableFullActions = <
             {
               id: "actions",
               header: "actions",
-              cell: ({ row }) => (
-                <AutoTableFullActionsColumn row={row.original} />
-              ),
+              cell: ({ row }) => <AutoTableFullActionsCell row={row} />,
             },
             ...(extraColumns ?? []),
           ]}

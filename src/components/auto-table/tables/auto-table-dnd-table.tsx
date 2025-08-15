@@ -55,16 +55,21 @@ export const AutoTableDndTable = ({
     useSensor(KeyboardSensor, {}),
   );
 
-  function handleDragEnd(event: DragEndEvent) {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
+      // Prevent dragging the select column
+      if (active.id === "select" || over.id === "select") {
+        return;
+      }
+
       table.setColumnOrder((columnOrder) => {
         const oldIndex = columnOrder.indexOf(active.id as string);
         const newIndex = columnOrder.indexOf(over.id as string);
         return arrayMove(columnOrder, oldIndex, newIndex); //this is just a splice util
       });
     }
-  }
+  };
 
   return (
     <DndContext
@@ -128,18 +133,23 @@ const DraggableTableHeader = ({
 }: {
   header: Header<unknown, unknown>;
 }) => {
+  const isSelectColumn = header.column.id === "select";
+
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useSortable({
       id: header.column.id,
+      disabled: isSelectColumn,
     });
 
   const style: CSSProperties = {
     opacity: isDragging ? 0.8 : 1,
     position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transform: CSS.Translate.toString(transform),
     transition: "width transform 0.2s ease-in-out",
     whiteSpace: "nowrap",
-    width: header.column.getSize(),
+    width: isSelectColumn ? 50 : header.column.getSize(),
+    minWidth: isSelectColumn ? 50 : undefined,
+    maxWidth: isSelectColumn ? 50 : undefined,
     zIndex: isDragging ? 1 : 0,
   };
 
@@ -150,41 +160,54 @@ const DraggableTableHeader = ({
           ? null
           : flexRender(header.column.columnDef.header, header.getContext())}
 
-        <Button {...attributes} {...listeners} size="icon" variant="ghost">
-          <GripVertical size={20} />
-        </Button>
+        {header.column.getCanSort() && (
+          <>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() =>
+                header.column.toggleSorting(
+                  header.column.getIsSorted() === "asc",
+                )
+              }
+            >
+              {!header.column.getIsSorted() ? (
+                <ArrowUpDown size={20} />
+              ) : header.column.getIsSorted() === "asc" ? (
+                <ArrowDown size={20} />
+              ) : (
+                <ArrowUp size={20} />
+              )}
+            </Button>
+          </>
+        )}
 
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={() =>
-            header.column.toggleSorting(header.column.getIsSorted() === "asc")
-          }
-        >
-          {!header.column.getIsSorted() ? (
-            <ArrowUpDown size={20} />
-          ) : header.column.getIsSorted() === "asc" ? (
-            <ArrowDown size={20} />
-          ) : (
-            <ArrowUp size={20} />
-          )}
-        </Button>
+        {!isSelectColumn && (
+          <Button {...attributes} {...listeners} size="icon" variant="ghost">
+            <GripVertical size={20} />
+          </Button>
+        )}
       </div>
     </TableHead>
   );
 };
 
 const DragAlongCell = ({ cell }: { cell: Cell<unknown, unknown> }) => {
+  const isSelectColumn = cell.column.id === "select";
+
   const { isDragging, setNodeRef, transform } = useSortable({
     id: cell.column.id,
+    disabled: isSelectColumn, // Disable dragging for select column
   });
 
   const style: CSSProperties = {
     opacity: isDragging ? 0.8 : 1,
     position: "relative",
-    transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
+    transform: CSS.Translate.toString(transform),
     transition: "width transform 0.2s ease-in-out",
-    width: cell.column.getSize(),
+    width: isSelectColumn ? 50 : cell.column.getSize(),
+    minWidth: isSelectColumn ? 50 : undefined,
+    maxWidth: isSelectColumn ? 50 : undefined,
     zIndex: isDragging ? 1 : 0,
   };
 

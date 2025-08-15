@@ -24,7 +24,7 @@ export const regionRouter = createTRPCRouter({
       return result;
     }),
   createOne: adminProcedure
-    .input(regionFormSchema.omit({ id: true }))
+    .input(regionFormSchema)
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.region.create({
         data: input,

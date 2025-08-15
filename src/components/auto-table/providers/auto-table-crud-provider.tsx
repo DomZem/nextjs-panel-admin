@@ -58,6 +58,7 @@ export const AutoTableCrudProvider = <
         {children}
 
         <AutoTableDeleteDialog onDelete={onDelete} />
+
         <AutoTableCreateFormSheet
           formSchema={autoForm.formSchema}
           fieldsConfig={autoForm.fieldsConfig}
@@ -65,6 +66,7 @@ export const AutoTableCrudProvider = <
           isSubmitting={autoForm.create.isSubmitting}
           defaultValues={autoForm.create.defaultValues}
         />
+
         <AutoTableUpdateFormSheet
           formSchema={autoForm.formSchema}
           onUpdate={autoForm.update.onUpdate}

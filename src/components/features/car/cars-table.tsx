@@ -6,11 +6,20 @@ import { AutoTableDetailsRow } from "~/components/auto-table/auto-table-row";
 import { carFormSchema, carSchema } from "~/common/validations/car/car";
 import { Car, Gauge, Truck, Zap } from "lucide-react";
 import {
+  AutoTableCloseDetailsButton,
   AutoTableContainer,
-  AutoTableToolbarHeader,
+  AutoTableCreateButton,
+  AutoTableHeader,
+  AutoTableHeaderContent,
+  AutoTableHeaderTitle,
+  AutoTableRefreshButton,
+  AutoTableSelectColumns,
 } from "~/components/auto-table/auto-table-header";
 import { Badge } from "~/components/ui/badge";
 import { api } from "~/trpc/react";
+import { mapDashedFieldName } from "~/utils/mappers";
+import { CarsHeaderActions } from "./header-actions/cars-header-actions";
+import { CarsAlertModal } from "./header-actions/cars-alert-modal";
 
 const ICON_SIZE = 16;
 
@@ -78,11 +87,22 @@ export const CarsTable = () => {
           },
         }}
       >
-        <AutoTableToolbarHeader title="Cars" />
+        <AutoTableHeader>
+          <AutoTableHeaderTitle>Cars</AutoTableHeaderTitle>
+          <AutoTableHeaderContent>
+            <AutoTableRefreshButton />
+            <CarsHeaderActions />
+            <AutoTableSelectColumns mapColumnName={mapDashedFieldName} />
+            <AutoTableCloseDetailsButton />
+            <AutoTableCreateButton />
+          </AutoTableHeaderContent>
+        </AutoTableHeader>
 
         <AutoTableDndTable
           extraRow={(row) => <AutoTableDetailsRow rowId={row.id} />}
         />
+
+        <CarsAlertModal />
       </AutoTableFullActions>
     </AutoTableContainer>
   );

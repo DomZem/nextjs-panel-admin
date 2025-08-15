@@ -57,7 +57,7 @@ export const AutoTableRedirectDetails = <
             header: "actions",
             cell: ({ row }) => (
               <AutoTableBasicActionsWithRedirectDetailsColumn
-                row={row.original}
+                row={row}
                 detailsHref={detailsHref}
               />
             ),

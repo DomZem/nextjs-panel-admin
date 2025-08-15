@@ -1,7 +1,7 @@
 "use client";
 
 import { useAutoTableColumnsSelect } from "~/hooks/auto-table/use-auto-table-columns-select";
-import { type DetailedHTMLProps, type HTMLAttributes, useState } from "react";
+import { type ComponentProps, useState } from "react";
 import {
   CirclePlus,
   CopyX,
@@ -38,10 +38,7 @@ export const AutoTableContainer = ({
   className,
   children,
   ...props
-}: React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->) => {
+}: ComponentProps<"div">) => {
   return (
     <div
       className={cn(
@@ -59,7 +56,7 @@ export const AutoTableHeader = ({
   className,
   children,
   ...props
-}: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>) => {
+}: ComponentProps<"header">) => {
   return (
     <header
       className={cn("flex items-center justify-between", className)}
@@ -74,10 +71,7 @@ export const AutoTableHeaderTitle = ({
   className,
   children,
   ...props
-}: React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLHeadingElement>,
-  HTMLHeadingElement
->) => {
+}: ComponentProps<"h2">) => {
   return (
     <h2 className={cn("text-lg font-semibold", className)} {...props}>
       {children}
@@ -239,7 +233,7 @@ export const AutoTableHeaderContent = ({
   className,
   children,
   ...props
-}: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+}: ComponentProps<"div">) => {
   return (
     <div className={cn("inline-flex items-center gap-3", className)} {...props}>
       {children}

@@ -13,6 +13,8 @@ import {
 } from "@tanstack/react-table";
 import { type z } from "zod";
 import dayjs from "dayjs";
+import { Checkbox } from "~/components/ui/checkbox";
+import { AutoTableSelectCell } from "../auto-table-cell";
 
 export interface IAutoTableDataProvider<TSchema extends ZodObjectSchema> {
   data: z.infer<TSchema>[];
@@ -38,8 +40,10 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
 }: IAutoTableDataProvider<TSchema> & {
   children: React.ReactNode;
 }) => {
+  const { schema, rowIdentifierKey, setSelectedRows } = useAutoTable<TSchema>();
+
   const [sorting, setSorting] = useState<SortingState>([]);
-  const { schema, rowIdentifierKey } = useAutoTable<TSchema>();
+  const [rowSelection, setRowSelection] = useState({});
 
   const fieldNames = extractFieldNamesFromSchema(schema);
 
@@ -92,8 +96,37 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
     [],
   );
 
+  const selectColumn: ColumnDef<z.infer<TSchema>> = useMemo(
+    () => ({
+      id: "select",
+      size: 50,
+      minSize: 50,
+      maxSize: 50,
+      header: ({ table }) => (
+        <div className="flex w-full items-center justify-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => {
+              setSelectedRows(value ? table.getFilteredRowModel().rows : []);
+              table.toggleAllPageRowsSelected(!!value);
+            }}
+            aria-label="Select all"
+          />
+        </div>
+      ),
+      cell: ({ row }) => <AutoTableSelectCell row={row} />,
+      enableSorting: false,
+      enableHiding: false,
+      enableResizing: false,
+    }),
+    [],
+  );
+
   const columns: ColumnDef<z.infer<TSchema>>[] = useMemo(
-    () => [...basicColumns, ...(extraColumns ?? [])],
+    () => [selectColumn, ...basicColumns, ...(extraColumns ?? [])],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
@@ -109,12 +142,15 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        enableRowSelection: true,
         state: {
           sorting,
           columnOrder,
+          rowSelection,
         },
         onSortingChange: setSorting,
         onColumnOrderChange: handleColumnOrderChange,
+        onRowSelectionChange: setRowSelection,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         getRowId: (row) => row[rowIdentifierKey],
       }}

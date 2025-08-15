@@ -13,6 +13,8 @@ interface IAutoTableContext<TSchema extends ZodObjectSchema> {
   rowIdentifierKey: ZodObjectSchemaIdentifierKey<TSchema>;
   selectedRow: z.infer<TSchema> | null;
   setSelectedRow: (row: z.infer<TSchema> | null) => void;
+  selectedRows: z.infer<TSchema>[];
+  setSelectedRows: (rows: z.infer<TSchema>[]) => void;
   currentAction: ActionType;
   setCurrentAction: (action: ActionType) => void;
   refetchData: () => Promise<unknown>;
@@ -38,6 +40,7 @@ export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
   children: React.ReactNode;
 }) => {
   const [selectedRow, setSelectedRow] = useState<z.infer<TSchema> | null>(null);
+  const [selectedRows, setSelectedRows] = useState<z.infer<TSchema>[]>([]);
   const [currentAction, setCurrentAction] = useState<ActionType>(null);
 
   return (
@@ -51,6 +54,8 @@ export const AutoTableProvider = <TSchema extends ZodObjectSchema>({
         setCurrentAction,
         rowIdentifierKey,
         setSelectedRow,
+        selectedRows,
+        setSelectedRows,
       }}
     >
       {children}
