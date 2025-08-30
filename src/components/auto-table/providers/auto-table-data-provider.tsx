@@ -18,6 +18,9 @@ import { AutoTableSelectCell } from "../auto-table-cell";
 
 export interface IAutoTableDataProvider<TSchema extends ZodObjectSchema> {
   data: z.infer<TSchema>[];
+  defaultVisibleColumns?: Partial<{
+    [K in keyof z.infer<TSchema>]: true;
+  }>;
   omitColumns?: Partial<{
     [K in keyof z.infer<TSchema>]: true;
   }>;
@@ -36,6 +39,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
   columnsMap,
   extraColumns,
   mapColumnName,
+  defaultVisibleColumns,
   children,
 }: IAutoTableDataProvider<TSchema> & {
   children: React.ReactNode;
@@ -63,6 +67,7 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
           ? mapColumnName(fieldName as string)
           : fieldName,
         id: fieldName.toString(),
+
         cell: ({ row }) => {
           const cellData = row.original[fieldName];
 
@@ -135,6 +140,9 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
     columns,
   });
 
+  const visibleColumnKeys = Object.keys(defaultVisibleColumns ?? {});
+  const hasDefaultVisibleColumns = visibleColumnKeys.length > 0;
+
   return (
     <DataTableProvider
       tableOptions={{
@@ -147,6 +155,19 @@ export const AutoTableDataProvider = <TSchema extends ZodObjectSchema>({
           sorting,
           columnOrder,
           rowSelection,
+        },
+        initialState: {
+          columnVisibility: {
+            ...Object.fromEntries(
+              filteredFieldNames.map((fieldName) => {
+                const value = hasDefaultVisibleColumns
+                  ? !!defaultVisibleColumns?.[fieldName]
+                  : true;
+
+                return [fieldName, value];
+              }),
+            ),
+          },
         },
         onSortingChange: setSorting,
         onColumnOrderChange: handleColumnOrderChange,

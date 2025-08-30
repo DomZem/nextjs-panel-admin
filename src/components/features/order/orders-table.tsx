@@ -56,6 +56,10 @@ export const OrdersTable = () => {
         schema={orderSchema}
         rowIdentifierKey="id"
         technicalTableName="orders"
+        defaultVisibleColumns={{
+          id: true,
+          status: true,
+        }}
         omitColumns={{
           user_id: true,
         }}

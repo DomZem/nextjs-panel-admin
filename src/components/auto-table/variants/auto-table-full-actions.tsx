@@ -34,6 +34,7 @@ export const AutoTableFullActions = <
   columnsMap,
   extraColumns,
   omitColumns,
+  defaultVisibleColumns,
   mapColumnName,
   children,
 }: IAutoTableCrudProvider<TSchema, TFormSchema> &
@@ -55,6 +56,7 @@ export const AutoTableFullActions = <
           data={data}
           omitColumns={omitColumns}
           columnsMap={columnsMap}
+          defaultVisibleColumns={defaultVisibleColumns}
           mapColumnName={mapColumnName ?? mapDashedFieldName}
           extraColumns={[
             {

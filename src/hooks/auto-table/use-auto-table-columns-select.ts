@@ -1,8 +1,8 @@
 import { useAutoTable } from "~/components/auto-table/providers/auto-table-provider";
 import { type AutoTableSetting } from "./use-auto-table-columns-order";
 import { useDataTable } from "~/components/ui/data-table";
-import { type ZodObjectSchema } from "~/types/zod";
 import { useEffect } from "react";
+import type { ZodObjectSchema } from "~/types/zod";
 
 export const useAutoTableColumnsSelect = <
   TSchema extends ZodObjectSchema,

@@ -34,6 +34,11 @@ export const CarsTable = () => {
       <AutoTableFullActions
         technicalTableName="cars"
         schema={carSchema}
+        defaultVisibleColumns={{
+          id: true,
+          name: true,
+          variant: true,
+        }}
         rowIdentifierKey="id"
         columnsMap={{
           variant: (v) => {

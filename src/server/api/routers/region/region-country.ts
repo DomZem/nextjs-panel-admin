@@ -108,4 +108,17 @@ export const regionCountryRouter = createTRPCRouter({
 
       return result;
     }),
+  deleteMany: adminProcedure
+    .input(Region_countryScalarSchema.pick({ id: true }).array())
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.region_country.deleteMany({
+        where: {
+          id: {
+            in: input.map((item) => item.id),
+          },
+        },
+      });
+
+      return result;
+    }),
 });
